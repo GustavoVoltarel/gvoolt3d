@@ -42,9 +42,9 @@
     "name": "Baby Yoda em Crochê",
     "description": "Miniatura do Grogu (Baby Yoda) com efeito em crochê, com acabamento detalhado e visual encantador — perfeita para fãs de Star Wars",
     "price": 60.00,
-    "image": "/assets/products/baby-yoda-index.jpeg",
+    "image": "assets/products/baby-yoda-index.jpeg",
     "images": [
-      "/assets/products/baby-yoda.jpeg"
+      "assets/products/baby-yoda.jpeg"
     ],
     "availability": "Em estoque",
     "leadTimeDays": null,
@@ -62,9 +62,9 @@
     "name": "Estrela Super Mario em Crochê",
     "description": "Estrela decorativa em estilo crochê em impressão 3D, com textura diferenciada e visual divertido — perfeita para setups e coleções",
     "price": 35.00,
-    "image": "/assets/products/estrela-mario-index.jpeg",
+    "image": "assets/products/estrela-mario-index.jpeg",
     "images": [
-      "/assets/products/estrela-mario.jpeg"
+      "assets/products/estrela-mario.jpeg"
     ],
     "availability": "Em estoque",
     "leadTimeDays": null,
@@ -83,10 +83,10 @@
     "name": "Suporte de Óculos Gato",
     "description": "Suporte para óculos em formato de gato, funcional e decorativo — perfeito para organizar com estilo",
     "price": 20.00,
-    "image": "/assets/products/porta-oculos-index.jpeg",
+    "image": "assets/products/porta-oculos-index.jpeg",
     "images": [
-      "/assets/products/porta-oculos-index.jpeg",
-      "/assets/products/porta-oculos.JPG"
+      "assets/products/porta-oculos-index.jpeg",
+      "assets/products/porta-oculos.JPG"
     ],
     "availability": "Sob encomenda",
     "leadTimeDays": 1,
