@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="650" viewBox="0 0 900 650">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#3b0a5f"/>
+      <stop offset="65%" stop-color="#12091f"/>
+      <stop offset="100%" stop-color="#05000d"/>
+    </radialGradient>
+  </defs>
+  <rect width="900" height="650" fill="url(#g)"/>
+  <circle cx="450" cy="250" r="100" fill="none" stroke="#b832ff" stroke-width="8" opacity="0.7"/>
+  <path d="M405 302l82-139h-58l-38 77h57l-43 62z" fill="#f02dff" opacity="0.85"/>
+  <text x="450" y="425" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="34" font-weight="700">GVolt 3D</text>
+  <text x="450" y="470" text-anchor="middle" fill="#b9a9c8" font-family="Arial, sans-serif" font-size="24">Imagem indisponível</text>
+</svg>

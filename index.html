@@ -141,15 +141,21 @@
           card.className = "product-card";
           card.innerHTML = `
           <a class="product-image" href="product.html?id=${product.id}" aria-label="Ver detalhes de ${product.name}">
-            <img src="${product.image}" alt="${product.name}">
+            <img src="${product.image}" alt="${product.name}" onerror="this.src='assets/fallback.jpg'">
           </a>
           <div class="product-card-body">
             <h3>${product.name}</h3>
             <p>${product.description}</p>
             <strong>${formatPrice(product.price)}</strong>
-            <a class="details-link" href="product.html?id=${product.id}">Ver detalhes <i class="fa-solid fa-arrow-right"></i></a>
+            <a class="details-link" href="product.html?id=${product.id}">
+  Ver detalhes e comprar →
+</a>
           </div>
         `;
+          card.addEventListener("click", (event) => {
+            if (event.target.closest("a")) return;
+            window.location.href = `product.html?id=${product.id}`;
+          });
           container.appendChild(card);
         });
       }
@@ -173,7 +179,8 @@
           const filtered = allProducts.filter((product) => {
             return (
               product.name.toLowerCase().includes(term) ||
-              product.description.toLowerCase().includes(term)
+              product.description.toLowerCase().includes(term) ||
+              (product.longDescription && product.longDescription.toLowerCase().includes(term))
             );
           });
           renderProducts(filtered);

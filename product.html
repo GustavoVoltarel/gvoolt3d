@@ -41,9 +41,13 @@
         <div class="detail-gallery">
           <!-- Main image with arrows -->
           <div class="main-image-wrapper">
-            <button class="nav-arrow prev" aria-label="Foto anterior">&#10094;</button>
+            <button class="nav-arrow prev" aria-label="Foto anterior">
+              &#10094;
+            </button>
             <img id="main-image" src="" alt="Produto" />
-            <button class="nav-arrow next" aria-label="Próxima foto">&#10095;</button>
+            <button class="nav-arrow next" aria-label="Próxima foto">
+              &#10095;
+            </button>
           </div>
           <!-- Thumbnails -->
           <div class="thumbnail-container" id="thumbnail-container"></div>
@@ -57,14 +61,12 @@
           <div class="rating" id="availability-info"></div>
           <p id="product-price" class="price"></p>
           <p id="product-description" class="description"></p>
-          <!-- Specs list -->
-          <ul id="product-specs" class="product-specs"></ul>
           <!-- Technical specs table -->
           <table id="technical-specs-table" class="technical-specs"></table>
 
           <a id="buy-button" class="buy-button" href="#" target="_blank">
             <i class="fa-brands fa-whatsapp"></i>
-            Comprar via WhatsApp
+            Fazer pedido no WhatsApp
           </a>
         </div>
       </section>
@@ -107,7 +109,9 @@
 
       function renderProductGallery(images) {
         const mainImageEl = document.getElementById("main-image");
-        const thumbnailContainer = document.getElementById("thumbnail-container");
+        const thumbnailContainer = document.getElementById(
+          "thumbnail-container",
+        );
         let currentIndex = 0;
 
         function showImage(index) {
@@ -152,13 +156,17 @@
           const product = products.find((item) => item.id === productId);
           const container = document.getElementById("product-detail-container");
           if (!product) {
-            container.innerHTML = '<p class="empty-message">Produto não encontrado.</p>';
+            container.innerHTML =
+              '<p class="empty-message">Produto não encontrado.</p>';
             return;
           }
           document.title = product.name + " | GVolt 3D";
           document.getElementById("product-name").textContent = product.name;
-          document.getElementById("product-description").textContent = product.description;
-          document.getElementById("product-price").textContent = formatPrice(product.price);
+          document.getElementById("product-description").innerHTML =
+            product.longDescription.replace(/\n/g, "<br>");
+          document.getElementById("product-price").textContent = formatPrice(
+            product.price,
+          );
 
           // Availability info with lead time
           const availabilityInfo = document.getElementById("availability-info");
@@ -170,18 +178,12 @@
             availabilityText += availabilityText ? " • " : "";
             availabilityText += `Prazo: ${product.leadTimeDays} dias`;
           }
-          availabilityInfo.textContent = availabilityText;
-
-          // Specs list
-          const specsContainer = document.getElementById("product-specs");
-          specsContainer.innerHTML = "";
-          if (product.specs && product.specs.length) {
-            product.specs.forEach((spec) => {
-              const li = document.createElement("li");
-              li.innerHTML = `<i class="fa-solid fa-check"></i> ${spec}`;
-              specsContainer.appendChild(li);
-            });
-          }
+          availabilityInfo.innerHTML = `
+  <span style="color:${product.availability === "Em estoque" ? "#25d366" : "#f02dff"}">
+    ● ${product.availability}
+  </span>
+  ${product.leadTimeDays ? ` • Prazo: ${product.leadTimeDays} dias` : ""}
+`;
 
           // Technical specs table
           const techTable = document.getElementById("technical-specs-table");
@@ -208,10 +210,7 @@
           // WhatsApp button
           const whatsappNumber = "5519995325891";
           const message = encodeURIComponent(
-            "Olá! Tenho interesse no produto: " +
-              product.name +
-              " - " +
-              formatPrice(product.price),
+            `Olá! Quero comprar este produto 👇\n\n${product.name}\n${formatPrice(product.price)}\n\nVocê pode me passar mais detalhes?`,
           );
           document.getElementById("buy-button").href =
             "https://wa.me/" + whatsappNumber + "?text=" + message;

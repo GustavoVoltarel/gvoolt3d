@@ -358,6 +358,7 @@ a {
   background: linear-gradient(180deg, rgba(21, 10, 37, 0.9), rgba(7, 2, 16, 0.95));
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.28);
   transition: 0.2s ease;
+  cursor: pointer;
 }
 
 .product-card:hover {

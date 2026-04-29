@@ -2,7 +2,7 @@
   {
     "id": "porta-figurinha",
     "name": "Caixa para Figurinhas da Copa do Mundo",
-    "description": "Caixa temática para armazenar e organizar suas figurinhas do álbum da Copa do Mundo. Impressa em PLA com acabamento premium.",
+    "description": "Organize suas figurinhas com praticidade e proteção ⚽",
     "price": 35.0,
     "image": "assets/products/porta-figurinhaindex.jpg",
     "images": [
@@ -11,78 +11,52 @@
     ],
     "availability": "Em estoque",
     "leadTimeDays": 0,
-    "specs": [
-      "Acabamento resistente",
-      "Capacidade para até 600 figurinhas",
-      "Design personalizado da Copa",
-      "Diversas cores (consultar disponibilidade)"
-    ]
+    "longDescription": "Caixa organizadora para figurinhas da Copa do Mundo, ideal para manter sua coleção protegida, bem armazenada e sempre à mão.\n\nProduzida em impressão 3D com acabamento resistente e cabendo até 600 figurinhas, é perfeita para quem quer praticidade no dia a dia sem abrir mão de um visual organizado.\n\nÓtima opção para colecionadores e também para presentear, podendo ser personalizada com seu nome para se tornar única."
   },
   {
     "id": "mascote-palmeiras",
     "name": "Mascote do Palmeiras",
-    "description": "Mascote do Palmeiras, visual imponente, perfeito para torcedores que querem levar a paixão pelo Verdão para qualquer ambiente.",
-    "price": 120.00,
+    "description": "Mostre sua paixão pelo Verdão 💚",
+    "price": 120.0,
     "image": "assets/products/mascote-palmeiras-index.jpeg",
     "images": [
       "assets/products/mascote-palmeiras.jpeg"
     ],
     "availability": "Sob Encomenda",
     "leadTimeDays": 4,
-    "specs": [
-      "Base personalizável com seu nome",
-       "Cores personalizáveis sob consulta",
-      "Design robusto e acabamento de alta qualidade",
-      "Peça decorativa ideal para torcedores"
-      
-    ]
+    "longDescription": "Mascote do Palmeiras em versão 3D com acabamento detalhado e visual imponente.\n\nIdeal para torcedores que querem demonstrar sua paixão pelo time em qualquer ambiente, seja na mesa, estante ou setup.\n\nUma peça decorativa que chama atenção e traz identidade para o espaço, sendo também uma ótima opção de presente para fãs do Verdão."
   },
   {
     "id": "baby-yoda",
     "name": "Baby Yoda em Crochê",
-    "description": "Miniatura do Grogu (Baby Yoda) com efeito em crochê, com acabamento detalhado e visual encantador — perfeita para fãs de Star Wars",
-    "price": 60.00,
+    "description": "Um toque geek que transforma seu ambiente ✨",
+    "price": 60.0,
     "image": "assets/products/baby-yoda-index.jpeg",
     "images": [
       "assets/products/baby-yoda.jpeg"
     ],
     "availability": "Em estoque",
     "leadTimeDays": null,
-    "specs": [
-      "Design inspirado no personagem Grogu (Baby Yoda)",
-  "Alto nível de detalhamento",
-  "Produzido em impressão 3D",
-  "Acabamento em crochê",
-  "Peça decorativa ideal para fãs de Star Wars",
-  "Ótimo para mesas, estantes e coleções"
-    ]
+    "longDescription": "Miniatura do Grogu (Baby Yoda) com acabamento estilo crochê, trazendo um visual único, criativo e cheio de personalidade.\n\nPerfeita para fãs de Star Wars que querem adicionar um toque geek à decoração.\n\nIdeal para mesas, estantes ou coleções, é uma peça que se destaca e também funciona muito bem como presente."
   },
   {
     "id": "estrela-mario",
     "name": "Estrela Super Mario em Crochê",
-    "description": "Estrela decorativa em estilo crochê em impressão 3D, com textura diferenciada e visual divertido — perfeita para setups e coleções",
-    "price": 35.00,
+    "description": "Deixe seu setup com visual gamer 🎮",
+    "price": 35.0,
     "image": "assets/products/estrela-mario-index.jpeg",
     "images": [
       "assets/products/estrela-mario.jpeg"
     ],
     "availability": "Em estoque",
     "leadTimeDays": null,
-    "specs": [
-      "Design inspirado em jogos clássicos",
-  "Textura diferenciada e acabamento detalhado",
-  "Produzido em impressão 3D",
-  "Peça decorativa e resistente",
-  "Ideal para setups gamers e coleções",
-  "Ótimo para mesas e estantes",
-  "Cores personalizáveis sob consulta"
-    ]
+    "longDescription": "Estrela decorativa inspirada em jogos clássicos, com textura estilo crochê e acabamento diferenciado.\n\nIdeal para setups gamers ou ambientes criativos que pedem um toque mais descontraído.\n\nLeve, resistente e fácil de posicionar, é uma peça que combina perfeitamente com outros itens decorativos."
   },
   {
     "id": "porta-oculos",
     "name": "Suporte de Óculos Gato",
-    "description": "Suporte para óculos em formato de gato, funcional e decorativo — perfeito para organizar com estilo",
-    "price": 20.00,
+    "description": "Organize seu óculos com estilo 🐱",
+    "price": 20.0,
     "image": "assets/products/porta-oculos-index.jpeg",
     "images": [
       "assets/products/porta-oculos-index.jpeg",
@@ -90,11 +64,6 @@
     ],
     "availability": "Sob encomenda",
     "leadTimeDays": 1,
-    "specs": [
-      "Disponível em várias cores",
-      "Design criativo em formato de gato",
-  "Para deixar seu óculos sempre a vista",
-  "Peça decorativa e funcional"
-    ]
+    "longDescription": "Suporte para óculos em formato de gato, funcional e decorativo.\n\nMantém seus óculos sempre protegidos e ao alcance, evitando riscos e perda no dia a dia.\n\nAlém da utilidade, adiciona um toque criativo ao ambiente, sendo ideal para mesas, criados-mudos ou setups.\n\nUma opção prática e também perfeita para presente."
   }
 ]
