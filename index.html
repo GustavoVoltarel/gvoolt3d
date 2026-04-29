@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GVolt 3D | Impressão 3D personalizada</title>
+    <meta
+      name="description"
+      content="Produtos personalizados de impressão 3D com acabamento premium. Conheça a GVolt 3D."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="site-glow"></div>
+
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="GVolt 3D">
+        <img src="assets/gvolt-logo.jpeg" alt="Logo GVolt 3D" />
+        <span>GVolt <strong>3D</strong></span>
+      </a>
+
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="index.html">Início</a>
+        <a href="#produtos">Produtos</a>
+        <a href="#contato">Contato</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-image-card">
+          <img src="assets/gvolt-logo.jpeg" alt="Logo GVolt 3D em neon roxo" />
+        </div>
+
+        <div class="hero-content">
+          <p class="eyebrow">
+            <i class="fa-solid fa-bolt"></i> Impressão 3D personalizada
+          </p>
+          <h1>GVolt <span>3D</span></h1>
+          <p class="hero-text">
+            Peças criativas, funcionais e decorativas feitas sob medida para
+            transformar suas ideias em realidade.
+          </p>
+          <div class="hero-actions">
+            <a href="#produtos" class="btn btn-primary">Ver produtos</a>
+            <a
+              href="https://wa.me/5519995325891?text=Ol%C3%A1%21%20Quero%20fazer%20um%20or%C3%A7amento%20com%20a%20GVolt%203D"
+              target="_blank"
+              class="btn btn-secondary"
+              >Orçamento via WhatsApp</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <section class="benefits" id="sobre">
+        <article>
+          <i class="fa-solid fa-cube"></i><span>Peças exclusivas</span>
+        </article>
+        <article>
+          <i class="fa-solid fa-wand-magic-sparkles"></i
+          ><span>Design personalizado</span>
+        </article>
+        <article>
+          <i class="fa-solid fa-shield-heart"></i
+          ><span>Acabamento cuidadoso</span>
+        </article>
+        <article>
+          <i class="fa-brands fa-whatsapp"></i><span>Compra rápida</span>
+        </article>
+      </section>
+
+      <section class="products-section" id="produtos">
+        <div class="section-heading">
+          <p class="eyebrow">
+            <i class="fa-solid fa-layer-group"></i> Catálogo
+          </p>
+          <h2>Nossos Produtos <span>/</span></h2>
+          <p>
+            Confira algumas peças disponíveis. Você também pode pedir modelos
+            personalizados.
+          </p>
+        </div>
+
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Buscar por produto ou descrição..."
+            aria-label="Buscar produtos"
+          />
+        </div>
+
+        <div id="products" class="products-container"></div>
+        <p id="emptyMessage" class="empty-message" hidden>
+          Nenhum produto encontrado.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer" id="contato">
+      <div class="footer-brand">
+        <img src="assets/gvolt-logo.jpeg" alt="Logo GVolt 3D" />
+        <strong>GVolt <span>3D</span></strong>
+      </div>
+      <p>Soluções criativas em impressão 3D.</p>
+      <a href="https://wa.me/5519995325891" target="_blank"
+        ><i class="fa-brands fa-whatsapp"></i> Fale conosco</a
+      >
+    </footer>
+
+    <script>
+      let allProducts = [];
+      const container = document.getElementById("products");
+      const emptyMessage = document.getElementById("emptyMessage");
+
+      function formatPrice(value) {
+        return value.toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        });
+      }
+
+      function renderProducts(products) {
+        container.innerHTML = "";
+        emptyMessage.hidden = products.length !== 0;
+
+        products.forEach((product) => {
+          const card = document.createElement("article");
+          card.className = "product-card";
+          card.innerHTML = `
+          <a class="product-image" href="product.html?id=${product.id}" aria-label="Ver detalhes de ${product.name}">
+            <img src="${product.image}" alt="${product.name}">
+          </a>
+          <div class="product-card-body">
+            <h3>${product.name}</h3>
+            <p>${product.description}</p>
+            <strong>${formatPrice(product.price)}</strong>
+            <a class="details-link" href="product.html?id=${product.id}">Ver detalhes <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        `;
+          container.appendChild(card);
+        });
+      }
+
+      fetch("products.json")
+        .then((response) => response.json())
+        .then((products) => {
+          allProducts = products;
+          renderProducts(allProducts);
+        })
+        .catch((error) => {
+          console.error("Erro ao carregar produtos:", error);
+          emptyMessage.textContent = "Não foi possível carregar os produtos.";
+          emptyMessage.hidden = false;
+        });
+
+      document
+        .getElementById("searchInput")
+        .addEventListener("input", function () {
+          const term = this.value.toLowerCase().trim();
+          const filtered = allProducts.filter((product) => {
+            return (
+              product.name.toLowerCase().includes(term) ||
+              product.description.toLowerCase().includes(term)
+            );
+          });
+          renderProducts(filtered);
+        });
+    </script>
+  </body>
+</html>

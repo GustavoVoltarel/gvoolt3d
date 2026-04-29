@@ -1,0 +1,100 @@
+[
+  {
+    "id": "porta-figurinha",
+    "name": "Caixa para Figurinhas da Copa do Mundo",
+    "description": "Caixa temática para armazenar e organizar suas figurinhas do álbum da Copa do Mundo. Impressa em PLA com acabamento premium.",
+    "price": 35.0,
+    "image": "assets/products/porta-figurinhaindex.jpg",
+    "images": [
+      "assets/products/porta-figurinha-main.jpg",
+      "assets/products/porta-figurinha.jpg"
+    ],
+    "availability": "Em estoque",
+    "leadTimeDays": 0,
+    "specs": [
+      "Acabamento resistente",
+      "Capacidade para até 600 figurinhas",
+      "Design personalizado da Copa",
+      "Diversas cores (consultar disponibilidade)"
+    ]
+  },
+  {
+    "id": "mascote-palmeiras",
+    "name": "Mascote do Palmeiras",
+    "description": "Mascote do Palmeiras, visual imponente, perfeito para torcedores que querem levar a paixão pelo Verdão para qualquer ambiente.",
+    "price": 120.00,
+    "image": "assets/products/mascote-palmeiras-index.jpeg",
+    "images": [
+      "assets/products/mascote-palmeiras.jpeg"
+    ],
+    "availability": "Sob Encomenda",
+    "leadTimeDays": 4,
+    "specs": [
+      "Base personalizável com seu nome",
+       "Cores personalizáveis sob consulta",
+      "Design robusto e acabamento de alta qualidade",
+      "Peça decorativa ideal para torcedores"
+      
+    ]
+  },
+  {
+    "id": "baby-yoda",
+    "name": "Baby Yoda em Crochê",
+    "description": "Miniatura do Grogu (Baby Yoda) com efeito em crochê, com acabamento detalhado e visual encantador — perfeita para fãs de Star Wars",
+    "price": 60.00,
+    "image": "/assets/products/baby-yoda-index.jpeg",
+    "images": [
+      "/assets/products/baby-yoda.jpeg"
+    ],
+    "availability": "Em estoque",
+    "leadTimeDays": null,
+    "specs": [
+      "Design inspirado no personagem Grogu (Baby Yoda)",
+  "Alto nível de detalhamento",
+  "Produzido em impressão 3D",
+  "Acabamento em crochê",
+  "Peça decorativa ideal para fãs de Star Wars",
+  "Ótimo para mesas, estantes e coleções"
+    ]
+  },
+  {
+    "id": "estrela-mario",
+    "name": "Estrela Super Mario em Crochê",
+    "description": "Estrela decorativa em estilo crochê em impressão 3D, com textura diferenciada e visual divertido — perfeita para setups e coleções",
+    "price": 35.00,
+    "image": "/assets/products/estrela-mario-index.jpeg",
+    "images": [
+      "/assets/products/estrela-mario.jpeg"
+    ],
+    "availability": "Em estoque",
+    "leadTimeDays": null,
+    "specs": [
+      "Design inspirado em jogos clássicos",
+  "Textura diferenciada e acabamento detalhado",
+  "Produzido em impressão 3D",
+  "Peça decorativa e resistente",
+  "Ideal para setups gamers e coleções",
+  "Ótimo para mesas e estantes",
+  "Cores personalizáveis sob consulta"
+    ]
+  },
+  {
+    "id": "porta-oculos",
+    "name": "Suporte de Óculos Gato",
+    "description": "Suporte para óculos em formato de gato, funcional e decorativo — perfeito para organizar com estilo",
+    "price": 20.00,
+    "image": "/assets/products/porta-oculos-index.jpeg",
+    "images": [
+      "/assets/products/porta-oculos-index.jpeg",
+      "/assets/products/porta-oculos.JPG"
+    ],
+    "availability": "Sob encomenda",
+    "leadTimeDays": 1,
+    "specs": [
+      "Disponível em várias cores",
+      "Design criativo em formato de gato",
+  "Para deixar seu óculos sempre a vista",
+  "Peça decorativa e funcional"
+    ]
+  }
+]
