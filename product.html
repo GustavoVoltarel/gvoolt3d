@@ -15,31 +15,31 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
     <link rel="stylesheet" href="style.css" />
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Configurações globais (SUPABASE_URL, SUPABASE_KEY) -->
+    <script src="config.js"></script>
   </head>
   <body>
     <div class="site-glow"></div>
-
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="GVolt 3D">
         <img src="assets/gvolt-logo.jpeg" alt="Logo GVolt 3D" />
         <span>GVolt <strong>3D</strong></span>
       </a>
-
       <nav class="nav-links" aria-label="Navegação principal">
         <a href="index.html">Início</a>
         <a href="index.html#produtos">Produtos</a>
         <a href="index.html#contato">Contato</a>
       </nav>
     </header>
-
     <main class="detail-page">
       <a href="index.html#produtos" class="back-link"
         ><i class="fa-solid fa-arrow-left"></i> Voltar para todos os produtos</a
       >
-
       <section id="product-detail-container" class="product-detail-container">
         <div class="detail-gallery">
-          <!-- Main image with arrows -->
+          <!-- Imagem principal com setas -->
           <div class="main-image-wrapper">
             <button class="nav-arrow prev" aria-label="Foto anterior">
               &#10094;
@@ -49,10 +49,9 @@
               &#10095;
             </button>
           </div>
-          <!-- Thumbnails -->
+          <!-- Miniaturas -->
           <div class="thumbnail-container" id="thumbnail-container"></div>
         </div>
-
         <div class="product-info">
           <p class="eyebrow">
             <i class="fa-solid fa-bolt"></i> Produto GVolt 3D
@@ -61,9 +60,8 @@
           <div class="rating" id="availability-info"></div>
           <p id="product-price" class="price"></p>
           <p id="product-description" class="description"></p>
-          <!-- Technical specs table -->
+          <!-- Tabela de especificações técnicas -->
           <table id="technical-specs-table" class="technical-specs"></table>
-
           <a id="buy-button" class="buy-button" href="#" target="_blank">
             <i class="fa-brands fa-whatsapp"></i>
             Fazer pedido no WhatsApp
@@ -71,7 +69,6 @@
         </div>
       </section>
     </main>
-
     <footer class="footer">
       <div class="footer-brand">
         <img src="assets/gvolt-logo.jpeg" alt="Logo GVolt 3D" />
@@ -79,8 +76,8 @@
       </div>
       <p>Soluções criativas em impressão 3D.</p>
     </footer>
-
     <script>
+      // Função auxiliar para extrair parâmetros da URL
       function getParameterByName(name, url = window.location.href) {
         name = name.replace(/[\[\]]/g, "\\$&");
         const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
@@ -96,24 +93,19 @@
           currency: "BRL",
         });
       }
-
+      // Obtém o ID do produto a partir da URL
       const productId = getParameterByName("id");
-
-      // Render gallery
+      // Função para obter lista de imagens
       function getProductImages(product) {
         if (product.images && product.images.length) {
           return product.images;
         }
         return product.image ? [product.image] : [];
       }
-
       function renderProductGallery(images) {
         const mainImageEl = document.getElementById("main-image");
-        const thumbnailContainer = document.getElementById(
-          "thumbnail-container",
-        );
+        const thumbnailContainer = document.getElementById("thumbnail-container");
         let currentIndex = 0;
-
         function showImage(index) {
           currentIndex = index;
           mainImageEl.src = images[index];
@@ -126,8 +118,6 @@
             }
           });
         }
-
-        // Clear previous thumbnails
         thumbnailContainer.innerHTML = "";
         images.forEach((imgSrc, idx) => {
           const thumb = document.createElement("img");
@@ -136,10 +126,7 @@
           thumb.addEventListener("click", () => showImage(idx));
           thumbnailContainer.appendChild(thumb);
         });
-        // Show first image
         if (images.length) showImage(0);
-
-        // Arrows navigation
         document.querySelector(".nav-arrow.prev").onclick = () => {
           const newIndex = (currentIndex - 1 + images.length) % images.length;
           showImage(newIndex);
@@ -149,43 +136,38 @@
           showImage(newIndex);
         };
       }
-
-      fetch("products.json")
-        .then((response) => response.json())
-        .then((products) => {
-          const product = products.find((item) => item.id === productId);
-          const container = document.getElementById("product-detail-container");
+      // Cria cliente Supabase com configurações globais
+      const supabaseClient = window.supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_KEY,
+      );
+      async function loadProduct() {
+        const container = document.getElementById("product-detail-container");
+        try {
+          const {data: product, error} = await supabaseClient
+            .from("products")
+            .select("*")
+            .eq("id", productId)
+            .single();
+          if (error) throw error;
           if (!product) {
-            container.innerHTML =
-              '<p class="empty-message">Produto não encontrado.</p>';
+            container.innerHTML = '<p class="empty-message">Produto não encontrado.</p>';
             return;
           }
-          document.title = product.name + " | GVolt 3D";
+          // Atualiza título
+          document.title = `${product.name} | GVolt 3D`;
+          // Preenche campos
           document.getElementById("product-name").textContent = product.name;
-          document.getElementById("product-description").innerHTML =
-            product.longDescription.replace(/\n/g, "<br>");
-          document.getElementById("product-price").textContent = formatPrice(
-            product.price,
-          );
-
-          // Availability info with lead time
+          document.getElementById("product-description").innerHTML = (product.long_description || "").replace(/\n/g, "<br>");
+          document.getElementById("product-price").textContent = formatPrice(product.price);
+          // Disponibilidade e prazo
           const availabilityInfo = document.getElementById("availability-info");
-          let availabilityText = "";
-          if (product.availability) {
-            availabilityText = product.availability;
-          }
-          if (product.leadTimeDays) {
-            availabilityText += availabilityText ? " • " : "";
-            availabilityText += `Prazo: ${product.leadTimeDays} dias`;
-          }
+          const statusColor = product.availability === "Em estoque" ? "#25d366" : "#f02dff";
           availabilityInfo.innerHTML = `
-  <span style="color:${product.availability === "Em estoque" ? "#25d366" : "#f02dff"}">
-    ● ${product.availability}
-  </span>
-  ${product.leadTimeDays ? ` • Prazo: ${product.leadTimeDays} dias` : ""}
+  <span style="color:${statusColor}">● ${product.availability || "Sob encomenda"}</span>
+  ${product.lead_time_days ? ` • Prazo: ${product.lead_time_days} dias` : ""}
 `;
-
-          // Technical specs table
+          // Tabela de especificações técnicas
           const techTable = document.getElementById("technical-specs-table");
           techTable.innerHTML = "";
           if (product.technicalSpecs) {
@@ -202,22 +184,21 @@
             }
             techTable.appendChild(tbody);
           }
-
-          // Gallery images
+          // Galeria de imagens
           const images = getProductImages(product);
           renderProductGallery(images);
-
-          // WhatsApp button
+          // Botão de compra via WhatsApp
           const whatsappNumber = "5519995325891";
           const message = encodeURIComponent(
             `Olá! Quero comprar este produto 👇\n\n${product.name}\n${formatPrice(product.price)}\n\nVocê pode me passar mais detalhes?`,
           );
-          document.getElementById("buy-button").href =
-            "https://wa.me/" + whatsappNumber + "?text=" + message;
-        })
-        .catch((error) => {
-          console.error("Erro ao carregar produto:", error);
-        });
+          document.getElementById("buy-button").href = `https://wa.me/${whatsappNumber}?text=${message}`;
+        } catch (err) {
+          console.error("Erro ao carregar produto:", err);
+          container.innerHTML = '<p class="empty-message">Erro ao carregar produto.</p>';
+        }
+      }
+      loadProduct();
     </script>
   </body>
 </html>

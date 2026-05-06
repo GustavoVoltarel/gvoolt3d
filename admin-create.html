@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastrar Produto | GVolt 3D</title>
+    <meta
+      name="description"
+      content="Cadastre novos produtos no catálogo da GVolt 3D diretamente pelo navegador."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <!-- Reutiliza o estilo principal -->
+    <link rel="stylesheet" href="style.css" />
+    <!-- Biblioteca Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Arquivo de configuração (define SUPABASE_URL, SUPABASE_KEY e ADMIN_EMAILS) -->
+    <script src="config.js"></script>
+    <style>
+      /* Estilos específicos para o formulário de cadastro */
+      .admin-page {
+        width: min(980px, calc(100% - 32px));
+        margin: 40px auto;
+        padding: 32px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--card);
+        box-shadow: var(--shadow);
+      }
+      .admin-page h2 {
+        margin-top: 0;
+        font-family: "Orbitron", sans-serif;
+        font-size: 1.6rem;
+        color: var(--pink);
+        text-align: center;
+      }
+      .form-group {
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+      }
+      .form-group label {
+        margin-bottom: 6px;
+        font-weight: 500;
+      }
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        padding: 12px;
+        font-size: 0.95rem;
+      }
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: var(--purple);
+      }
+      .message {
+        margin-top: 12px;
+        font-size: 0.92rem;
+      }
+      .message.error {
+        color: var(--pink);
+      }
+      .message.success {
+        color: var(--success);
+      }
+      /* Botões extras */
+      #back-button {
+        margin-top: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="site-glow"></div>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="GVolt 3D">
+        <img src="assets/gvolt-logo.jpeg" alt="Logo GVolt 3D" />
+        <span>GVolt <strong>3D</strong></span>
+      </a>
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="index.html">Início</a>
+        <a href="index.html#produtos">Produtos</a>
+        <a href="index.html#contato">Contato</a>
+      </nav>
+    </header>
+    <main class="admin-page">
+      <h2>Cadastrar Produto</h2>
+      <!-- Formulário de login -->
+      <div id="login-container">
+        <div class="form-group">
+          <label for="login-email">E-mail</label>
+          <input type="email" id="login-email" placeholder="seu@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Senha</label>
+          <input type="password" id="login-password" placeholder="Senha" />
+        </div>
+        <button class="btn btn-primary" id="login-button">Entrar</button>
+        <p id="login-message" class="message error" hidden></p>
+      </div>
+      <!-- Conteúdo de cadastro -->
+      <div id="admin-container" hidden>
+        <p>Preencha os campos abaixo para adicionar um novo produto.</p>
+        <form id="product-form">
+          <div class="form-group">
+            <label for="product-id">ID (slug)</label>
+            <input
+              type="text"
+              id="product-id"
+              placeholder="Ex: baby-yoda"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="product-name">Nome</label>
+            <input
+              type="text"
+              id="product-name"
+              placeholder="Nome do produto"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="product-description">Descrição curta</label>
+            <input
+              type="text"
+              id="product-description"
+              placeholder="Resumo do produto"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="product-price">Preço (R$)</label>
+            <input
+              type="number"
+              step="0.01"
+              id="product-price"
+              placeholder="0.00"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="product-image">Imagem principal (URL)</label>
+            <input type="text" id="product-image" placeholder="URL da imagem" />
+          </div>
+          <div class="form-group">
+            <label for="product-images"
+              >Imagens (URLs separadas por vírgula)</label
+            >
+            <input
+              type="text"
+              id="product-images"
+              placeholder="url1.jpg, url2.jpg"
+            />
+          </div>
+          <div class="form-group">
+            <label for="product-availability">Disponibilidade</label>
+            <select id="product-availability">
+              <option value="Em estoque">Em estoque</option>
+              <option value="Sob encomenda">Sob encomenda</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="product-lead-time">Prazo (dias)</label>
+            <input type="number" id="product-lead-time" placeholder="0" />
+          </div>
+          <div class="form-group">
+            <label for="product-long-description">Descrição longa</label>
+            <textarea
+              id="product-long-description"
+              placeholder="Detalhes completos do produto..."
+              rows="6"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="product-specs"
+              >Especificações técnicas (JSON ou vazio)</label
+            >
+            <textarea
+              id="product-specs"
+              placeholder='{"Altura":"15cm","Material":"PLA"}'
+              rows="3"
+            ></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Salvar Produto</button>
+          <p id="product-message" class="message" hidden></p>
+        </form>
+        <button class="btn btn-secondary" id="back-button">Voltar</button>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="footer-brand">
+        <img src="assets/gvolt-logo.jpeg" alt="Logo GVolt 3D" />
+        <strong>GVolt <span>3D</span></strong>
+      </div>
+      <p>Soluções criativas em impressão 3D.</p>
+      <a href="https://wa.me/5519995325891" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i> Fale conosco</a
+      >
+    </footer>
+    <script>
+      // Cria o cliente Supabase usando as configurações globais definidas em config.js
+      const supabaseClient = window.supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_KEY,
+      );
+      const ADMIN_EMAILS = window.ADMIN_EMAILS || [];
+
+      const loginContainer = document.getElementById("login-container");
+      const adminContainer = document.getElementById("admin-container");
+      const loginMessage = document.getElementById("login-message");
+      const productMessage = document.getElementById("product-message");
+
+      // Verifica se há sessão ativa e se o usuário está autorizado
+      async function checkSession() {
+        const {
+          data: {session},
+        } = await supabaseClient.auth.getSession();
+        if (session && session.user) {
+          if (ADMIN_EMAILS.includes(session.user.email)) {
+            showAdmin();
+          } else {
+            loginContainer.hidden = false;
+            adminContainer.hidden = true;
+            loginMessage.hidden = false;
+            loginMessage.textContent =
+              "Este usuário não tem permissão para acessar a área administrativa.";
+          }
+        } else {
+          showLogin();
+        }
+      }
+
+      function showLogin() {
+        loginContainer.hidden = false;
+        adminContainer.hidden = true;
+        loginMessage.hidden = true;
+      }
+
+      function showAdmin() {
+        loginContainer.hidden = true;
+        adminContainer.hidden = false;
+        loginMessage.hidden = true;
+      }
+
+      // Evento de login
+      document
+        .getElementById("login-button")
+        .addEventListener("click", async () => {
+          const email = document.getElementById("login-email").value.trim();
+          const password = document.getElementById("login-password").value;
+          loginMessage.hidden = true;
+          if (!email || !password) {
+            loginMessage.textContent = "Preencha e-mail e senha.";
+            loginMessage.hidden = false;
+            return;
+          }
+          const {error} = await supabaseClient.auth.signInWithPassword({
+            email,
+            password,
+          });
+          if (error) {
+            loginMessage.textContent = error.message || "Erro ao fazer login.";
+            loginMessage.hidden = false;
+          } else {
+            await checkSession();
+          }
+        });
+
+      // Botão de voltar para listagem
+      document.getElementById("back-button").addEventListener("click", () => {
+        window.location.href = "admin.html";
+      });
+
+      // Envio do formulário para inserir produto
+      document
+        .getElementById("product-form")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+          productMessage.hidden = true;
+
+          // Captura valores do formulário
+          const id = document.getElementById("product-id").value.trim();
+          const name = document.getElementById("product-name").value.trim();
+          const description = document
+            .getElementById("product-description")
+            .value.trim();
+          const priceValue = document.getElementById("product-price").value;
+          const image =
+            document.getElementById("product-image").value.trim() || null;
+          const imagesStr = document
+            .getElementById("product-images")
+            .value.trim();
+          const availability = document.getElementById(
+            "product-availability",
+          ).value;
+          const leadTime = document.getElementById("product-lead-time").value;
+          const longDescription = document
+            .getElementById("product-long-description")
+            .value.trim();
+          const specsStr = document
+            .getElementById("product-specs")
+            .value.trim();
+
+          if (!id || !name || !description || !priceValue) {
+            productMessage.textContent =
+              "Preencha todos os campos obrigatórios.";
+            productMessage.className = "message error";
+            productMessage.hidden = false;
+            return;
+          }
+          const price = parseFloat(priceValue);
+          const leadTimeDays = leadTime ? parseInt(leadTime) : null;
+          let images = null;
+          if (imagesStr) {
+            images = imagesStr
+              .split(",")
+              .map((url) => url.trim())
+              .filter((v) => v);
+          }
+          let technicalSpecs = null;
+          if (specsStr) {
+            try {
+              technicalSpecs = JSON.parse(specsStr);
+            } catch (e) {
+              productMessage.textContent =
+                "Especificações técnicas inválidas (não é JSON).";
+              productMessage.className = "message error";
+              productMessage.hidden = false;
+              return;
+            }
+          }
+
+          const newProduct = {
+            id,
+            name,
+            description,
+            price,
+            image,
+            images,
+            availability,
+            lead_time_days: leadTimeDays,
+            long_description: longDescription,
+          };
+          try {
+            const {error} = await supabaseClient
+              .from("products")
+              .insert([newProduct]);
+            if (error) throw error;
+            productMessage.textContent = "Produto adicionado com sucesso!";
+            productMessage.className = "message success";
+            productMessage.hidden = false;
+            document.getElementById("product-form").reset();
+          } catch (err) {
+            productMessage.textContent =
+              err.message || "Erro ao adicionar produto.";
+            productMessage.className = "message error";
+            productMessage.hidden = false;
+          }
+        });
+
+      // Checa a sessão ao carregar
+      checkSession();
+    </script>
+  </body>
+</html>

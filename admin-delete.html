@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Apagar Produto | GVolt 3D</title>
+    <meta
+      name="description"
+      content="Confirmação para exclusão de um produto do catálogo."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Importa as variáveis globais de configuração -->
+    <script src="config.js"></script>
+    <style>
+      /* Ajustes para a página de apagamento */
+      .product-info {
+        margin: 24px 0;
+        padding: 16px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+      }
+      .product-info h3 {
+        margin-top: 0;
+        font-family: "Orbitron", sans-serif;
+        color: var(--pink);
+      }
+      .buttons {
+        display: flex;
+        gap: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="site-glow"></div>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="GVolt 3D">
+        <img src="assets/gvolt-logo.jpeg" alt="Logo GVolt 3D" />
+        <span>GVolt <strong>3D</strong></span>
+      </a>
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="index.html">Início</a>
+        <a href="index.html#produtos">Produtos</a>
+        <a href="index.html#contato">Contato</a>
+      </nav>
+    </header>
+    <main class="admin-page">
+      <h2>Apagar Produto</h2>
+      <!-- Área de login -->
+      <div id="login-container">
+        <div class="form-group">
+          <label for="login-email">E-mail</label>
+          <input type="email" id="login-email" placeholder="seu@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Senha</label>
+          <input type="password" id="login-password" placeholder="Senha" />
+        </div>
+        <button class="btn btn-primary" id="login-button">Entrar</button>
+        <p id="login-message" class="message error" hidden></p>
+      </div>
+      <!-- Conteúdo de apagar -->
+      <div id="delete-container" hidden>
+        <div class="product-info" id="product-info">
+          <!-- Detalhes do produto -->
+        </div>
+        <p id="delete-message" class="message" hidden></p>
+        <div class="buttons">
+          <button class="btn btn-primary" id="confirm-delete">Apagar</button>
+          <button class="btn btn-secondary" id="cancel-delete">Cancelar</button>
+        </div>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="footer-brand">
+        <img src="assets/gvolt-logo.jpeg" alt="Logo GVolt 3D" />
+        <strong>GVolt <span>3D</span></strong>
+      </div>
+      <p>Soluções criativas em impressão 3D.</p>
+      <a href="https://wa.me/5519995325891" target="_blank"
+        ><i class="fa-brands fa-whatsapp"></i> Fale conosco</a
+      >
+    </footer>
+    <script>
+      // Cria o cliente Supabase usando as variáveis globais definidas em config.js
+      const supabaseClient = window.supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_KEY,
+      );
+      const ADMIN_EMAILS = window.ADMIN_EMAILS || [];
+      const loginContainer = document.getElementById("login-container");
+      const deleteContainer = document.getElementById("delete-container");
+      const loginMessage = document.getElementById("login-message");
+      const deleteMessage = document.getElementById("delete-message");
+      const productInfo = document.getElementById("product-info");
+
+      function getProductIdFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get("id");
+      }
+
+      async function checkSession() {
+        const {
+          data: {session},
+        } = await supabaseClient.auth.getSession();
+        if (session && session.user) {
+          if (ADMIN_EMAILS.includes(session.user.email)) {
+            showDelete();
+            await loadProduct();
+          } else {
+            loginContainer.hidden = false;
+            deleteContainer.hidden = true;
+            loginMessage.hidden = false;
+            loginMessage.textContent =
+              "Este usuário não tem permissão para acessar a área administrativa.";
+          }
+        } else {
+          showLogin();
+        }
+      }
+
+      function showLogin() {
+        loginContainer.hidden = false;
+        deleteContainer.hidden = true;
+        loginMessage.hidden = true;
+      }
+
+      function showDelete() {
+        loginContainer.hidden = true;
+        deleteContainer.hidden = false;
+        loginMessage.hidden = true;
+      }
+
+      document
+        .getElementById("login-button")
+        .addEventListener("click", async () => {
+          const email = document.getElementById("login-email").value.trim();
+          const password = document.getElementById("login-password").value;
+          loginMessage.hidden = true;
+          if (!email || !password) {
+            loginMessage.textContent = "Preencha e-mail e senha.";
+            loginMessage.hidden = false;
+            return;
+          }
+          const {error} = await supabaseClient.auth.signInWithPassword({
+            email,
+            password,
+          });
+          if (error) {
+            loginMessage.textContent = error.message || "Erro ao fazer login.";
+            loginMessage.hidden = false;
+          } else {
+            await checkSession();
+          }
+        });
+
+      document.getElementById("cancel-delete").addEventListener("click", () => {
+        // Volta para listagem
+        window.location.href = "admin.html";
+      });
+
+      async function loadProduct() {
+        deleteMessage.hidden = true;
+        productInfo.innerHTML = "";
+        const productId = getProductIdFromUrl();
+        if (!productId) {
+          deleteMessage.textContent = "Produto não encontrado.";
+          deleteMessage.className = "message error";
+          deleteMessage.hidden = false;
+          return;
+        }
+        const {data, error} = await supabaseClient
+          .from("products")
+          .select("*")
+          .eq("id", productId)
+          .single();
+        if (error) {
+          deleteMessage.textContent =
+            error.message || "Erro ao carregar produto.";
+          deleteMessage.className = "message error";
+          deleteMessage.hidden = false;
+          return;
+        }
+        if (!data) {
+          deleteMessage.textContent = "Produto não encontrado.";
+          deleteMessage.className = "message";
+          deleteMessage.hidden = false;
+          return;
+        }
+        // Exibe informações básicas
+        productInfo.innerHTML = `
+          <h3>${data.name}</h3>
+          <p><strong>ID:</strong> ${data.id}</p>
+          <p><strong>Descrição:</strong> ${data.description || ""}</p>
+          <p><strong>Preço:</strong> R$ ${data.price.toFixed(2)}</p>
+          <p><strong>Disponibilidade:</strong> ${data.availability || ""}</p>
+          <p>Tem certeza que deseja apagar este produto?</p>
+        `;
+        // Atribui ID para event handler de apagar
+        document.getElementById("confirm-delete").onclick = async function () {
+          await deleteProduct(productId);
+        };
+      }
+
+      async function deleteProduct(productId) {
+        deleteMessage.hidden = true;
+        try {
+          const {error} = await supabaseClient
+            .from("products")
+            .delete()
+            .eq("id", productId);
+          if (error) throw error;
+          deleteMessage.textContent = "Produto apagado com sucesso!";
+          deleteMessage.className = "message success";
+          deleteMessage.hidden = false;
+          // Remove detalhes e botões
+          productInfo.innerHTML = "";
+          document.getElementById("confirm-delete").disabled = true;
+        } catch (err) {
+          deleteMessage.textContent = err.message || "Erro ao apagar produto.";
+          deleteMessage.className = "message error";
+          deleteMessage.hidden = false;
+        }
+      }
+
+      checkSession();
+    </script>
+  </body>
+</html>

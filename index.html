@@ -19,6 +19,11 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
     <link rel="stylesheet" href="style.css" />
+
+    <!-- Supabase JS SDK (v2) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Carrega as constantes SUPABASE_URL, SUPABASE_KEY e ADMIN_EMAILS -->
+    <script src="config.js"></script>
   </head>
   <body>
     <div class="site-glow"></div>
@@ -121,6 +126,14 @@
     </footer>
 
     <script>
+      // ---------------------------------------------------------------------------------------------------------
+      //  Instancia o cliente Supabase utilizando as constantes globais definidas em config.js.
+      //  As variáveis SUPABASE_URL e SUPABASE_KEY são carregadas no objeto window pelo arquivo de configuração.
+      const supabaseClient = window.supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_KEY,
+      );
+
       let allProducts = [];
       const container = document.getElementById("products");
       const emptyMessage = document.getElementById("emptyMessage");
@@ -160,18 +173,27 @@
         });
       }
 
-      fetch("products.json")
-        .then((response) => response.json())
-        .then((products) => {
-          allProducts = products;
+      // Carrega todos os produtos da tabela "products" no Supabase.
+      async function loadProducts() {
+        try {
+          const {data, error} = await supabaseClient
+            .from("products")
+            .select("*")
+            .order("name", {ascending: true});
+          if (error) throw error;
+          allProducts = data || [];
           renderProducts(allProducts);
-        })
-        .catch((error) => {
+        } catch (error) {
           console.error("Erro ao carregar produtos:", error);
           emptyMessage.textContent = "Não foi possível carregar os produtos.";
           emptyMessage.hidden = false;
-        });
+        }
+      }
 
+      // Inicializa a busca assim que o DOM estiver pronto
+      loadProducts();
+
+      // Busca em tempo real: filtra os produtos conforme o usuário digita
       document
         .getElementById("searchInput")
         .addEventListener("input", function () {
@@ -180,7 +202,8 @@
             return (
               product.name.toLowerCase().includes(term) ||
               product.description.toLowerCase().includes(term) ||
-              (product.longDescription && product.longDescription.toLowerCase().includes(term))
+              (product.long_description &&
+                product.long_description.toLowerCase().includes(term))
             );
           });
           renderProducts(filtered);

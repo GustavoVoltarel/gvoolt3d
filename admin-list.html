@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerenciar Produtos | GVolt 3D</title>
+    <meta
+      name="description"
+      content="Lista de produtos cadastrados e opções para editar ou apagar."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <!-- Usa o mesmo arquivo de estilos que o restante do site -->
+    <link rel="stylesheet" href="style.css" />
+    <!-- Biblioteca do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+      /* Estilos adicionais para a listagem */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 24px;
+      }
+      thead {
+        background: var(--card-solid);
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 12px;
+        border-bottom: 1px solid var(--border);
+      }
+      tr:nth-child(even) {
+        background: rgba(255, 255, 255, 0.03);
+      }
+      .actions {
+        display: flex;
+        gap: 12px;
+      }
+      .actions a {
+        color: var(--purple);
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .actions a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="site-glow"></div>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="GVolt 3D">
+        <img src="assets/gvolt-logo.jpeg" alt="Logo GVolt 3D" />
+        <span>GVolt <strong>3D</strong></span>
+      </a>
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="index.html">Início</a>
+        <a href="index.html#produtos">Produtos</a>
+        <a href="index.html#contato">Contato</a>
+      </nav>
+    </header>
+    <main class="admin-page">
+      <h2>Gerenciar Produtos</h2>
+      <!-- Área de login -->
+      <div id="login-container">
+        <div class="form-group">
+          <label for="login-email">E-mail</label>
+          <input type="email" id="login-email" placeholder="seu@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Senha</label>
+          <input type="password" id="login-password" placeholder="Senha" />
+        </div>
+        <button class="btn btn-primary" id="login-button">Entrar</button>
+        <p id="login-message" class="message error" hidden></p>
+      </div>
+
+      <!-- Área de listagem -->
+      <div id="list-container" hidden>
+        <p>Lista de produtos cadastrados:</p>
+        <table id="products-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Preço</th>
+              <th>Disponibilidade</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="products-body">
+            <!-- Conteúdo dinâmico -->
+          </tbody>
+        </table>
+        <p id="list-message" class="message" hidden></p>
+        <button class="btn btn-secondary" id="logout-button">Sair</button>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="footer-brand">
+        <img src="assets/gvolt-logo.jpeg" alt="Logo GVolt 3D" />
+        <strong>GVolt <span>3D</span></strong>
+      </div>
+      <p>Soluções criativas em impressão 3D.</p>
+      <a href="https://wa.me/5519995325891" target="_blank"
+        ><i class="fa-brands fa-whatsapp"></i> Fale conosco</a
+      >
+    </footer>
+    <script>
+      // Altere estas constantes para suas credenciais
+      const SUPABASE_URL = "https://ztrzwaosybnmzwjufqld.supabase.co";
+      const SUPABASE_KEY = "sb_publishable_oKFgxOaFvi21vRGpymMKOg_Z26OATE6";
+      const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY,
+      );
+      const ADMIN_EMAILS = ["g.voltarel95@gmail.com"]; // ajuste com seus e-mails
+
+      const loginContainer = document.getElementById("login-container");
+      const listContainer = document.getElementById("list-container");
+      const loginMessage = document.getElementById("login-message");
+      const listMessage = document.getElementById("list-message");
+      const productsBody = document.getElementById("products-body");
+
+      async function checkSession() {
+        const {
+          data: {session},
+        } = await supabaseClient.auth.getSession();
+        if (session && session.user) {
+          if (ADMIN_EMAILS.includes(session.user.email)) {
+            showList();
+            await loadProducts();
+          } else {
+            loginContainer.hidden = false;
+            listContainer.hidden = true;
+            loginMessage.hidden = false;
+            loginMessage.textContent =
+              "Este usuário não tem permissão para acessar a área administrativa.";
+          }
+        } else {
+          showLogin();
+        }
+      }
+
+      function showLogin() {
+        loginContainer.hidden = false;
+        listContainer.hidden = true;
+        loginMessage.hidden = true;
+      }
+
+      function showList() {
+        loginContainer.hidden = true;
+        listContainer.hidden = false;
+        loginMessage.hidden = true;
+      }
+
+      document
+        .getElementById("login-button")
+        .addEventListener("click", async () => {
+          const email = document.getElementById("login-email").value.trim();
+          const password = document.getElementById("login-password").value;
+          loginMessage.hidden = true;
+          if (!email || !password) {
+            loginMessage.textContent = "Preencha e-mail e senha.";
+            loginMessage.hidden = false;
+            return;
+          }
+          const {error} = await supabaseClient.auth.signInWithPassword({
+            email,
+            password,
+          });
+          if (error) {
+            loginMessage.textContent = error.message || "Erro ao fazer login.";
+            loginMessage.hidden = false;
+          } else {
+            await checkSession();
+          }
+        });
+
+      document
+        .getElementById("logout-button")
+        .addEventListener("click", async () => {
+          await supabaseClient.auth.signOut();
+          showLogin();
+        });
+
+      async function loadProducts() {
+        listMessage.hidden = true;
+        productsBody.innerHTML = "";
+        const {data, error} = await supabaseClient
+          .from("products")
+          .select("id, name, price, availability");
+        if (error) {
+          listMessage.textContent =
+            error.message || "Erro ao carregar produtos.";
+          listMessage.className = "message error";
+          listMessage.hidden = false;
+          return;
+        }
+        if (!data || data.length === 0) {
+          listMessage.textContent = "Nenhum produto cadastrado.";
+          listMessage.className = "message";
+          listMessage.hidden = false;
+          return;
+        }
+        data.forEach((prod) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${prod.id}</td>
+            <td>${prod.name}</td>
+            <td>R$ ${prod.price.toFixed(2)}</td>
+            <td>${prod.availability || ""}</td>
+            <td class="actions">
+              <a href="admin-edit.html?id=${encodeURIComponent(prod.id)}">Editar</a>
+              <a href="admin-delete.html?id=${encodeURIComponent(prod.id)}">Apagar</a>
+            </td>
+          `;
+          productsBody.appendChild(tr);
+        });
+      }
+
+      // Inicializa verificação
+      checkSession();
+    </script>
+  </body>
+</html>

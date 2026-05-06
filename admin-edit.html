@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editar Produto | GVolt 3D</title>
+    <meta
+      name="description"
+      content="Editar as informações de um produto existente no catálogo."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Importa as variáveis globais de configuração (SUPABASE_URL, SUPABASE_KEY, ADMIN_EMAILS) -->
+    <script src="config.js"></script>
+    <style>
+      /* Estilos específicos para o formulário de edição */
+      .admin-page form {
+        margin-top: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="site-glow"></div>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="GVolt 3D">
+        <img src="assets/gvolt-logo.jpeg" alt="Logo GVolt 3D" />
+        <span>GVolt <strong>3D</strong></span>
+      </a>
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="index.html">Início</a>
+        <a href="index.html#produtos">Produtos</a>
+        <a href="index.html#contato">Contato</a>
+      </nav>
+    </header>
+    <main class="admin-page">
+      <h2>Editar Produto</h2>
+      <!-- Área de login -->
+      <div id="login-container">
+        <div class="form-group">
+          <label for="login-email">E-mail</label>
+          <input type="email" id="login-email" placeholder="seu@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Senha</label>
+          <input type="password" id="login-password" placeholder="Senha" />
+        </div>
+        <button class="btn btn-primary" id="login-button">Entrar</button>
+        <p id="login-message" class="message error" hidden></p>
+      </div>
+      <!-- Formulário de edição -->
+      <div id="edit-container" hidden>
+        <form id="edit-form">
+          <div class="form-group">
+            <label for="product-id">ID (não editável)</label>
+            <input type="text" id="product-id" disabled />
+          </div>
+          <div class="form-group">
+            <label for="product-name">Nome</label>
+            <input type="text" id="product-name" required />
+          </div>
+          <div class="form-group">
+            <label for="product-description">Descrição curta</label>
+            <input type="text" id="product-description" required />
+          </div>
+          <div class="form-group">
+            <label for="product-price">Preço (R$)</label>
+            <input type="number" step="0.01" id="product-price" required />
+          </div>
+          <div class="form-group">
+            <label for="product-image">Imagem principal (URL)</label>
+            <input type="text" id="product-image" />
+          </div>
+          <div class="form-group">
+            <label for="product-images"
+              >Imagens (URLs separadas por vírgula)</label
+            >
+            <input type="text" id="product-images" />
+          </div>
+          <div class="form-group">
+            <label for="product-availability">Disponibilidade</label>
+            <select id="product-availability">
+              <option value="Em estoque">Em estoque</option>
+              <option value="Sob encomenda">Sob encomenda</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="product-lead">Prazo (dias)</label>
+            <input type="number" id="product-lead" />
+          </div>
+          <div class="form-group">
+            <label for="product-long-description">Descrição longa</label>
+            <textarea id="product-long-description" rows="6"></textarea>
+          </div>
+          <p id="edit-message" class="message" hidden></p>
+          <button type="submit" class="btn btn-primary">
+            Salvar alterações
+          </button>
+        </form>
+        <button class="btn btn-secondary" id="back-button">Voltar</button>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="footer-brand">
+        <img src="assets/gvolt-logo.jpeg" alt="Logo GVolt 3D" />
+        <strong>GVolt <span>3D</span></strong>
+      </div>
+      <p>Soluções criativas em impressão 3D.</p>
+      <a href="https://wa.me/5519995325891" target="_blank"
+        ><i class="fa-brands fa-whatsapp"></i> Fale conosco</a
+      >
+    </footer>
+    <script>
+      // Cria o cliente Supabase usando as variáveis definidas em config.js
+      const supabaseClient = window.supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_KEY,
+      );
+      const ADMIN_EMAILS = window.ADMIN_EMAILS || [];
+      const loginContainer = document.getElementById("login-container");
+      const editContainer = document.getElementById("edit-container");
+      const loginMessage = document.getElementById("login-message");
+      const editMessage = document.getElementById("edit-message");
+
+      // Obtém ID da URL
+      function getProductIdFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get("id");
+      }
+
+      async function checkSession() {
+        const {
+          data: {session},
+        } = await supabaseClient.auth.getSession();
+        if (session && session.user) {
+          if (ADMIN_EMAILS.includes(session.user.email)) {
+            showEdit();
+            await loadProduct();
+          } else {
+            loginContainer.hidden = false;
+            editContainer.hidden = true;
+            loginMessage.hidden = false;
+            loginMessage.textContent =
+              "Este usuário não tem permissão para acessar a área administrativa.";
+          }
+        } else {
+          showLogin();
+        }
+      }
+
+      function showLogin() {
+        loginContainer.hidden = false;
+        editContainer.hidden = true;
+        loginMessage.hidden = true;
+      }
+
+      function showEdit() {
+        loginContainer.hidden = true;
+        editContainer.hidden = false;
+        loginMessage.hidden = true;
+      }
+
+      document
+        .getElementById("login-button")
+        .addEventListener("click", async () => {
+          const email = document.getElementById("login-email").value.trim();
+          const password = document.getElementById("login-password").value;
+          loginMessage.hidden = true;
+          if (!email || !password) {
+            loginMessage.textContent = "Preencha e-mail e senha.";
+            loginMessage.hidden = false;
+            return;
+          }
+          const {error} = await supabaseClient.auth.signInWithPassword({
+            email,
+            password,
+          });
+          if (error) {
+            loginMessage.textContent = error.message || "Erro ao fazer login.";
+            loginMessage.hidden = false;
+          } else {
+            await checkSession();
+          }
+        });
+
+      document.getElementById("back-button").addEventListener("click", () => {
+        // Volta para a listagem de produtos principal
+        window.location.href = "admin.html";
+      });
+
+      async function loadProduct() {
+        editMessage.hidden = true;
+        const productId = getProductIdFromUrl();
+        if (!productId) {
+          editMessage.textContent = "Produto não encontrado.";
+          editMessage.className = "message error";
+          editMessage.hidden = false;
+          return;
+        }
+        const {data, error} = await supabaseClient
+          .from("products")
+          .select("*")
+          .eq("id", productId)
+          .single();
+        if (error) {
+          editMessage.textContent =
+            error.message || "Erro ao carregar produto.";
+          editMessage.className = "message error";
+          editMessage.hidden = false;
+          return;
+        }
+        if (!data) {
+          editMessage.textContent = "Produto não encontrado.";
+          editMessage.className = "message";
+          editMessage.hidden = false;
+          return;
+        }
+        // Preenche os campos
+        document.getElementById("product-id").value = data.id;
+        document.getElementById("product-name").value = data.name || "";
+        document.getElementById("product-description").value =
+          data.description || "";
+        document.getElementById("product-price").value = data.price || "";
+        document.getElementById("product-image").value = data.image || "";
+        document.getElementById("product-images").value = data.images
+          ? data.images.join(", ")
+          : "";
+        document.getElementById("product-availability").value =
+          data.availability || "Em estoque";
+        document.getElementById("product-lead").value =
+          data.lead_time_days || "";
+        document.getElementById("product-long-description").value =
+          data.long_description || "";
+      }
+
+      document
+        .getElementById("edit-form")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+          editMessage.hidden = true;
+          const productId = getProductIdFromUrl();
+          const name = document.getElementById("product-name").value.trim();
+          const description = document
+            .getElementById("product-description")
+            .value.trim();
+          const priceValue = document.getElementById("product-price").value;
+          const image =
+            document.getElementById("product-image").value.trim() || null;
+          const imagesStr = document
+            .getElementById("product-images")
+            .value.trim();
+          const availability = document.getElementById(
+            "product-availability",
+          ).value;
+          const leadTime = document.getElementById("product-lead").value;
+          const longDescription = document
+            .getElementById("product-long-description")
+            .value.trim();
+          if (!productId || !name || !description || !priceValue) {
+            editMessage.textContent = "Preencha todos os campos obrigatórios.";
+            editMessage.className = "message error";
+            editMessage.hidden = false;
+            return;
+          }
+          const price = parseFloat(priceValue);
+          const lead_time_days = leadTime ? parseInt(leadTime) : null;
+          let images = null;
+          if (imagesStr) {
+            images = imagesStr
+              .split(",")
+              .map((u) => u.trim())
+              .filter((v) => v);
+          }
+          const updated = {
+            name,
+            description,
+            price,
+            image,
+            images,
+            availability,
+            lead_time_days,
+            long_description: longDescription,
+          };
+          try {
+            const {error} = await supabaseClient
+              .from("products")
+              .update(updated)
+              .eq("id", productId);
+            if (error) throw error;
+            editMessage.textContent = "Produto atualizado com sucesso!";
+            editMessage.className = "message success";
+            editMessage.hidden = false;
+          } catch (err) {
+            editMessage.textContent =
+              err.message || "Erro ao atualizar produto.";
+            editMessage.className = "message error";
+            editMessage.hidden = false;
+          }
+        });
+
+      checkSession();
+    </script>
+  </body>
+</html>
