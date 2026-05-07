@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configurações de Custo | GVolt 3D</title>
+    <meta
+      name="description"
+      content="Defina valores padrão para custos de energia, mão de obra, taxas e margens usados nos cálculos de impressão 3D."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Ícone da aba do navegador -->
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcyMDYyLCJleHAiOjQ5MzE3NzIwNjJ9.1vnoc_Ib-MghMmvi6Pm5kXpz-qCW2Q0OYxxgzZz5Fx8"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <style>
+      .admin-page {
+        width: min(980px, calc(100% - 32px));
+        margin: 40px auto;
+        padding: 32px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--card);
+        box-shadow: var(--shadow);
+      }
+      .admin-page h2 {
+        margin-top: 0;
+        font-family: "Orbitron", sans-serif;
+        font-size: 1.6rem;
+        color: var(--pink);
+        text-align: center;
+      }
+      .form-group {
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+      }
+      .form-group label {
+        margin-bottom: 6px;
+        font-weight: 500;
+      }
+      .form-group input {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        padding: 12px;
+        font-size: 0.95rem;
+      }
+      .form-group input:focus {
+        outline: none;
+        border-color: var(--purple);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="site-glow"></div>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="GVolt 3D">
+        <!-- Usa a nova logo do site -->
+        <img
+          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          alt="Logo GVolt 3D"
+        />
+        <span>GVolt <strong>3D</strong></span>
+      </a>
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="admin.html">Produtos</a>
+        <a href="admin-filaments.html">Filamentos</a>
+        <a href="admin-printers.html">Impressoras</a>
+        <a href="admin-packaging.html">Embalagens</a>
+        <a href="admin-extras.html">Extras</a>
+        <a href="admin-settings.html" class="active">Configurações</a>
+        <a href="admin-calculator.html">Calculadora</a>
+      </nav>
+      <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </header>
+    <main class="admin-page">
+      <h2>Configurações de Cálculo</h2>
+      <!-- Login -->
+      <div id="login-container">
+        <div class="form-group">
+          <label for="login-email">E-mail</label>
+          <input type="email" id="login-email" placeholder="seu@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Senha</label>
+          <input type="password" id="login-password" placeholder="Senha" />
+        </div>
+        <button class="btn btn-primary" id="login-button">Entrar</button>
+        <p id="login-message" class="message error" hidden></p>
+      </div>
+      <!-- Conteúdo de configuração -->
+      <div id="settings-container" hidden>
+        <p>
+          Defina os valores padrão utilizados na calculadora. Percentuais devem
+          ser informados como número (por exemplo: 10 para 10%).
+        </p>
+        <form id="settings-form">
+          <div class="form-group">
+            <label for="energy-cost">Custo de energia (R$/kWh)</label>
+            <input
+              type="number"
+              id="energy-cost"
+              step="0.01"
+              placeholder="0.00"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="labor-cost">Custo de mão de obra (R$/h)</label>
+            <input
+              type="number"
+              id="labor-cost"
+              step="0.01"
+              placeholder="0.00"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="failure-rate">Taxa de falha (%)</label>
+            <input
+              type="number"
+              id="failure-rate"
+              step="0.1"
+              placeholder="0.0"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="marketplace-fee">Taxa de marketplace (%)</label>
+            <input
+              type="number"
+              id="marketplace-fee"
+              step="0.1"
+              placeholder="0.0"
+            />
+          </div>
+          <div class="form-group">
+            <label for="tax-rate">Taxa de imposto (%)</label>
+            <input type="number" id="tax-rate" step="0.1" placeholder="0.0" />
+          </div>
+          <div class="form-group">
+            <label for="fixed-fee">Taxa fixa (R$)</label>
+            <input
+              type="number"
+              id="fixed-fee"
+              step="0.01"
+              placeholder="0.00"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">
+            Salvar Configurações
+          </button>
+        </form>
+        <p id="settings-message" class="message" hidden></p>
+        <button class="btn btn-secondary" id="back-button">Voltar</button>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="footer-brand">
+        <!-- Usa a nova logo do site -->
+        <img
+          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          alt="Logo GVolt 3D"
+        />
+        <strong>GVolt <span>3D</span></strong>
+      </div>
+      <p>Soluções criativas em impressão 3D.</p>
+      <a href="https://wa.me/5519995325891" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i> Fale conosco
+      </a>
+    </footer>
+    <script>
+      const supabaseClient = window.supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_KEY,
+      );
+      const ADMIN_EMAILS = window.ADMIN_EMAILS || [];
+      const loginContainer = document.getElementById("login-container");
+      const settingsContainer = document.getElementById("settings-container");
+      const loginMessage = document.getElementById("login-message");
+      const settingsMessage = document.getElementById("settings-message");
+      async function checkSession() {
+        const {
+          data: {session},
+        } = await supabaseClient.auth.getSession();
+        if (session && session.user) {
+          if (ADMIN_EMAILS.includes(session.user.email)) {
+            showSettings();
+            await loadSettings();
+          } else {
+            showLogin();
+            loginMessage.textContent = "Usuário sem permissão de acesso.";
+            loginMessage.hidden = false;
+          }
+        } else {
+          showLogin();
+        }
+      }
+      function showLogin() {
+        loginContainer.hidden = false;
+        settingsContainer.hidden = true;
+        loginMessage.hidden = true;
+      }
+      function showSettings() {
+        loginContainer.hidden = true;
+        settingsContainer.hidden = false;
+        loginMessage.hidden = true;
+      }
+      document
+        .getElementById("login-button")
+        .addEventListener("click", async () => {
+          const email = document.getElementById("login-email").value.trim();
+          const password = document.getElementById("login-password").value;
+          loginMessage.hidden = true;
+          if (!email || !password) {
+            loginMessage.textContent = "Preencha e-mail e senha.";
+            loginMessage.hidden = false;
+            return;
+          }
+          const {error} = await supabaseClient.auth.signInWithPassword({
+            email,
+            password,
+          });
+          if (error) {
+            loginMessage.textContent = error.message || "Erro ao fazer login.";
+            loginMessage.hidden = false;
+          } else {
+            await checkSession();
+          }
+        });
+      document.getElementById("back-button").addEventListener("click", () => {
+        window.location.href = "admin.html";
+      });
+      async function loadSettings() {
+        settingsMessage.hidden = true;
+        try {
+          const {data, error} = await supabaseClient
+            .from("settings")
+            .select("*")
+            .single();
+          if (error && error.code !== "PGRST116") {
+            throw error;
+          }
+          if (data) {
+            document.getElementById("energy-cost").value = Number(
+              data.energy_cost || 0,
+            ).toFixed(2);
+            document.getElementById("labor-cost").value = Number(
+              data.labor_cost || 0,
+            ).toFixed(2);
+            document.getElementById("failure-rate").value =
+              Number(data.failure_rate || 0) * 100;
+            document.getElementById("marketplace-fee").value =
+              Number(data.marketplace_fee || 0) * 100;
+            document.getElementById("tax-rate").value =
+              Number(data.tax_rate || 0) * 100;
+            document.getElementById("fixed-fee").value = Number(
+              data.fixed_fee || 0,
+            ).toFixed(2);
+          }
+        } catch (err) {
+          settingsMessage.textContent =
+            err.message || "Erro ao carregar configurações.";
+          settingsMessage.className = "message error";
+          settingsMessage.hidden = false;
+        }
+      }
+      document
+        .getElementById("settings-form")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+          settingsMessage.hidden = true;
+          // Captura valores e converte percentuais em frações decimais
+          const energyCost = parseFloat(
+            document.getElementById("energy-cost").value,
+          );
+          const laborCost = parseFloat(
+            document.getElementById("labor-cost").value,
+          );
+          const failureRate =
+            parseFloat(document.getElementById("failure-rate").value) / 100;
+          const marketplaceFee =
+            parseFloat(document.getElementById("marketplace-fee").value || 0) /
+            100;
+          const taxRate =
+            parseFloat(document.getElementById("tax-rate").value || 0) / 100;
+          const fixedFee = parseFloat(
+            document.getElementById("fixed-fee").value || 0,
+          );
+          if (
+            isNaN(energyCost) ||
+            energyCost < 0 ||
+            isNaN(laborCost) ||
+            laborCost < 0 ||
+            isNaN(failureRate) ||
+            failureRate < 0 ||
+            isNaN(marketplaceFee) ||
+            marketplaceFee < 0 ||
+            isNaN(taxRate) ||
+            taxRate < 0 ||
+            isNaN(fixedFee) ||
+            fixedFee < 0
+          ) {
+            settingsMessage.textContent =
+              "Preencha corretamente todos os campos.";
+            settingsMessage.className = "message error";
+            settingsMessage.hidden = false;
+            return;
+          }
+          const payload = {
+            energy_cost: energyCost,
+            labor_cost: laborCost,
+            failure_rate: failureRate,
+            marketplace_fee: marketplaceFee,
+            tax_rate: taxRate,
+            fixed_fee: fixedFee,
+          };
+          try {
+            // Verifica se já existe uma linha; se existir, atualiza, senão insere
+            const {data, error: selErr} = await supabaseClient
+              .from("settings")
+              .select("*")
+              .single();
+            if (selErr && selErr.code !== "PGRST116") {
+              throw selErr;
+            }
+            if (data) {
+              // Atualiza linha existente
+              const {error: updateErr} = await supabaseClient
+                .from("settings")
+                .update(payload)
+                .eq("id", data.id);
+              if (updateErr) throw updateErr;
+            } else {
+              // Insere nova linha
+              const {error: insertErr} = await supabaseClient
+                .from("settings")
+                .insert([payload]);
+              if (insertErr) throw insertErr;
+            }
+            settingsMessage.textContent = "Configurações salvas com sucesso!";
+            settingsMessage.className = "message success";
+            settingsMessage.hidden = false;
+          } catch (err) {
+            settingsMessage.textContent =
+              err.message || "Erro ao salvar configurações.";
+            settingsMessage.className = "message error";
+            settingsMessage.hidden = false;
+          }
+        });
+      checkSession();
+      const menuToggle = document.getElementById("menu-toggle");
+      const navLinks = document.querySelector(".nav-links");
+      if (menuToggle && navLinks) {
+        menuToggle.addEventListener("click", () => {
+          navLinks.classList.toggle("show");
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculadora de Custos | GVolt 3D</title>
+    <meta
+      name="description"
+      content="Calcule o custo de uma impressão 3D considerando filamento, impressora, energia, mão de obra e embalagens."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <!-- Estilo principal do site -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Ícone da aba do navegador -->
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcyMDYyLCJleHAiOjQ5MzE3NzIwNjJ9.1vnoc_Ib-MghMmvi6Pm5kXpz-qCW2Q0OYxxgzZz5Fx8"
+    />
+    <!-- Biblioteca Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Arquivo de configuração (SUPABASE_URL, SUPABASE_KEY e ADMIN_EMAILS) -->
+    <script src="config.js"></script>
+    <style>
+      /* Estilos específicos para o formulário da calculadora */
+      .admin-page {
+        width: min(980px, calc(100% - 32px));
+        margin: 40px auto;
+        padding: 32px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--card);
+        box-shadow: var(--shadow);
+      }
+      .admin-page h2 {
+        margin-top: 0;
+        font-family: "Orbitron", sans-serif;
+        font-size: 1.6rem;
+        color: var(--pink);
+        text-align: center;
+      }
+      .form-group {
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+      }
+      .form-group label {
+        margin-bottom: 6px;
+        font-weight: 500;
+      }
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        padding: 12px;
+        font-size: 0.95rem;
+      }
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: var(--purple);
+      }
+      .extras-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      .extras-row label {
+        flex: 1;
+      }
+      .extras-row input[type="number"] {
+        width: 80px;
+      }
+      .result-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+      }
+      .result-table th,
+      .result-table td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+      .result-table th {
+        background: var(--card-solid);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="site-glow"></div>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="GVolt 3D">
+        <!-- Usa a nova logo do site -->
+        <img
+          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          alt="Logo GVolt 3D"
+        />
+        <span>GVolt <strong>3D</strong></span>
+      </a>
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="admin.html">Produtos</a>
+        <a href="admin-filaments.html">Filamentos</a>
+        <a href="admin-printers.html">Impressoras</a>
+        <a href="admin-packaging.html">Embalagens</a>
+        <a href="admin-extras.html">Extras</a>
+        <a href="admin-settings.html">Configurações</a>
+        <a href="admin-calculator.html" class="active">Calculadora</a>
+      </nav>
+      <!-- Botão de menu para navegação em telas pequenas -->
+      <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </header>
+    <main class="admin-page">
+      <h2>Calculadora de Custos</h2>
+      <!-- Formulário de login -->
+      <div id="login-container">
+        <div class="form-group">
+          <label for="login-email">E-mail</label>
+          <input type="email" id="login-email" placeholder="seu@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Senha</label>
+          <input type="password" id="login-password" placeholder="Senha" />
+        </div>
+        <button class="btn btn-primary" id="login-button">Entrar</button>
+        <p id="login-message" class="message error" hidden></p>
+      </div>
+      <!-- Conteúdo da calculadora -->
+      <div id="calc-container" hidden>
+        <p>Preencha os campos abaixo para calcular o custo de impressão.</p>
+        <form id="calc-form">
+          <div class="form-group">
+            <label for="calc-name">Nome do projeto</label>
+            <input
+              type="text"
+              id="calc-name"
+              placeholder="Projeto XYZ"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="calc-printer">Impressora</label>
+            <select id="calc-printer" required>
+              <option value="">Selecione...</option>
+            </select>
+          </div>
+          <!-- Container dinâmico para múltiplos filamentos -->
+          <div class="form-group">
+            <label>Filamentos e quantidades (g)</label>
+            <div id="filaments-container"></div>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="add-filament-btn"
+            >
+              Adicionar Filamento
+            </button>
+          </div>
+          <div class="form-group">
+            <label for="calc-time">Tempo de impressão (h)</label>
+            <input
+              type="number"
+              id="calc-time"
+              step="0.01"
+              placeholder="0.00"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="calc-labor">Horas de trabalho (h)</label>
+            <input
+              type="number"
+              id="calc-labor"
+              step="0.01"
+              placeholder="0.00"
+              value="0"
+              required
+            />
+          </div>
+          <!-- Container dinâmico para múltiplas embalagens -->
+          <div class="form-group">
+            <label>Embalagens (quantidade)</label>
+            <div id="packaging-container"></div>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="add-packaging-btn"
+            >
+              Adicionar Embalagem
+            </button>
+          </div>
+          <div class="form-group">
+            <label>Extras (quantidade por item)</label>
+            <div id="extras-container"></div>
+          </div>
+          <div class="form-group">
+            <label for="calc-markup">Markup (%)</label>
+            <input type="number" id="calc-markup" step="1" value="100" />
+          </div>
+          <button type="button" class="btn btn-primary" id="calc-btn">
+            Calcular
+          </button>
+        </form>
+        <div id="calc-result" hidden>
+          <h3>Resultado do Cálculo</h3>
+          <table class="result-table">
+            <tbody id="result-body"></tbody>
+          </table>
+          <button class="btn btn-primary" id="save-btn">Salvar cálculo</button>
+        </div>
+        <p id="calc-message" class="message" hidden></p>
+        <button class="btn btn-secondary" id="back-button">Voltar</button>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="footer-brand">
+        <!-- Usa a nova logo do site -->
+        <img
+          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          alt="Logo GVolt 3D"
+        />
+        <strong>GVolt <span>3D</span></strong>
+      </div>
+      <p>Soluções criativas em impressão 3D.</p>
+      <a href="https://wa.me/5519995325891" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i> Fale conosco
+      </a>
+    </footer>
+    <script>
+      // Cria o cliente Supabase usando as configurações globais definidas em config.js
+      const supabaseClient = window.supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_KEY,
+      );
+      const ADMIN_EMAILS = window.ADMIN_EMAILS || [];
+
+      const loginContainer = document.getElementById("login-container");
+      const calcContainer = document.getElementById("calc-container");
+      const loginMessage = document.getElementById("login-message");
+      const calcMessage = document.getElementById("calc-message");
+      const resultBody = document.getElementById("result-body");
+
+      // Armazena dados carregados
+      let printers = [];
+      let filaments = [];
+      let packaging = [];
+      let extras = [];
+      let settings = {
+        energy_cost: 0.0,
+        labor_cost: 0.0,
+        failure_rate: 0.0,
+        marketplace_fee: 0.0,
+        tax_rate: 0.0,
+        fixed_fee: 0.0,
+      };
+      // Objeto de resultado para salvar posteriormente
+      let lastResult = null;
+
+      // Verifica se há sessão ativa e se o usuário está autorizado
+      async function checkSession() {
+        const {
+          data: {session},
+        } = await supabaseClient.auth.getSession();
+        if (session && session.user) {
+          if (ADMIN_EMAILS.includes(session.user.email)) {
+            showCalc();
+            await loadData();
+          } else {
+            loginContainer.hidden = false;
+            calcContainer.hidden = true;
+            loginMessage.hidden = false;
+            loginMessage.textContent =
+              "Este usuário não tem permissão para acessar a área administrativa.";
+          }
+        } else {
+          showLogin();
+        }
+      }
+
+      function showLogin() {
+        loginContainer.hidden = false;
+        calcContainer.hidden = true;
+        loginMessage.hidden = true;
+      }
+
+      function showCalc() {
+        loginContainer.hidden = true;
+        calcContainer.hidden = false;
+        loginMessage.hidden = true;
+      }
+
+      // Cria uma linha de filamento com select e campo de peso
+      function createFilamentRow() {
+        const row = document.createElement("div");
+        row.className = "filament-row";
+        row.style.display = "flex";
+        row.style.gap = "8px";
+        row.style.marginBottom = "8px";
+        // Select de filamentos
+        const select = document.createElement("select");
+        select.required = true;
+        // Opção padrão
+        const defaultOpt = document.createElement("option");
+        defaultOpt.value = "";
+        defaultOpt.textContent = "Selecione...";
+        select.appendChild(defaultOpt);
+        // Preenche opções com a lista de filamentos carregada
+        filaments.forEach((f) => {
+          const opt = document.createElement("option");
+          opt.value = f.id;
+          opt.textContent = f.name;
+          select.appendChild(opt);
+        });
+        // Campo de peso em gramas
+        const input = document.createElement("input");
+        input.type = "number";
+        input.step = "0.01";
+        input.min = "0";
+        input.placeholder = "0.00";
+        input.className = "filament-weight";
+        // Botão remover
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.className = "btn btn-secondary";
+        removeBtn.textContent = "Remover";
+        removeBtn.addEventListener("click", () => {
+          row.remove();
+        });
+        row.appendChild(select);
+        row.appendChild(input);
+        row.appendChild(removeBtn);
+        return row;
+      }
+
+      // Adiciona uma nova linha de filamento ao container
+      function addFilamentRow() {
+        const container = document.getElementById("filaments-container");
+        const row = createFilamentRow();
+        container.appendChild(row);
+      }
+
+      // Cria uma linha de embalagem com select e quantidade
+      function createPackagingRow() {
+        const row = document.createElement("div");
+        row.className = "packaging-row";
+        row.style.display = "flex";
+        row.style.gap = "8px";
+        row.style.marginBottom = "8px";
+        // Select de embalagens
+        const select = document.createElement("select");
+        // Opção padrão
+        const defaultOpt = document.createElement("option");
+        defaultOpt.value = "";
+        defaultOpt.textContent = "Selecione...";
+        select.appendChild(defaultOpt);
+        packaging.forEach((p) => {
+          const opt = document.createElement("option");
+          opt.value = p.id;
+          opt.textContent = p.name;
+          select.appendChild(opt);
+        });
+        // Campo de quantidade
+        const input = document.createElement("input");
+        input.type = "number";
+        input.step = "1";
+        input.min = "0";
+        input.placeholder = "0";
+        input.className = "packaging-qty";
+        // Botão remover
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.className = "btn btn-secondary";
+        removeBtn.textContent = "Remover";
+        removeBtn.addEventListener("click", () => {
+          row.remove();
+        });
+        row.appendChild(select);
+        row.appendChild(input);
+        row.appendChild(removeBtn);
+        return row;
+      }
+
+      // Adiciona nova linha de embalagem ao container
+      function addPackagingRow() {
+        const container = document.getElementById("packaging-container");
+        const row = createPackagingRow();
+        container.appendChild(row);
+      }
+
+      // Evento de login
+      document
+        .getElementById("login-button")
+        .addEventListener("click", async () => {
+          const email = document.getElementById("login-email").value.trim();
+          const password = document.getElementById("login-password").value;
+          loginMessage.hidden = true;
+          if (!email || !password) {
+            loginMessage.textContent = "Preencha e-mail e senha.";
+            loginMessage.hidden = false;
+            return;
+          }
+          const {error} = await supabaseClient.auth.signInWithPassword({
+            email,
+            password,
+          });
+          if (error) {
+            loginMessage.textContent = error.message || "Erro ao fazer login.";
+            loginMessage.hidden = false;
+          } else {
+            await checkSession();
+          }
+        });
+
+      document.getElementById("back-button").addEventListener("click", () => {
+        window.location.href = "admin.html";
+      });
+
+      // Carrega dados das tabelas necessárias e inicializa selects dinâmicos
+      async function loadData() {
+        // Limpa selects antes de preencher
+        const printerSelect = document.getElementById("calc-printer");
+        const extrasContainer = document.getElementById("extras-container");
+        // Containers para linhas dinâmicas
+        const filamentsContainer = document.getElementById(
+          "filaments-container",
+        );
+        const packagingContainer = document.getElementById(
+          "packaging-container",
+        );
+
+        printerSelect.innerHTML = '<option value="">Selecione...</option>';
+        // Limpa containers de filamentos/embalagens
+        filamentsContainer.innerHTML = "";
+        packagingContainer.innerHTML = "";
+        extrasContainer.innerHTML = "";
+        try {
+          // Filamentos
+          const {data: filData, error: filErr} = await supabaseClient
+            .from("filaments")
+            .select("*");
+          if (filErr) throw filErr;
+          filaments = filData || [];
+          // Impressoras
+          const {data: prData, error: prErr} = await supabaseClient
+            .from("printers")
+            .select("*");
+          if (prErr) throw prErr;
+          printers = prData || [];
+          printers.forEach((prt) => {
+            const opt = document.createElement("option");
+            opt.value = prt.id;
+            opt.textContent = prt.name;
+            printerSelect.appendChild(opt);
+          });
+          // Embalagens
+          const {data: packData, error: packErr} = await supabaseClient
+            .from("packaging")
+            .select("*");
+          if (packErr) throw packErr;
+          packaging = packData || [];
+          // Extras
+          const {data: exData, error: exErr} = await supabaseClient
+            .from("extras")
+            .select("*");
+          if (exErr) throw exErr;
+          extras = exData || [];
+          extras.forEach((ex) => {
+            const row = document.createElement("div");
+            row.className = "extras-row";
+            const label = document.createElement("label");
+            label.textContent = ex.name;
+            const input = document.createElement("input");
+            input.type = "number";
+            input.step = "1";
+            input.min = "0";
+            input.value = "0";
+            input.dataset.extraId = ex.id;
+            row.appendChild(label);
+            row.appendChild(input);
+            extrasContainer.appendChild(row);
+          });
+          // Configurações (settings)
+          const {data: settingsData, error: settingsErr} = await supabaseClient
+            .from("settings")
+            .select("*")
+            .single();
+          if (settingsErr && settingsErr.code !== "PGRST116") {
+            // PGRST116 means no rows found
+            throw settingsErr;
+          }
+          if (settingsData) {
+            settings = {
+              energy_cost: Number(settingsData.energy_cost) || 0,
+              labor_cost: Number(settingsData.labor_cost) || 0,
+              failure_rate: Number(settingsData.failure_rate) || 0,
+              marketplace_fee: Number(settingsData.marketplace_fee) || 0,
+              tax_rate: Number(settingsData.tax_rate) || 0,
+              fixed_fee: Number(settingsData.fixed_fee) || 0,
+            };
+          }
+        } catch (err) {
+          calcMessage.textContent = err.message || "Erro ao carregar dados.";
+          calcMessage.className = "message error";
+          calcMessage.hidden = false;
+        }
+
+        // Após carregar dados, adicione pelo menos uma linha de filamento e uma de embalagem
+        try {
+          addFilamentRow();
+          addPackagingRow();
+        } catch (e) {
+          // ignora erros caso os dados ainda não estejam disponíveis
+        }
+      }
+
+      // Função para calcular custos e exibir resultado
+      function calculateCosts() {
+        calcMessage.hidden = true;
+        resultBody.innerHTML = "";
+        const name = document.getElementById("calc-name").value.trim();
+        const printerId = document.getElementById("calc-printer").value;
+        // Coleta múltiplos filamentos e seus pesos
+        const filamentRows = document.querySelectorAll(
+          "#filaments-container .filament-row",
+        );
+        const filamentItems = [];
+        filamentRows.forEach((row) => {
+          const sel = row.querySelector("select");
+          const inp = row.querySelector("input.filament-weight");
+          if (sel && inp) {
+            const fid = sel.value;
+            const w = parseFloat(inp.value);
+            if (fid && !isNaN(w) && w > 0) {
+              filamentItems.push({filament_id: fid, weight: w});
+            }
+          }
+        });
+        const timeStr = document.getElementById("calc-time").value;
+        const laborStr = document.getElementById("calc-labor").value;
+        // Coleta múltiplas embalagens e suas quantidades
+        const packagingRows = document.querySelectorAll(
+          "#packaging-container .packaging-row",
+        );
+        const packagingItems = [];
+        packagingRows.forEach((row) => {
+          const sel = row.querySelector("select");
+          const inp = row.querySelector("input.packaging-qty");
+          if (sel && inp) {
+            const pid = sel.value;
+            const q = parseFloat(inp.value);
+            if (pid && !isNaN(q) && q > 0) {
+              packagingItems.push({packaging_id: pid, quantity: q});
+            }
+          }
+        });
+        const markupStr = document.getElementById("calc-markup").value;
+
+        if (
+          !name ||
+          !printerId ||
+          filamentItems.length === 0 ||
+          !timeStr ||
+          !laborStr
+        ) {
+          calcMessage.textContent =
+            "Preencha todos os campos obrigatórios e adicione pelo menos um filamento.";
+          calcMessage.className = "message error";
+          calcMessage.hidden = false;
+          return;
+        }
+        const printTime = parseFloat(timeStr);
+        const laborTime = parseFloat(laborStr);
+        const markupPercent = markupStr ? parseFloat(markupStr) : 0;
+        // Validação básica para tempos e horas de trabalho
+        if (isNaN(printTime) || isNaN(laborTime) || printTime <= 0) {
+          calcMessage.textContent =
+            "Verifique os valores de tempo de impressão e horas de trabalho.";
+          calcMessage.className = "message error";
+          calcMessage.hidden = false;
+          return;
+        }
+        const printer = printers.find((p) => p.id === printerId);
+        if (!printer) {
+          calcMessage.textContent =
+            "Falha ao encontrar impressora selecionada.";
+          calcMessage.className = "message error";
+          calcMessage.hidden = false;
+          return;
+        }
+        // Calcula custo de filamentos (soma de cada item)
+        let filamentCost = 0;
+        const filamentsSummary = {};
+        filamentItems.forEach((item) => {
+          const f = filaments.find((fl) => fl.id === item.filament_id);
+          if (f) {
+            const pricePerGram =
+              (Number(f.spool_price) || 0) /
+              ((Number(f.spool_size) || 1) * 1000);
+            const cost = pricePerGram * item.weight;
+            filamentCost += cost;
+            filamentsSummary[item.filament_id] = item.weight;
+          }
+        });
+        // Energia: printTime * energy_consumption * energy_cost
+        const energyCost =
+          printTime *
+          (Number(printer.energy_consumption) || 0) *
+          settings.energy_cost;
+        // Depreciação: (price + maintenance) / depreciation_hours * printTime
+        const depreciationCost =
+          ((Number(printer.price) + Number(printer.maintenance_cost) || 0) /
+            (Number(printer.depreciation_hours) || 1)) *
+          printTime;
+        // Mão de obra: laborTime * labor_cost
+        const laborCost = laborTime * settings.labor_cost;
+        // Custo de embalagens: soma multiplicando custo unitário por quantidade
+        let packagingCost = 0;
+        const packagingSummary = {};
+        packagingItems.forEach((item) => {
+          const p = packaging.find((pk) => pk.id === item.packaging_id);
+          if (p) {
+            const costUnit = Number(p.cost) || 0;
+            packagingCost += costUnit * item.quantity;
+            packagingSummary[item.packaging_id] = item.quantity;
+          }
+        });
+        // Extras
+        let extrasCost = 0;
+        const extrasQuantities = {};
+        extras.forEach((ex) => {
+          const input = document.querySelector(
+            `input[data-extra-id="${ex.id}"]`,
+          );
+          if (input) {
+            const qty = parseInt(input.value) || 0;
+            if (qty > 0) {
+              extrasCost += qty * (Number(ex.cost) || 0);
+              extrasQuantities[ex.id] = qty;
+            }
+          }
+        });
+        // Subtotal sem perdas
+        const subtotal =
+          filamentCost +
+          energyCost +
+          depreciationCost +
+          laborCost +
+          packagingCost +
+          extrasCost;
+        // Ajuste por taxa de falha
+        const costWithFailure =
+          settings.failure_rate > 0
+            ? subtotal / (1 - settings.failure_rate)
+            : subtotal;
+        // Custo bruto inclui taxa fixa
+        const costBruto = costWithFailure + settings.fixed_fee;
+        // Final com markup percentual
+        const markupFactor = markupPercent / 100;
+        const finalPrice = costBruto * (1 + markupFactor);
+        // Preço estimado para marketplace, considerando taxa de marketplace e imposto
+        const effectiveRate = settings.marketplace_fee + settings.tax_rate;
+        const marketplacePrice =
+          effectiveRate >= 1 ? finalPrice : finalPrice / (1 - effectiveRate);
+        // Armazena resultado para salvar
+        lastResult = {
+          project_name: name,
+          printer_id: printerId,
+          filaments: filamentsSummary,
+          packagings: packagingSummary,
+          print_time: printTime,
+          labor_time: laborTime,
+          extras: extrasQuantities,
+          filament_cost: filamentCost,
+          energy_cost: energyCost,
+          depreciation_cost: depreciationCost,
+          labor_cost: laborCost,
+          packaging_cost: packagingCost,
+          extras_cost: extrasCost,
+          subtotal,
+          cost_with_failure: costWithFailure,
+          cost_bruto: costBruto,
+          markup_percent: markupPercent,
+          final_price: finalPrice,
+          marketplace_price: marketplacePrice,
+        };
+        // Preenche tabela de resultados
+        const rows = [];
+        function addRow(label, value) {
+          const tr = document.createElement("tr");
+          const th = document.createElement("th");
+          th.textContent = label;
+          const td = document.createElement("td");
+          td.textContent =
+            typeof value === "number" ? `R$ ${value.toFixed(2)}` : value;
+          tr.appendChild(th);
+          tr.appendChild(td);
+          rows.push(tr);
+        }
+        addRow("Filamento", filamentCost);
+        addRow("Energia", energyCost);
+        addRow("Depreciação da impressora", depreciationCost);
+        addRow("Mão de obra", laborCost);
+        if (packagingCost) addRow("Embalagens", packagingCost);
+        if (extrasCost) addRow("Extras", extrasCost);
+        addRow("Subtotal", subtotal);
+        if (settings.failure_rate > 0)
+          addRow("Custo com falha", costWithFailure);
+        if (settings.fixed_fee > 0) addRow("Taxa fixa", settings.fixed_fee);
+        addRow("Custo bruto", costBruto);
+        addRow(`Preço final (markup ${markupPercent}% )`, finalPrice);
+        if (settings.marketplace_fee > 0 || settings.tax_rate > 0) {
+          addRow("Preço em marketplace", marketplacePrice);
+        }
+        resultBody.innerHTML = "";
+        rows.forEach((tr) => resultBody.appendChild(tr));
+        document.getElementById("calc-result").hidden = false;
+      }
+
+      // Botão de calcular
+      document
+        .getElementById("calc-btn")
+        .addEventListener("click", calculateCosts);
+
+      // Botão de salvar cálculo
+      document
+        .getElementById("save-btn")
+        .addEventListener("click", async () => {
+          if (!lastResult) {
+            calcMessage.textContent =
+              "Nenhum cálculo para salvar. Calcule primeiro.";
+            calcMessage.className = "message error";
+            calcMessage.hidden = false;
+            return;
+          }
+          try {
+            // Insere na tabela calculations
+            const {error} = await supabaseClient.from("calculations").insert([
+              {
+                project_name: lastResult.project_name,
+                printer_id: lastResult.printer_id,
+                filaments: lastResult.filaments,
+                packagings: lastResult.packagings,
+                print_time: lastResult.print_time,
+                labor_time: lastResult.labor_time,
+                extras: lastResult.extras,
+                filament_cost: lastResult.filament_cost,
+                energy_cost: lastResult.energy_cost,
+                depreciation_cost: lastResult.depreciation_cost,
+                labor_cost: lastResult.labor_cost,
+                packaging_cost: lastResult.packaging_cost,
+                extras_cost: lastResult.extras_cost,
+                subtotal: lastResult.subtotal,
+                cost_with_failure: lastResult.cost_with_failure,
+                cost_bruto: lastResult.cost_bruto,
+                markup_percent: lastResult.markup_percent,
+                final_price: lastResult.final_price,
+                marketplace_price: lastResult.marketplace_price,
+              },
+            ]);
+            if (error) throw error;
+            calcMessage.textContent = "Cálculo salvo com sucesso!";
+            calcMessage.className = "message success";
+            calcMessage.hidden = false;
+          } catch (err) {
+            calcMessage.textContent = err.message || "Erro ao salvar cálculo.";
+            calcMessage.className = "message error";
+            calcMessage.hidden = false;
+          }
+        });
+
+      // Eventos para adicionar linhas de filamento e embalagem
+      document
+        .getElementById("add-filament-btn")
+        .addEventListener("click", () => {
+          addFilamentRow();
+        });
+      document
+        .getElementById("add-packaging-btn")
+        .addEventListener("click", () => {
+          addPackagingRow();
+        });
+
+      // Inicializa a checagem de sessão
+      checkSession();
+
+      // Botão de menu responsivo para a navegação
+      const menuToggle = document.getElementById("menu-toggle");
+      const navLinks = document.querySelector(".nav-links");
+      if (menuToggle && navLinks) {
+        menuToggle.addEventListener("click", () => {
+          navLinks.classList.toggle("show");
+        });
+      }
+    </script>
+  </body>
+</html>

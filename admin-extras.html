@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerenciar Extras | GVolt 3D</title>
+    <meta
+      name="description"
+      content="Cadastre e consulte custos extras relacionados à produção e envio das impressões 3D."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Ícone da aba do navegador -->
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcyMDYyLCJleHAiOjQ5MzE3NzIwNjJ9.1vnoc_Ib-MghMmvi6Pm5kXpz-qCW2Q0OYxxgzZz5Fx8"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <style>
+      .admin-page {
+        width: min(980px, calc(100% - 32px));
+        margin: 40px auto;
+        padding: 32px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--card);
+        box-shadow: var(--shadow);
+      }
+      .admin-page h2 {
+        margin-top: 0;
+        font-family: "Orbitron", sans-serif;
+        font-size: 1.6rem;
+        color: var(--pink);
+        text-align: center;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 24px;
+      }
+      thead {
+        background: var(--card-solid);
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 12px;
+        border-bottom: 1px solid var(--border);
+      }
+      tr:nth-child(even) {
+        background: rgba(255, 255, 255, 0.03);
+      }
+      @media (max-width: 700px) {
+        table thead {
+          display: none;
+        }
+        table,
+        table tbody,
+        table tr,
+        table td {
+          display: block;
+          width: 100%;
+        }
+        table tr {
+          margin-bottom: 16px;
+          border-bottom: 1px solid var(--border);
+        }
+        table td {
+          text-align: right;
+          position: relative;
+          padding-left: 50%;
+        }
+        table td::before {
+          content: attr(data-label);
+          position: absolute;
+          left: 0;
+          width: 50%;
+          padding-left: 16px;
+          font-weight: 500;
+          color: var(--muted);
+          text-align: left;
+        }
+      }
+      .form-group {
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+      }
+      .form-group label {
+        margin-bottom: 6px;
+        font-weight: 500;
+      }
+      .form-group input {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        padding: 12px;
+        font-size: 0.95rem;
+      }
+      .form-group input:focus {
+        outline: none;
+        border-color: var(--purple);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="site-glow"></div>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="GVolt 3D">
+        <!-- Usa a nova logo do site -->
+        <img
+          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          alt="Logo GVolt 3D"
+        />
+        <span>GVolt <strong>3D</strong></span>
+      </a>
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="admin.html">Produtos</a>
+        <a href="admin-filaments.html">Filamentos</a>
+        <a href="admin-printers.html">Impressoras</a>
+        <a href="admin-packaging.html">Embalagens</a>
+        <a href="admin-extras.html" class="active">Extras</a>
+        <a href="admin-settings.html">Configurações</a>
+        <a href="admin-calculator.html">Calculadora</a>
+      </nav>
+      <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </header>
+    <main class="admin-page">
+      <h2>Gerenciar Extras</h2>
+      <!-- Login -->
+      <div id="login-container">
+        <div class="form-group">
+          <label for="login-email">E-mail</label>
+          <input type="email" id="login-email" placeholder="seu@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Senha</label>
+          <input type="password" id="login-password" placeholder="Senha" />
+        </div>
+        <button class="btn btn-primary" id="login-button">Entrar</button>
+        <p id="login-message" class="message error" hidden></p>
+      </div>
+      <!-- Gerenciamento -->
+      <div id="manage-container" hidden>
+        <p>Lista de extras cadastrados:</p>
+        <table id="extras-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Custo (R$)</th>
+            </tr>
+          </thead>
+          <tbody id="extras-body">
+            <!-- Dinâmico -->
+          </tbody>
+        </table>
+        <h3>Novo Extra</h3>
+        <form id="extra-form">
+          <div class="form-group">
+            <label for="extra-name">Nome</label>
+            <input
+              type="text"
+              id="extra-name"
+              placeholder="Ex: Suporte de metal"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="extra-cost">Custo (R$)</label>
+            <input
+              type="number"
+              id="extra-cost"
+              step="0.01"
+              placeholder="0.00"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Salvar Extra</button>
+        </form>
+        <p id="extra-message" class="message" hidden></p>
+        <button class="btn btn-secondary" id="back-button">Voltar</button>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="footer-brand">
+        <!-- Usa a nova logo do site -->
+        <img
+          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          alt="Logo GVolt 3D"
+        />
+        <strong>GVolt <span>3D</span></strong>
+      </div>
+      <p>Soluções criativas em impressão 3D.</p>
+      <a href="https://wa.me/5519995325891" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i> Fale conosco
+      </a>
+    </footer>
+    <script>
+      const supabaseClient = window.supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_KEY,
+      );
+      const ADMIN_EMAILS = window.ADMIN_EMAILS || [];
+      const loginContainer = document.getElementById("login-container");
+      const manageContainer = document.getElementById("manage-container");
+      const loginMessage = document.getElementById("login-message");
+      const extraMessage = document.getElementById("extra-message");
+      const extrasBody = document.getElementById("extras-body");
+      async function checkSession() {
+        const {
+          data: {session},
+        } = await supabaseClient.auth.getSession();
+        if (session && session.user) {
+          if (ADMIN_EMAILS.includes(session.user.email)) {
+            showManage();
+            await loadExtras();
+          } else {
+            showLogin();
+            loginMessage.textContent = "Usuário sem permissão de acesso.";
+            loginMessage.hidden = false;
+          }
+        } else {
+          showLogin();
+        }
+      }
+      function showLogin() {
+        loginContainer.hidden = false;
+        manageContainer.hidden = true;
+        loginMessage.hidden = true;
+      }
+      function showManage() {
+        loginContainer.hidden = true;
+        manageContainer.hidden = false;
+        loginMessage.hidden = true;
+      }
+      document
+        .getElementById("login-button")
+        .addEventListener("click", async () => {
+          const email = document.getElementById("login-email").value.trim();
+          const password = document.getElementById("login-password").value;
+          loginMessage.hidden = true;
+          if (!email || !password) {
+            loginMessage.textContent = "Preencha e-mail e senha.";
+            loginMessage.hidden = false;
+            return;
+          }
+          const {error} = await supabaseClient.auth.signInWithPassword({
+            email,
+            password,
+          });
+          if (error) {
+            loginMessage.textContent = error.message || "Erro ao fazer login.";
+            loginMessage.hidden = false;
+          } else {
+            await checkSession();
+          }
+        });
+      document.getElementById("back-button").addEventListener("click", () => {
+        window.location.href = "admin.html";
+      });
+      async function loadExtras() {
+        extraMessage.hidden = true;
+        extrasBody.innerHTML = "";
+        try {
+          const {data, error} = await supabaseClient.from("extras").select("*");
+          if (error) throw error;
+          if (!data || data.length === 0) {
+            extraMessage.textContent = "Nenhum extra cadastrado.";
+            extraMessage.className = "message";
+            extraMessage.hidden = false;
+            return;
+          }
+          data.forEach((ex) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td data-label="Nome">${ex.name}</td>
+              <td data-label="Custo">R$ ${Number(ex.cost).toFixed(2)}</td>
+            `;
+            extrasBody.appendChild(tr);
+          });
+        } catch (err) {
+          extraMessage.textContent = err.message || "Erro ao carregar extras.";
+          extraMessage.className = "message error";
+          extraMessage.hidden = false;
+        }
+      }
+      document
+        .getElementById("extra-form")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+          extraMessage.hidden = true;
+          const name = document.getElementById("extra-name").value.trim();
+          const cost = parseFloat(document.getElementById("extra-cost").value);
+          if (!name || isNaN(cost) || cost < 0) {
+            extraMessage.textContent = "Preencha corretamente nome e custo.";
+            extraMessage.className = "message error";
+            extraMessage.hidden = false;
+            return;
+          }
+          const newExtra = {name, cost};
+          try {
+            const {error} = await supabaseClient
+              .from("extras")
+              .insert([newExtra]);
+            if (error) throw error;
+            extraMessage.textContent = "Extra adicionado com sucesso!";
+            extraMessage.className = "message success";
+            extraMessage.hidden = false;
+            document.getElementById("extra-form").reset();
+            await loadExtras();
+          } catch (err) {
+            extraMessage.textContent =
+              err.message || "Erro ao adicionar extra.";
+            extraMessage.className = "message error";
+            extraMessage.hidden = false;
+          }
+        });
+      checkSession();
+      const menuToggle = document.getElementById("menu-toggle");
+      const navLinks = document.querySelector(".nav-links");
+      if (menuToggle && navLinks) {
+        menuToggle.addEventListener("click", () => {
+          navLinks.classList.toggle("show");
+        });
+      }
+    </script>
+  </body>
+</html>

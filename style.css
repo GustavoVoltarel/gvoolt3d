@@ -1,3 +1,14 @@
+/*
+ * Estilo principal do site GVolt 3D
+ *
+ * Este arquivo unifica o estilo completo para todas as páginas públicas,
+ * incorporando o design neon/roxo e os comportamentos responsivos. Ele foi
+ * baseado no arquivo anterior `style(6).css` e substitui o antigo
+ * `style.css` simplificado. Caso você deseje personalizar estilos para
+ * páginas administrativas, utilize estilos inline dentro dos HTML ou
+ * crie regras adicionais neste arquivo.
+ */
+
 :root {
   --bg: #05000d;
   --bg-soft: #0c0617;
@@ -31,6 +42,29 @@ body {
     radial-gradient(circle at 90% 10%, rgba(142, 0, 255, 0.22), transparent 30%),
     linear-gradient(180deg, #07000f 0%, #030008 100%);
   min-height: 100vh;
+}
+
+/* Aparência consistente para elementos de formulário em temas escuros */
+select {
+  /* Herdar o fundo semelhante aos inputs */
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 0.95rem;
+}
+
+/* As opções dentro dos selects permanecem visíveis mesmo com tema escuro */
+select option {
+  background-color: var(--card-solid);
+  color: var(--text);
+}
+
+/* Cor de destaque quando a opção é selecionada */
+select option:checked {
+  background-color: var(--purple);
+  color: var(--text);
 }
 
 body::before {
@@ -75,7 +109,6 @@ a {
   background: rgba(8, 3, 18, 0.82);
   box-shadow: var(--shadow);
   backdrop-filter: blur(16px);
-  /* position: sticky; */
   top: 14px;
   z-index: 10;
 }
@@ -126,6 +159,18 @@ a {
 .nav-links a:hover {
   color: var(--text);
   text-shadow: 0 0 12px var(--purple);
+}
+
+/* Botão hamburguer para menus responsivos */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
 }
 
 .hero {
@@ -643,9 +688,38 @@ a {
   padding: 12px 18px;
 }
 
+/* Responsividade */
 @media (max-width: 900px) {
+
+  /* Mostra o botão de menu e transforma a navegação em um menu suspenso */
+  .menu-toggle {
+    display: block;
+  }
+
   .nav-links {
     display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: rgba(8, 3, 18, 0.95);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px;
+    gap: 12px;
+    margin: 0;
+    z-index: 20;
+  }
+
+  /* Exibe a navegação quando a classe "show" está presente */
+  .nav-links.show {
+    display: flex;
+  }
+
+  .nav-links a {
+    color: var(--text);
   }
 
   .hero,

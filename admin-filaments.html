@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cadastrar Produto | GVolt 3D</title>
+    <title>Gerenciar Filamentos | GVolt 3D</title>
     <meta
       name="description"
-      content="Cadastre novos produtos no catálogo da GVolt 3D diretamente pelo navegador."
+      content="Cadastre e consulte filamentos utilizados para impressões 3D."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,21 +18,21 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
-    <!-- Reutiliza o estilo principal -->
+    <!-- Estilo principal do site -->
     <link rel="stylesheet" href="style.css" />
 
     <!-- Ícone da aba do navegador -->
     <link
       rel="icon"
       type="image/png"
-      href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcxNDU2LCJleHAiOjQ5MzE3NzE0NTZ9.BXqHQJ7vzskF_NkliO4hJGsD96NCYQCjghncISquesg"
+      href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcyMDYyLCJleHAiOjQ5MzE3NzIwNjJ9.1vnoc_Ib-MghMmvi6Pm5kXpz-qCW2Q0OYxxgzZz5Fx8"
     />
     <!-- Biblioteca Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Arquivo de configuração (define SUPABASE_URL, SUPABASE_KEY e ADMIN_EMAILS) -->
+    <!-- Arquivo de configuração com variáveis globais -->
     <script src="config.js"></script>
     <style>
-      /* Estilos específicos para o formulário de cadastro */
+      /* Estilos específicos para a página de filamentos */
       .admin-page {
         width: min(980px, calc(100% - 32px));
         margin: 40px auto;
@@ -49,6 +49,55 @@
         color: var(--pink);
         text-align: center;
       }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 24px;
+      }
+      thead {
+        background: var(--card-solid);
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 12px;
+        border-bottom: 1px solid var(--border);
+      }
+      tr:nth-child(even) {
+        background: rgba(255, 255, 255, 0.03);
+      }
+      /* Responsivo */
+      @media (max-width: 700px) {
+        table thead {
+          display: none;
+        }
+        table,
+        table tbody,
+        table tr,
+        table td {
+          display: block;
+          width: 100%;
+        }
+        table tr {
+          margin-bottom: 16px;
+          border-bottom: 1px solid var(--border);
+        }
+        table td {
+          text-align: right;
+          position: relative;
+          padding-left: 50%;
+        }
+        table td::before {
+          content: attr(data-label);
+          position: absolute;
+          left: 0;
+          width: 50%;
+          padding-left: 16px;
+          font-weight: 500;
+          color: var(--muted);
+          text-align: left;
+        }
+      }
       .form-group {
         margin-bottom: 16px;
         display: flex;
@@ -58,9 +107,7 @@
         margin-bottom: 6px;
         font-weight: 500;
       }
-      .form-group input,
-      .form-group textarea,
-      .form-group select {
+      .form-group input {
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid var(--border);
         border-radius: 8px;
@@ -68,25 +115,9 @@
         padding: 12px;
         font-size: 0.95rem;
       }
-      .form-group input:focus,
-      .form-group textarea:focus,
-      .form-group select:focus {
+      .form-group input:focus {
         outline: none;
         border-color: var(--purple);
-      }
-      .message {
-        margin-top: 12px;
-        font-size: 0.92rem;
-      }
-      .message.error {
-        color: var(--pink);
-      }
-      .message.success {
-        color: var(--success);
-      }
-      /* Botões extras */
-      #back-button {
-        margin-top: 16px;
       }
     </style>
   </head>
@@ -99,25 +130,23 @@
           src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
           alt="Logo GVolt 3D"
         />
-
         <span>GVolt <strong>3D</strong></span>
       </a>
       <nav class="nav-links" aria-label="Navegação principal">
         <a href="admin.html">Produtos</a>
-        <a href="admin-filaments.html">Filamentos</a>
+        <a href="admin-filaments.html" class="active">Filamentos</a>
         <a href="admin-printers.html">Impressoras</a>
         <a href="admin-packaging.html">Embalagens</a>
         <a href="admin-extras.html">Extras</a>
         <a href="admin-settings.html">Configurações</a>
         <a href="admin-calculator.html">Calculadora</a>
       </nav>
-      <!-- Botão de menu para navegação em telas pequenas -->
       <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
         <i class="fa-solid fa-bars"></i>
       </button>
     </header>
     <main class="admin-page">
-      <h2>Cadastrar Produto</h2>
+      <h2>Gerenciar Filamentos</h2>
       <!-- Formulário de login -->
       <div id="login-container">
         <div class="form-group">
@@ -131,93 +160,84 @@
         <button class="btn btn-primary" id="login-button">Entrar</button>
         <p id="login-message" class="message error" hidden></p>
       </div>
-      <!-- Conteúdo de cadastro -->
-      <div id="admin-container" hidden>
-        <p>Preencha os campos abaixo para adicionar um novo produto.</p>
-        <form id="product-form">
+      <!-- Conteúdo de gerenciamento -->
+      <div id="manage-container" hidden>
+        <p>Lista de filamentos cadastrados:</p>
+        <table id="filaments-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Preço do carretel (R$)</th>
+              <th>Tamanho do carretel (kg)</th>
+              <th>Preço por kg (R$/kg)</th>
+            </tr>
+          </thead>
+          <tbody id="filaments-body">
+            <!-- Preenchido dinamicamente -->
+          </tbody>
+        </table>
+        <h3>Novo Filamento</h3>
+        <form id="filament-form">
           <div class="form-group">
-            <label for="product-id">ID (slug)</label>
+            <label for="filament-name">Nome</label>
             <input
               type="text"
-              id="product-id"
-              placeholder="Ex: baby-yoda"
+              id="filament-name"
+              placeholder="Ex: PLA Branco"
               required
             />
           </div>
           <div class="form-group">
-            <label for="product-name">Nome</label>
-            <input
-              type="text"
-              id="product-name"
-              placeholder="Nome do produto"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="product-description">Descrição curta</label>
-            <input
-              type="text"
-              id="product-description"
-              placeholder="Resumo do produto"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="product-price">Preço (R$)</label>
+            <label for="filament-price">Preço do carretel (R$)</label>
             <input
               type="number"
+              id="filament-price"
               step="0.01"
-              id="product-price"
               placeholder="0.00"
               required
             />
           </div>
           <div class="form-group">
-            <label for="product-image">Imagem principal (URL)</label>
-            <input type="text" id="product-image" placeholder="URL da imagem" />
-          </div>
-          <div class="form-group">
-            <label for="product-images"
-              >Imagens (URLs separadas por vírgula)</label
-            >
+            <label for="filament-size">Tamanho do carretel (kg)</label>
             <input
-              type="text"
-              id="product-images"
-              placeholder="url1.jpg, url2.jpg"
+              type="number"
+              id="filament-size"
+              step="0.01"
+              placeholder="1.00"
+              required
             />
           </div>
           <div class="form-group">
-            <label for="product-availability">Disponibilidade</label>
-            <select id="product-availability">
-              <option value="Em estoque">Em estoque</option>
-              <option value="Sob encomenda">Sob encomenda</option>
-            </select>
+            <label for="filament-density">Densidade (g/cm³) (opcional)</label>
+            <input
+              type="number"
+              id="filament-density"
+              step="0.01"
+              placeholder="1.24"
+            />
           </div>
           <div class="form-group">
-            <label for="product-lead-time">Prazo (dias)</label>
-            <input type="number" id="product-lead-time" placeholder="0" />
-          </div>
-          <div class="form-group">
-            <label for="product-long-description">Descrição longa</label>
-            <textarea
-              id="product-long-description"
-              placeholder="Detalhes completos do produto..."
-              rows="6"
-            ></textarea>
-          </div>
-          <div class="form-group">
-            <label for="product-specs"
-              >Especificações técnicas (JSON ou vazio)</label
+            <label for="filament-nozzle"
+              >Temperatura do bico (°C) (opcional)</label
             >
-            <textarea
-              id="product-specs"
-              placeholder='{"Altura":"15cm","Material":"PLA"}'
-              rows="3"
-            ></textarea>
+            <input
+              type="number"
+              id="filament-nozzle"
+              step="1"
+              placeholder="200"
+            />
           </div>
-          <button type="submit" class="btn btn-primary">Salvar Produto</button>
-          <p id="product-message" class="message" hidden></p>
+          <div class="form-group">
+            <label for="filament-bed"
+              >Temperatura da mesa (°C) (opcional)</label
+            >
+            <input type="number" id="filament-bed" step="1" placeholder="60" />
+          </div>
+          <button type="submit" class="btn btn-primary">
+            Salvar Filamento
+          </button>
         </form>
+        <p id="filament-message" class="message" hidden></p>
         <button class="btn btn-secondary" id="back-button">Voltar</button>
       </div>
     </main>
@@ -232,11 +252,11 @@
       </div>
       <p>Soluções criativas em impressão 3D.</p>
       <a href="https://wa.me/5519995325891" target="_blank">
-        <i class="fa-brands fa-whatsapp"></i> Fale conosco</a
-      >
+        <i class="fa-brands fa-whatsapp"></i> Fale conosco
+      </a>
     </footer>
     <script>
-      // Cria o cliente Supabase usando as configurações globais definidas em config.js
+      // Inicializa Supabase com variáveis globais
       const supabaseClient = window.supabase.createClient(
         window.SUPABASE_URL,
         window.SUPABASE_KEY,
@@ -244,24 +264,24 @@
       const ADMIN_EMAILS = window.ADMIN_EMAILS || [];
 
       const loginContainer = document.getElementById("login-container");
-      const adminContainer = document.getElementById("admin-container");
+      const manageContainer = document.getElementById("manage-container");
       const loginMessage = document.getElementById("login-message");
-      const productMessage = document.getElementById("product-message");
+      const filamentMessage = document.getElementById("filament-message");
+      const filamentsBody = document.getElementById("filaments-body");
 
-      // Verifica se há sessão ativa e se o usuário está autorizado
+      // Verifica sessão
       async function checkSession() {
         const {
           data: {session},
         } = await supabaseClient.auth.getSession();
         if (session && session.user) {
           if (ADMIN_EMAILS.includes(session.user.email)) {
-            showAdmin();
+            showManage();
+            await loadFilaments();
           } else {
-            loginContainer.hidden = false;
-            adminContainer.hidden = true;
+            showLogin();
+            loginMessage.textContent = "Usuário sem permissão de acesso.";
             loginMessage.hidden = false;
-            loginMessage.textContent =
-              "Este usuário não tem permissão para acessar a área administrativa.";
           }
         } else {
           showLogin();
@@ -270,17 +290,16 @@
 
       function showLogin() {
         loginContainer.hidden = false;
-        adminContainer.hidden = true;
+        manageContainer.hidden = true;
         loginMessage.hidden = true;
       }
 
-      function showAdmin() {
+      function showManage() {
         loginContainer.hidden = true;
-        adminContainer.hidden = false;
+        manageContainer.hidden = false;
         loginMessage.hidden = true;
       }
 
-      // Evento de login
       document
         .getElementById("login-button")
         .addEventListener("click", async () => {
@@ -304,103 +323,104 @@
           }
         });
 
-      // Botão de voltar para listagem
       document.getElementById("back-button").addEventListener("click", () => {
         window.location.href = "admin.html";
       });
 
-      // Envio do formulário para inserir produto
-      document
-        .getElementById("product-form")
-        .addEventListener("submit", async (event) => {
-          event.preventDefault();
-          productMessage.hidden = true;
-
-          // Captura valores do formulário
-          const id = document.getElementById("product-id").value.trim();
-          const name = document.getElementById("product-name").value.trim();
-          const description = document
-            .getElementById("product-description")
-            .value.trim();
-          const priceValue = document.getElementById("product-price").value;
-          const image =
-            document.getElementById("product-image").value.trim() || null;
-          const imagesStr = document
-            .getElementById("product-images")
-            .value.trim();
-          const availability = document.getElementById(
-            "product-availability",
-          ).value;
-          const leadTime = document.getElementById("product-lead-time").value;
-          const longDescription = document
-            .getElementById("product-long-description")
-            .value.trim();
-          const specsStr = document
-            .getElementById("product-specs")
-            .value.trim();
-
-          if (!id || !name || !description || !priceValue) {
-            productMessage.textContent =
-              "Preencha todos os campos obrigatórios.";
-            productMessage.className = "message error";
-            productMessage.hidden = false;
+      async function loadFilaments() {
+        filamentMessage.hidden = true;
+        filamentsBody.innerHTML = "";
+        try {
+          const {data, error} = await supabaseClient
+            .from("filaments")
+            .select("*");
+          if (error) throw error;
+          if (!data || data.length === 0) {
+            filamentMessage.textContent = "Nenhum filamento cadastrado.";
+            filamentMessage.className = "message";
+            filamentMessage.hidden = false;
             return;
           }
-          const price = parseFloat(priceValue);
-          const leadTimeDays = leadTime ? parseInt(leadTime) : null;
-          let images = null;
-          if (imagesStr) {
-            images = imagesStr
-              .split(",")
-              .map((url) => url.trim())
-              .filter((v) => v);
-          }
-          let technicalSpecs = null;
-          if (specsStr) {
-            try {
-              technicalSpecs = JSON.parse(specsStr);
-            } catch (e) {
-              productMessage.textContent =
-                "Especificações técnicas inválidas (não é JSON).";
-              productMessage.className = "message error";
-              productMessage.hidden = false;
-              return;
-            }
-          }
+          data.forEach((fila) => {
+            const tr = document.createElement("tr");
+            const pricePerKg = fila.spool_size
+              ? fila.spool_price / fila.spool_size
+              : 0;
+            tr.innerHTML = `
+              <td data-label="Nome">${fila.name}</td>
+              <td data-label="Preço do carretel">R$ ${Number(fila.spool_price).toFixed(2)}</td>
+              <td data-label="Tamanho do carretel">${Number(fila.spool_size).toFixed(2)} kg</td>
+              <td data-label="Preço por kg">R$ ${pricePerKg.toFixed(2)}</td>
+            `;
+            filamentsBody.appendChild(tr);
+          });
+        } catch (err) {
+          filamentMessage.textContent =
+            err.message || "Erro ao carregar filamentos.";
+          filamentMessage.className = "message error";
+          filamentMessage.hidden = false;
+        }
+      }
 
-          const newProduct = {
-            id,
+      // Formulário de novo filamento
+      document
+        .getElementById("filament-form")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+          filamentMessage.hidden = true;
+          const name = document.getElementById("filament-name").value.trim();
+          const spoolPrice = parseFloat(
+            document.getElementById("filament-price").value,
+          );
+          const spoolSize = parseFloat(
+            document.getElementById("filament-size").value,
+          );
+          const density = document.getElementById("filament-density").value;
+          const nozzleTemp = document.getElementById("filament-nozzle").value;
+          const bedTemp = document.getElementById("filament-bed").value;
+          if (
+            !name ||
+            isNaN(spoolPrice) ||
+            spoolPrice <= 0 ||
+            isNaN(spoolSize) ||
+            spoolSize <= 0
+          ) {
+            filamentMessage.textContent =
+              "Preencha corretamente nome, preço e tamanho.";
+            filamentMessage.className = "message error";
+            filamentMessage.hidden = false;
+            return;
+          }
+          const newFila = {
             name,
-            description,
-            price,
-            image,
-            images,
-            availability,
-            lead_time_days: leadTimeDays,
-            long_description: longDescription,
-            technicalSpecs: technicalSpecs,
+            spool_price: spoolPrice,
+            spool_size: spoolSize,
+            density: density ? parseFloat(density) : null,
+            nozzle_temp: nozzleTemp ? parseFloat(nozzleTemp) : null,
+            bed_temp: bedTemp ? parseFloat(bedTemp) : null,
           };
           try {
             const {error} = await supabaseClient
-              .from("products")
-              .insert([newProduct]);
+              .from("filaments")
+              .insert([newFila]);
             if (error) throw error;
-            productMessage.textContent = "Produto adicionado com sucesso!";
-            productMessage.className = "message success";
-            productMessage.hidden = false;
-            document.getElementById("product-form").reset();
+            filamentMessage.textContent = "Filamento adicionado com sucesso!";
+            filamentMessage.className = "message success";
+            filamentMessage.hidden = false;
+            document.getElementById("filament-form").reset();
+            await loadFilaments();
           } catch (err) {
-            productMessage.textContent =
-              err.message || "Erro ao adicionar produto.";
-            productMessage.className = "message error";
-            productMessage.hidden = false;
+            filamentMessage.textContent =
+              err.message || "Erro ao adicionar filamento.";
+            filamentMessage.className = "message error";
+            filamentMessage.hidden = false;
           }
         });
 
       // Checa a sessão ao carregar
       checkSession();
 
-      // Botão de menu responsivo para a navegação
+      // Botão de menu responsivo
       const menuToggle = document.getElementById("menu-toggle");
       const navLinks = document.querySelector(".nav-links");
       if (menuToggle && navLinks) {

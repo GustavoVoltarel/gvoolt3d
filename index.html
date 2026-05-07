@@ -20,6 +20,13 @@
     />
     <link rel="stylesheet" href="style.css" />
 
+    <!-- Ícone da aba do navegador -->
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcxNDU2LCJleHAiOjQ5MzE3NzE0NTZ9.BXqHQJ7vzskF_NkliO4hJGsD96NCYQCjghncISquesg"
+    />
+
     <!-- Supabase JS SDK (v2) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Carrega as constantes SUPABASE_URL, SUPABASE_KEY e ADMIN_EMAILS -->
@@ -30,7 +37,11 @@
 
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="GVolt 3D">
-        <img src="assets/gvolt-logo.jpeg" alt="Logo GVolt 3D" />
+        <!-- Usa a nova logo diretamente do arquivo enviado -->
+        <img
+          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          alt="Logo GVolt 3D"
+        />
         <span>GVolt <strong>3D</strong></span>
       </a>
 
@@ -39,12 +50,20 @@
         <a href="#produtos">Produtos</a>
         <a href="#contato">Contato</a>
       </nav>
+      <!-- Botão de menu para navegação em telas pequenas -->
+      <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
     </header>
 
     <main>
       <section class="hero">
         <div class="hero-image-card">
-          <img src="assets/gvolt-logo.jpeg" alt="Logo GVolt 3D em neon roxo" />
+          <!-- Substitui a imagem antiga pela nova logo -->
+          <img
+            src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+            alt="Logo GVolt 3D"
+          />
         </div>
 
         <div class="hero-content">
@@ -116,7 +135,11 @@
 
     <footer class="footer" id="contato">
       <div class="footer-brand">
-        <img src="assets/gvolt-logo.jpeg" alt="Logo GVolt 3D" />
+        <!-- Atualiza a logo para o novo arquivo -->
+        <img
+          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          alt="Logo GVolt 3D"
+        />
         <strong>GVolt <span>3D</span></strong>
       </div>
       <p>Soluções criativas em impressão 3D.</p>
@@ -208,6 +231,15 @@
           });
           renderProducts(filtered);
         });
+
+      // Botão de menu responsivo
+      const menuToggle = document.getElementById("menu-toggle");
+      const navLinks = document.querySelector(".nav-links");
+      if (menuToggle && navLinks) {
+        menuToggle.addEventListener("click", () => {
+          navLinks.classList.toggle("show");
+        });
+      }
     </script>
   </body>
 </html>
