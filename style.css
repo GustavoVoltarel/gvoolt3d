@@ -846,3 +846,80 @@ a {
     justify-content: space-between;
   }
 }
+
+/* Melhorias mobile para a calculadora de custos */
+@media (max-width: 700px) {
+  .admin-page {
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .filament-row select,
+  .filament-row input,
+  .filament-row button,
+  .packaging-row select,
+  .packaging-row input,
+  .packaging-row button {
+    width: 100% !important;
+    min-width: 0;
+  }
+
+  #add-filament-btn,
+  #add-packaging-btn {
+    width: 100%;
+    margin-top: 4px;
+    padding: 13px 16px;
+  }
+
+  .extras-row {
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: 1fr 92px;
+    gap: 10px !important;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(189, 67, 255, 0.18);
+  }
+
+  .extras-row label {
+    min-width: 0;
+    line-height: 1.35;
+    word-break: break-word;
+  }
+
+  .extras-row input[type="number"] {
+    width: 92px !important;
+    min-width: 0;
+    text-align: center;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .result-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 420px) {
+  .admin-page {
+    width: calc(100% - 16px);
+    padding: 18px 12px;
+  }
+
+  .extras-row {
+    grid-template-columns: 1fr 78px;
+  }
+
+  .extras-row input[type="number"] {
+    width: 78px !important;
+  }
+}
