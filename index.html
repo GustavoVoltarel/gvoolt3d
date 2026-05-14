@@ -8,6 +8,7 @@
       name="description"
       content="Produtos personalizados de impressão 3D com acabamento premium. Conheça a GVolt 3D."
     />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -20,24 +21,50 @@
     />
     <link rel="stylesheet" href="style.css" />
 
-    <!-- Ícone da aba do navegador -->
     <link
       rel="icon"
       type="image/png"
       href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcxNDU2LCJleHAiOjQ5MzE3NzE0NTZ9.BXqHQJ7vzskF_NkliO4hJGsD96NCYQCjghncISquesg"
     />
 
-    <!-- Supabase JS SDK (v2) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Carrega as constantes SUPABASE_URL, SUPABASE_KEY e ADMIN_EMAILS -->
     <script src="config.js"></script>
+
+    <style>
+      .product-card.featured {
+        border-color: rgba(240, 45, 255, 0.62);
+        box-shadow:
+          0 0 28px rgba(184, 50, 255, 0.26),
+          0 8px 30px rgba(0, 0, 0, 0.28);
+      }
+
+      .favorite.favorite-badge {
+        width: auto;
+        height: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 9px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        background: linear-gradient(135deg, var(--pink), var(--purple-strong));
+        color: #fff;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.2px;
+        box-shadow: 0 0 22px rgba(184, 50, 255, 0.42);
+      }
+
+      .favorite.favorite-badge i {
+        font-size: 0.78rem;
+      }
+    </style>
   </head>
+
   <body>
     <div class="site-glow"></div>
 
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="GVolt 3D">
-        <!-- Usa a nova logo diretamente do arquivo enviado -->
         <img
           src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
           alt="Logo GVolt 3D"
@@ -46,20 +73,19 @@
       </a>
 
       <nav class="nav-links" aria-label="Navegação principal">
-        <a href="index.html">Início</a>
+        <a href="#inicio">Início</a>
         <a href="#produtos">Produtos</a>
         <a href="#contato">Contato</a>
       </nav>
-      <!-- Botão de menu para navegação em telas pequenas -->
+
       <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
         <i class="fa-solid fa-bars"></i>
       </button>
     </header>
 
-    <main>
+    <main id="inicio">
       <section class="hero">
         <div class="hero-image-card">
-          <!-- Substitui a imagem antiga pela nova logo -->
           <img
             src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
             alt="Logo GVolt 3D"
@@ -75,6 +101,7 @@
             Peças criativas, funcionais e decorativas feitas sob medida para
             transformar suas ideias em realidade.
           </p>
+
           <div class="hero-actions">
             <a href="#produtos" class="btn btn-primary">Ver produtos</a>
             <a
@@ -127,6 +154,7 @@
         </div>
 
         <div id="products" class="products-container"></div>
+
         <p id="emptyMessage" class="empty-message" hidden>
           Nenhum produto encontrado.
         </p>
@@ -135,13 +163,13 @@
 
     <footer class="footer" id="contato">
       <div class="footer-brand">
-        <!-- Atualiza a logo para o novo arquivo -->
         <img
           src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
           alt="Logo GVolt 3D"
         />
         <strong>GVolt <span>3D</span></strong>
       </div>
+
       <p>Soluções criativas em impressão 3D.</p>
       <a href="https://wa.me/5519995325891" target="_blank"
         ><i class="fa-brands fa-whatsapp"></i> Fale conosco</a
@@ -149,23 +177,30 @@
     </footer>
 
     <script>
-      // ---------------------------------------------------------------------------------------------------------
-      //  Instancia o cliente Supabase utilizando as constantes globais definidas em config.js.
-      //  As variáveis SUPABASE_URL e SUPABASE_KEY são carregadas no objeto window pelo arquivo de configuração.
       const supabaseClient = window.supabase.createClient(
         window.SUPABASE_URL,
         window.SUPABASE_KEY,
       );
 
       let allProducts = [];
+
       const container = document.getElementById("products");
       const emptyMessage = document.getElementById("emptyMessage");
 
       function formatPrice(value) {
-        return value.toLocaleString("pt-BR", {
+        return Number(value || 0).toLocaleString("pt-BR", {
           style: "currency",
           currency: "BRL",
         });
+      }
+
+      function escapeHtml(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
       }
 
       function renderProducts(products) {
@@ -174,36 +209,67 @@
 
         products.forEach((product) => {
           const card = document.createElement("article");
-          card.className = "product-card";
+          const isFavorite = Boolean(product.is_favorite);
+
+          card.className = isFavorite
+            ? "product-card featured"
+            : "product-card";
+
           card.innerHTML = `
-          <a class="product-image" href="product.html?id=${product.id}" aria-label="Ver detalhes de ${product.name}">
-            <img src="${product.image}" alt="${product.name}" onerror="this.src='assets/fallback.jpg'">
-          </a>
-          <div class="product-card-body">
-            <h3>${product.name}</h3>
-            <p>${product.description}</p>
-            <strong>${formatPrice(product.price)}</strong>
-            <a class="details-link" href="product.html?id=${product.id}">
-  Ver detalhes e comprar →
-</a>
-          </div>
-        `;
+            <a class="product-image" href="product.html?id=${encodeURIComponent(product.id)}" aria-label="Ver detalhes de ${escapeHtml(product.name)}">
+              <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" onerror="this.src='assets/fallback.jpg'">
+              ${
+                isFavorite
+                  ? `<span class="favorite favorite-badge"><i class="fa-solid fa-star"></i></span>`
+                  : ""
+              }
+            </a>
+
+            <div class="product-card-body">
+              <h3>${escapeHtml(product.name)}</h3>
+              <p>${escapeHtml(product.description)}</p>
+              <strong>${formatPrice(product.price)}</strong>
+              <a class="details-link" href="product.html?id=${encodeURIComponent(product.id)}">
+                Ver detalhes e comprar →
+              </a>
+            </div>
+          `;
+
           card.addEventListener("click", (event) => {
             if (event.target.closest("a")) return;
-            window.location.href = `product.html?id=${product.id}`;
+            window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
           });
+
           container.appendChild(card);
         });
       }
 
-      // Carrega todos os produtos da tabela "products" no Supabase.
+      async function queryProducts(orderByFavorite = true) {
+        let query = supabaseClient.from("products").select("*");
+
+        if (orderByFavorite) {
+          query = query
+            .order("is_favorite", {ascending: false})
+            .order("name", {ascending: true});
+        } else {
+          query = query.order("name", {ascending: true});
+        }
+
+        return await query;
+      }
+
       async function loadProducts() {
         try {
-          const {data, error} = await supabaseClient
-            .from("products")
-            .select("*")
-            .order("name", {ascending: true});
+          let {data, error} = await queryProducts(true);
+
+          if (error && String(error.message || "").includes("is_favorite")) {
+            const fallback = await queryProducts(false);
+            data = fallback.data;
+            error = fallback.error;
+          }
+
           if (error) throw error;
+
           allProducts = data || [];
           renderProducts(allProducts);
         } catch (error) {
@@ -213,28 +279,33 @@
         }
       }
 
-      // Inicializa a busca assim que o DOM estiver pronto
       loadProducts();
 
-      // Busca em tempo real: filtra os produtos conforme o usuário digita
       document
         .getElementById("searchInput")
         .addEventListener("input", function () {
           const term = this.value.toLowerCase().trim();
+
           const filtered = allProducts.filter((product) => {
+            const name = String(product.name || "").toLowerCase();
+            const description = String(product.description || "").toLowerCase();
+            const longDescription = String(
+              product.long_description || "",
+            ).toLowerCase();
+
             return (
-              product.name.toLowerCase().includes(term) ||
-              product.description.toLowerCase().includes(term) ||
-              (product.long_description &&
-                product.long_description.toLowerCase().includes(term))
+              name.includes(term) ||
+              description.includes(term) ||
+              longDescription.includes(term)
             );
           });
+
           renderProducts(filtered);
         });
 
-      // Botão de menu responsivo
       const menuToggle = document.getElementById("menu-toggle");
       const navLinks = document.querySelector(".nav-links");
+
       if (menuToggle && navLinks) {
         menuToggle.addEventListener("click", () => {
           navLinks.classList.toggle("show");

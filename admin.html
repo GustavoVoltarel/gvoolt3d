@@ -8,106 +8,94 @@
       name="description"
       content="Tela inicial de administração para listar, editar e excluir produtos."
     />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
     <link
       href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
-    <!-- Usa o mesmo arquivo de estilos do site -->
+
     <link rel="stylesheet" href="style.css" />
 
-    <!-- Ícone da aba do navegador -->
     <link
       rel="icon"
       type="image/png"
       href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcyMDYyLCJleHAiOjQ5MzE3NzIwNjJ9.1vnoc_Ib-MghMmvi6Pm5kXpz-qCW2Q0OYxxgzZz5Fx8"
     />
-    <!-- Biblioteca Supabase -->
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Configurações (SUPABASE_URL, SUPABASE_KEY, ADMIN_EMAILS) -->
     <script src="config.js"></script>
+
     <style>
-      /* Estilos adicionais para a listagem de produtos */
       table {
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 24px;
       }
+
       thead {
         background: var(--card-solid);
       }
+
       th,
       td {
         text-align: left;
         padding: 12px;
         border-bottom: 1px solid var(--border);
       }
+
       tr:nth-child(even) {
         background: rgba(255, 255, 255, 0.03);
       }
+
       .actions {
         display: flex;
         gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
       }
-      .actions a {
+
+      .actions a,
+      .actions button {
         color: var(--purple);
         cursor: pointer;
         text-decoration: none;
+        background: transparent;
+        border: none;
+        padding: 0;
+        font: inherit;
       }
-      .actions a:hover {
+
+      .actions a:hover,
+      .actions button:hover {
         text-decoration: underline;
       }
-      /* Botão de novo produto */
+
+      .actions .danger {
+        color: #ff6b6b;
+      }
+
       #new-product-button {
         margin-bottom: 16px;
       }
 
-      /* Tabela responsiva para telas menores */
       @media (max-width: 700px) {
-        #products-table thead {
-          display: none;
-        }
-        #products-table,
-        #products-table tbody,
-        #products-table tr,
-        #products-table td {
-          display: block;
-          width: 100%;
-        }
-        #products-table tr {
-          margin-bottom: 16px;
-          border-bottom: 1px solid var(--border);
-        }
-        #products-table td {
-          text-align: right;
-          position: relative;
-          padding-left: 50%;
-        }
-        #products-table td::before {
-          content: attr(data-label);
-          position: absolute;
-          left: 0;
-          width: 50%;
-          padding-left: 16px;
-          font-weight: 500;
-          color: var(--muted);
-          text-align: left;
-        }
-        #products-table td.actions {
-          display: flex;
-          justify-content: flex-end;
-          gap: 8px;
-        }
-
-        /* Estilo responsivo para a tabela de cálculos */
+        #products-table thead,
         #calculations-table thead {
           display: none;
         }
+
+        #products-table,
+        #products-table tbody,
+        #products-table tr,
+        #products-table td,
         #calculations-table,
         #calculations-table tbody,
         #calculations-table tr,
@@ -115,15 +103,21 @@
           display: block;
           width: 100%;
         }
+
+        #products-table tr,
         #calculations-table tr {
           margin-bottom: 16px;
           border-bottom: 1px solid var(--border);
         }
+
+        #products-table td,
         #calculations-table td {
           text-align: right;
           position: relative;
           padding-left: 50%;
         }
+
+        #products-table td::before,
         #calculations-table td::before {
           content: attr(data-label);
           position: absolute;
@@ -134,20 +128,29 @@
           color: var(--muted);
           text-align: left;
         }
+
+        #products-table td.actions,
+        #calculations-table td.actions {
+          display: flex;
+          justify-content: flex-end;
+          gap: 12px;
+        }
       }
     </style>
   </head>
+
   <body>
     <div class="site-glow"></div>
+
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="GVolt 3D">
-        <!-- Usa a nova logo do site -->
         <img
           src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
           alt="Logo GVolt 3D"
         />
         <span>GVolt <strong>3D</strong></span>
       </a>
+
       <nav class="nav-links" aria-label="Navegação principal">
         <a href="admin.html" class="active">Produtos</a>
         <a href="admin-filaments.html">Filamentos</a>
@@ -157,32 +160,37 @@
         <a href="admin-settings.html">Configurações</a>
         <a href="admin-calculator.html">Calculadora</a>
       </nav>
-      <!-- Botão de menu para navegação em telas pequenas -->
+
       <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
         <i class="fa-solid fa-bars"></i>
       </button>
     </header>
+
     <main class="admin-page">
       <h2>Gerenciar Produtos</h2>
-      <!-- Área de login -->
+
       <div id="login-container">
         <div class="form-group">
           <label for="login-email">E-mail</label>
           <input type="email" id="login-email" placeholder="seu@email.com" />
         </div>
+
         <div class="form-group">
           <label for="login-password">Senha</label>
           <input type="password" id="login-password" placeholder="Senha" />
         </div>
+
         <button class="btn btn-primary" id="login-button">Entrar</button>
         <p id="login-message" class="message error" hidden></p>
       </div>
-      <!-- Área de listagem de produtos -->
+
       <div id="list-container" hidden>
         <p>Lista de produtos cadastrados:</p>
+
         <button id="new-product-button" class="btn btn-primary">
           Novo Produto
         </button>
+
         <table id="products-table">
           <thead>
             <tr>
@@ -196,47 +204,53 @@
             <!-- Preenchido dinamicamente -->
           </tbody>
         </table>
+
         <p id="list-message" class="message" hidden></p>
 
-        <!-- Seção de cálculos salvos -->
         <h3>Histórico de Cálculos</h3>
+
         <table id="calculations-table">
           <thead>
             <tr>
               <th>Projeto</th>
               <th>Preço Final</th>
               <th>Data</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody id="calculations-body">
-            <!-- Dinâmico -->
+            <!-- Preenchido dinamicamente -->
           </tbody>
         </table>
 
         <button class="btn btn-secondary" id="logout-button">Sair</button>
       </div>
     </main>
+
     <footer class="footer">
       <div class="footer-brand">
-        <!-- Usa a nova logo do site -->
         <img
           src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
           alt="Logo GVolt 3D"
         />
         <strong>GVolt <span>3D</span></strong>
       </div>
+
       <p>Soluções criativas em impressão 3D.</p>
-      <a href="https://wa.me/5519995325891" target="_blank"
-        ><i class="fa-brands fa-whatsapp"></i> Fale conosco</a
-      >
+
+      <a href="https://wa.me/5519995325891" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i> Fale conosco
+      </a>
     </footer>
+
     <script>
-      // Cria o cliente Supabase com as variáveis globais definidas em config.js
       const supabaseClient = window.supabase.createClient(
         window.SUPABASE_URL,
-        window.SUPABASE_KEY,
+        window.SUPABASE_KEY
       );
+
       const ADMIN_EMAILS = window.ADMIN_EMAILS || [];
+
       const loginContainer = document.getElementById("login-container");
       const listContainer = document.getElementById("list-container");
       const loginMessage = document.getElementById("login-message");
@@ -244,15 +258,51 @@
       const productsBody = document.getElementById("products-body");
       const newProductButton = document.getElementById("new-product-button");
 
-      // Redireciona para a página de cadastro ao clicar em "Novo Produto"
       newProductButton.addEventListener("click", () => {
         window.location.href = "admin-create.html";
       });
 
+      function formatMoney(value) {
+        if (value === null || value === undefined || value === "") {
+          return "";
+        }
+
+        return Number(value).toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        });
+      }
+
+      function formatDate(value) {
+        if (!value) return "";
+
+        return new Date(value).toLocaleDateString("pt-BR");
+      }
+
+      function showMessage(text, type = "message") {
+        listMessage.textContent = text;
+        listMessage.className = type;
+        listMessage.hidden = false;
+      }
+
+      function clearMessage() {
+        listMessage.textContent = "";
+        listMessage.hidden = true;
+      }
+
+      function addCell(row, label, value) {
+        const td = document.createElement("td");
+        td.setAttribute("data-label", label);
+        td.textContent = value ?? "";
+        row.appendChild(td);
+        return td;
+      }
+
       async function checkSession() {
         const {
-          data: {session},
+          data: { session },
         } = await supabaseClient.auth.getSession();
+
         if (session && session.user) {
           if (ADMIN_EMAILS.includes(session.user.email)) {
             showList();
@@ -287,16 +337,20 @@
         .addEventListener("click", async () => {
           const email = document.getElementById("login-email").value.trim();
           const password = document.getElementById("login-password").value;
+
           loginMessage.hidden = true;
+
           if (!email || !password) {
             loginMessage.textContent = "Preencha e-mail e senha.";
             loginMessage.hidden = false;
             return;
           }
-          const {error} = await supabaseClient.auth.signInWithPassword({
+
+          const { error } = await supabaseClient.auth.signInWithPassword({
             email,
             password,
           });
+
           if (error) {
             loginMessage.textContent = error.message || "Erro ao fazer login.";
             loginMessage.hidden = false;
@@ -313,97 +367,140 @@
         });
 
       async function loadProducts() {
-        listMessage.hidden = true;
+        clearMessage();
         productsBody.innerHTML = "";
-        const {data, error} = await supabaseClient
+
+        const { data, error } = await supabaseClient
           .from("products")
-          .select("name, price, availability");
+          .select("id, name, price, availability")
+          .order("name", { ascending: true });
+
         if (error) {
-          listMessage.textContent =
-            error.message || "Erro ao carregar produtos.";
-          listMessage.className = "message error";
-          listMessage.hidden = false;
+          showMessage(error.message || "Erro ao carregar produtos.", "message error");
           return;
         }
+
         if (!data || data.length === 0) {
-          listMessage.textContent = "Nenhum produto cadastrado.";
-          listMessage.className = "message";
-          listMessage.hidden = false;
+          showMessage("Nenhum produto cadastrado.", "message");
           return;
         }
+
         data.forEach((prod) => {
           const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td data-label="Nome">${prod.name}</td>
-            <td data-label="Preço">R$ ${prod.price.toFixed(2)}</td>
-            <td data-label="Disponibilidade">${prod.availability || ""}</td>
-            <td data-label="Ações" class="actions">
-              <a href="admin-edit.html?id=${encodeURIComponent(prod.id)}">Editar</a>
-              <a href="admin-delete.html?id=${encodeURIComponent(prod.id)}">Apagar</a>
-            </td>
-          `;
+
+          addCell(tr, "Nome", prod.name || "");
+          addCell(tr, "Preço", formatMoney(prod.price));
+          addCell(tr, "Disponibilidade", prod.availability || "");
+
+          const actions = addCell(tr, "Ações", "");
+          actions.className = "actions";
+
+          const editLink = document.createElement("a");
+          editLink.href = `admin-edit.html?id=${encodeURIComponent(prod.id)}`;
+          editLink.textContent = "Editar";
+
+          const deleteLink = document.createElement("a");
+          deleteLink.href = `admin-delete.html?id=${encodeURIComponent(prod.id)}`;
+          deleteLink.textContent = "Apagar";
+
+          actions.appendChild(editLink);
+          actions.appendChild(deleteLink);
+
           productsBody.appendChild(tr);
         });
       }
 
-      // Carrega cálculos de custos salvos
       async function loadCalculations() {
         const calcBody = document.getElementById("calculations-body");
+
         if (!calcBody) return;
+
         calcBody.innerHTML = "";
+
         try {
-          const {data, error} = await supabaseClient
+          const { data, error } = await supabaseClient
             .from("calculations")
-            .select("project_name, final_price, created_at")
-            .order("created_at", {ascending: false});
+            .select("id, project_name, final_price, created_at")
+            .order("created_at", { ascending: false });
+
           if (error) {
-            // Reutiliza listMessage para exibir erros
-            listMessage.textContent =
-              error.message || "Erro ao carregar cálculos.";
-            listMessage.className = "message error";
-            listMessage.hidden = false;
+            showMessage(error.message || "Erro ao carregar cálculos.", "message error");
             return;
           }
+
           if (!data || data.length === 0) {
-            // Se não houver cálculos, exibe mensagem de vazio abaixo da tabela
             const row = document.createElement("tr");
             const cell = document.createElement("td");
+
             cell.colSpan = 4;
             cell.textContent = "Nenhum cálculo salvo.";
+
             row.appendChild(cell);
             calcBody.appendChild(row);
             return;
           }
+
           data.forEach((calc) => {
             const tr = document.createElement("tr");
-            // Data formatada para português
-            const dateStr = calc.created_at
-              ? new Date(calc.created_at).toLocaleDateString("pt-BR")
-              : "";
-            const priceStr =
-              calc.final_price != null
-                ? `R$ ${Number(calc.final_price).toFixed(2)}`
-                : "";
-            tr.innerHTML = `
-              <td data-label="Projeto">${calc.project_name || ""}</td>
-              <td data-label="Preço Final">${priceStr}</td>
-              <td data-label="Data">${dateStr}</td>
-            `;
+
+            addCell(tr, "Projeto", calc.project_name || "");
+            addCell(tr, "Preço Final", formatMoney(calc.final_price));
+            addCell(tr, "Data", formatDate(calc.created_at));
+
+            const actions = addCell(tr, "Ações", "");
+            actions.className = "actions";
+
+            const detailsLink = document.createElement("a");
+            detailsLink.href = `admin-calculation-details.html?id=${encodeURIComponent(calc.id)}`;
+            detailsLink.textContent = "Detalhes";
+
+            const deleteButton = document.createElement("button");
+            deleteButton.type = "button";
+            deleteButton.className = "danger";
+            deleteButton.textContent = "Excluir";
+            deleteButton.addEventListener("click", async () => {
+              await deleteCalculation(calc.id);
+            });
+
+            actions.appendChild(detailsLink);
+            actions.appendChild(deleteButton);
+
             calcBody.appendChild(tr);
           });
         } catch (err) {
-          listMessage.textContent = err.message || "Erro ao carregar cálculos.";
-          listMessage.className = "message error";
-          listMessage.hidden = false;
+          showMessage(err.message || "Erro ao carregar cálculos.", "message error");
         }
       }
 
-      // Inicializa a verificação de sessão ao carregar a página
+      async function deleteCalculation(calculationId) {
+        if (!calculationId) return;
+
+        const confirmed = confirm(
+          "Tem certeza que deseja excluir este cálculo? Essa ação não poderá ser desfeita."
+        );
+
+        if (!confirmed) return;
+
+        try {
+          const { error } = await supabaseClient
+            .from("calculations")
+            .delete()
+            .eq("id", calculationId);
+
+          if (error) throw error;
+
+          showMessage("Cálculo excluído com sucesso.", "message success");
+          await loadCalculations();
+        } catch (err) {
+          showMessage(err.message || "Erro ao excluir cálculo.", "message error");
+        }
+      }
+
       checkSession();
 
-      // Botão de menu responsivo para a navegação
       const menuToggle = document.getElementById("menu-toggle");
       const navLinks = document.querySelector(".nav-links");
+
       if (menuToggle && navLinks) {
         menuToggle.addEventListener("click", () => {
           navLinks.classList.toggle("show");

@@ -8,45 +8,329 @@
       name="description"
       content="Editar as informações de um produto existente no catálogo."
     />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
     <link
       href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
+
     <link rel="stylesheet" href="style.css" />
 
-    <!-- Ícone da aba do navegador -->
     <link
       rel="icon"
       type="image/png"
       href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcyMDYyLCJleHAiOjQ5MzE3NzIwNjJ9.1vnoc_Ib-MghMmvi6Pm5kXpz-qCW2Q0OYxxgzZz5Fx8"
     />
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Importa as variáveis globais de configuração (SUPABASE_URL, SUPABASE_KEY, ADMIN_EMAILS) -->
     <script src="config.js"></script>
+
     <style>
-      /* Estilos específicos para o formulário de edição */
-      .admin-page form {
-        margin-top: 16px;
+      .admin-page {
+        width: min(1080px, calc(100% - 32px));
+        margin: 28px auto 60px;
+        padding: clamp(20px, 4vw, 38px);
+        border: 1px solid var(--border);
+        border-radius: 30px;
+        background:
+          radial-gradient(circle at top left, rgba(184, 50, 255, 0.17), transparent 36%),
+          linear-gradient(135deg, rgba(12, 5, 25, 0.96), rgba(5, 1, 13, 0.98));
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .admin-page::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(184, 50, 255, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(184, 50, 255, 0.04) 1px, transparent 1px);
+        background-size: 38px 38px;
+        pointer-events: none;
+        opacity: 0.55;
+      }
+
+      .admin-page > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .page-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 28px;
+      }
+
+      .page-header h2 {
+        margin: 0;
+        font-family: 'Orbitron', sans-serif;
+        font-size: clamp(1.55rem, 3vw, 2.35rem);
+        letter-spacing: 0.5px;
+      }
+
+      .page-header p {
+        max-width: 680px;
+        margin: 8px 0 0;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .header-icon {
+        width: 58px;
+        height: 58px;
+        flex: 0 0 58px;
+        display: grid;
+        place-items: center;
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--purple);
+        box-shadow: 0 0 24px rgba(184, 50, 255, 0.3);
+        font-size: 1.35rem;
+      }
+
+      #login-container,
+      #edit-container {
+        border: 1px solid rgba(189, 67, 255, 0.22);
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.035);
+        padding: clamp(18px, 3vw, 28px);
+        backdrop-filter: blur(14px);
+      }
+
+      .edit-form {
+        display: grid;
+        gap: 20px;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .form-group {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .form-group.full {
+        grid-column: 1 / -1;
+      }
+
+      .form-group label {
+        color: #eadbff;
+        font-weight: 600;
+        font-size: 0.94rem;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        border: 1px solid rgba(189, 67, 255, 0.34);
+        border-radius: 16px;
+        background: rgba(5, 0, 13, 0.68);
+        color: var(--text);
+        padding: 14px 16px;
+        font: inherit;
+        outline: none;
+        transition: 0.18s ease;
+        box-shadow: inset 0 0 18px rgba(184, 50, 255, 0.06);
+      }
+
+      .form-group textarea {
+        min-height: 170px;
+        resize: vertical;
+        line-height: 1.55;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        border-color: var(--purple);
+        box-shadow:
+          0 0 0 3px rgba(184, 50, 255, 0.15),
+          inset 0 0 18px rgba(184, 50, 255, 0.08);
+      }
+
+      .form-group input[disabled] {
+        opacity: 0.72;
+        cursor: not-allowed;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .field-hint {
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.45;
+      }
+
+      .favorite-card {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 18px;
+        border: 1px solid rgba(240, 45, 255, 0.34);
+        border-radius: 20px;
+        background:
+          linear-gradient(135deg, rgba(184, 50, 255, 0.14), rgba(255, 255, 255, 0.035)),
+          rgba(5, 0, 13, 0.52);
+      }
+
+      .favorite-info {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .favorite-icon {
+        width: 46px;
+        height: 46px;
+        flex: 0 0 46px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--pink), var(--purple-strong));
+        color: #fff;
+        box-shadow: 0 0 22px rgba(184, 50, 255, 0.45);
+      }
+
+      .favorite-info strong {
+        display: block;
+        color: var(--text);
+        margin-bottom: 3px;
+      }
+
+      .favorite-info p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.45;
+        font-size: 0.9rem;
+      }
+
+      .toggle {
+        position: relative;
+        width: 62px;
+        height: 34px;
+        flex: 0 0 62px;
+        cursor: pointer;
+      }
+
+      .toggle input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .toggle span {
+        position: absolute;
+        inset: 0;
+        border-radius: 999px;
+        border: 1px solid rgba(189, 67, 255, 0.38);
+        background: rgba(255, 255, 255, 0.08);
+        transition: 0.2s ease;
+      }
+
+      .toggle span::before {
+        content: "";
+        position: absolute;
+        width: 26px;
+        height: 26px;
+        left: 4px;
+        top: 3px;
+        border-radius: 50%;
+        background: #fff;
+        transition: 0.2s ease;
+      }
+
+      .toggle input:checked + span {
+        border-color: transparent;
+        background: linear-gradient(135deg, var(--pink), var(--purple-strong));
+        box-shadow: 0 0 18px rgba(184, 50, 255, 0.44);
+      }
+
+      .toggle input:checked + span::before {
+        transform: translateX(28px);
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 4px;
+      }
+
+      .message {
+        margin: 4px 0 0;
+        padding: 12px 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(189, 67, 255, 0.25);
+        background: rgba(255, 255, 255, 0.045);
+      }
+
+      .message.error {
+        color: #ffd1d1;
+        border-color: rgba(255, 107, 107, 0.45);
+        background: rgba(255, 107, 107, 0.1);
+      }
+
+      .message.success {
+        color: #caffdd;
+        border-color: rgba(37, 211, 102, 0.45);
+        background: rgba(37, 211, 102, 0.1);
+      }
+
+      @media (max-width: 760px) {
+        .page-header {
+          flex-direction: column;
+        }
+
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .favorite-card {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .form-actions .btn {
+          width: 100%;
+        }
       }
     </style>
   </head>
+
   <body>
     <div class="site-glow"></div>
+
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="GVolt 3D">
-        <!-- Usa a nova logo do site -->
         <img
           src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
           alt="Logo GVolt 3D"
         />
         <span>GVolt <strong>3D</strong></span>
       </a>
+
       <nav class="nav-links" aria-label="Navegação principal">
         <a href="admin.html">Produtos</a>
         <a href="admin-filaments.html">Filamentos</a>
@@ -56,114 +340,178 @@
         <a href="admin-settings.html">Configurações</a>
         <a href="admin-calculator.html">Calculadora</a>
       </nav>
-      <!-- Botão de menu para navegação em telas pequenas -->
+
       <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
         <i class="fa-solid fa-bars"></i>
       </button>
     </header>
+
     <main class="admin-page">
-      <h2>Editar Produto</h2>
-      <!-- Área de login -->
+      <div class="page-header">
+        <div>
+          <p class="eyebrow"><i class="fa-solid fa-pen-to-square"></i> Administração</p>
+          <h2>Editar Produto</h2>
+          <p>
+            Atualize as informações da peça e marque como favorito quando quiser
+            destacar o produto no início do catálogo público.
+          </p>
+        </div>
+        <div class="header-icon" aria-hidden="true">
+          <i class="fa-solid fa-cube"></i>
+        </div>
+      </div>
+
       <div id="login-container">
-        <div class="form-group">
-          <label for="login-email">E-mail</label>
-          <input type="email" id="login-email" placeholder="seu@email.com" />
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="login-email">E-mail</label>
+            <input type="email" id="login-email" placeholder="seu@email.com" />
+          </div>
+
+          <div class="form-group">
+            <label for="login-password">Senha</label>
+            <input type="password" id="login-password" placeholder="Senha" />
+          </div>
         </div>
-        <div class="form-group">
-          <label for="login-password">Senha</label>
-          <input type="password" id="login-password" placeholder="Senha" />
+
+        <div class="form-actions">
+          <button class="btn btn-primary" id="login-button">Entrar</button>
         </div>
-        <button class="btn btn-primary" id="login-button">Entrar</button>
+
         <p id="login-message" class="message error" hidden></p>
       </div>
-      <!-- Formulário de edição -->
+
       <div id="edit-container" hidden>
-        <form id="edit-form">
-          <div class="form-group">
-            <label for="product-id">ID (não editável)</label>
-            <input type="text" id="product-id" disabled />
+        <form id="edit-form" class="edit-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="product-id">ID do produto</label>
+              <input type="text" id="product-id" disabled />
+              <span class="field-hint">Campo somente leitura.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="product-name">Nome</label>
+              <input type="text" id="product-name" required />
+            </div>
+
+            <div class="form-group full">
+              <label for="product-description">Descrição curta</label>
+              <input type="text" id="product-description" required />
+              <span class="field-hint">Texto curto exibido no card do catálogo.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="product-price">Preço (R$)</label>
+              <input type="number" step="0.01" min="0" id="product-price" required />
+            </div>
+
+            <div class="form-group">
+              <label for="product-availability">Disponibilidade</label>
+              <select id="product-availability">
+                <option value="Em estoque">Em estoque</option>
+                <option value="Sob encomenda">Sob encomenda</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="product-lead">Prazo (dias)</label>
+              <input type="number" min="0" id="product-lead" />
+            </div>
+
+            <div class="form-group">
+              <label for="product-image">Imagem principal (URL)</label>
+              <input type="text" id="product-image" />
+            </div>
+
+            <div class="form-group full">
+              <label for="product-images">Imagens extras</label>
+              <input type="text" id="product-images" />
+              <span class="field-hint">Separe as URLs por vírgula.</span>
+            </div>
+
+            <div class="favorite-card">
+              <div class="favorite-info">
+                <span class="favorite-icon"><i class="fa-solid fa-star"></i></span>
+                <div>
+                  <strong>Produto favorito na vitrine</strong>
+                  <p>
+                    Quando marcado, este produto aparece primeiro para quem acessa
+                    a página inicial do site.
+                  </p>
+                </div>
+              </div>
+
+              <label class="toggle" aria-label="Marcar produto como favorito">
+                <input type="checkbox" id="product-is-favorite" />
+                <span></span>
+              </label>
+            </div>
+
+            <div class="form-group full">
+              <label for="product-long-description">Descrição longa</label>
+              <textarea id="product-long-description" rows="7"></textarea>
+              <span class="field-hint">Texto completo exibido na página de detalhes do produto.</span>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="product-name">Nome</label>
-            <input type="text" id="product-name" required />
-          </div>
-          <div class="form-group">
-            <label for="product-description">Descrição curta</label>
-            <input type="text" id="product-description" required />
-          </div>
-          <div class="form-group">
-            <label for="product-price">Preço (R$)</label>
-            <input type="number" step="0.01" id="product-price" required />
-          </div>
-          <div class="form-group">
-            <label for="product-image">Imagem principal (URL)</label>
-            <input type="text" id="product-image" />
-          </div>
-          <div class="form-group">
-            <label for="product-images"
-              >Imagens (URLs separadas por vírgula)</label
-            >
-            <input type="text" id="product-images" />
-          </div>
-          <div class="form-group">
-            <label for="product-availability">Disponibilidade</label>
-            <select id="product-availability">
-              <option value="Em estoque">Em estoque</option>
-              <option value="Sob encomenda">Sob encomenda</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="product-lead">Prazo (dias)</label>
-            <input type="number" id="product-lead" />
-          </div>
-          <div class="form-group">
-            <label for="product-long-description">Descrição longa</label>
-            <textarea id="product-long-description" rows="6"></textarea>
-          </div>
+
           <p id="edit-message" class="message" hidden></p>
-          <button type="submit" class="btn btn-primary">
-            Salvar alterações
-          </button>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+              <i class="fa-solid fa-floppy-disk"></i>&nbsp; Salvar alterações
+            </button>
+            <button type="button" class="btn btn-secondary" id="back-button">
+              Voltar
+            </button>
+          </div>
         </form>
-        <button class="btn btn-secondary" id="back-button">Voltar</button>
       </div>
     </main>
+
     <footer class="footer">
       <div class="footer-brand">
-        <!-- Usa a nova logo do site -->
         <img
           src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
           alt="Logo GVolt 3D"
         />
         <strong>GVolt <span>3D</span></strong>
       </div>
+
       <p>Soluções criativas em impressão 3D.</p>
-      <a href="https://wa.me/5519995325891" target="_blank"
-        ><i class="fa-brands fa-whatsapp"></i> Fale conosco</a
-      >
+      <a href="https://wa.me/5519995325891" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i> Fale conosco
+      </a>
     </footer>
+
     <script>
-      // Cria o cliente Supabase usando as variáveis definidas em config.js
       const supabaseClient = window.supabase.createClient(
         window.SUPABASE_URL,
         window.SUPABASE_KEY,
       );
+
       const ADMIN_EMAILS = window.ADMIN_EMAILS || [];
       const loginContainer = document.getElementById("login-container");
       const editContainer = document.getElementById("edit-container");
       const loginMessage = document.getElementById("login-message");
       const editMessage = document.getElementById("edit-message");
 
-      // Obtém ID da URL
       function getProductIdFromUrl() {
         const params = new URLSearchParams(window.location.search);
         return params.get("id");
       }
 
+      function showMessage(element, text, type = "") {
+        element.textContent = text;
+        element.className = type ? `message ${type}` : "message";
+        element.hidden = false;
+      }
+
       async function checkSession() {
         const {
-          data: {session},
+          data: { session },
         } = await supabaseClient.auth.getSession();
+
         if (session && session.user) {
           if (ADMIN_EMAILS.includes(session.user.email)) {
             showEdit();
@@ -171,9 +519,11 @@
           } else {
             loginContainer.hidden = false;
             editContainer.hidden = true;
-            loginMessage.hidden = false;
-            loginMessage.textContent =
-              "Este usuário não tem permissão para acessar a área administrativa.";
+            showMessage(
+              loginMessage,
+              "Este usuário não tem permissão para acessar a área administrativa.",
+              "error",
+            );
           }
         } else {
           showLogin();
@@ -192,66 +542,61 @@
         loginMessage.hidden = true;
       }
 
-      document
-        .getElementById("login-button")
-        .addEventListener("click", async () => {
-          const email = document.getElementById("login-email").value.trim();
-          const password = document.getElementById("login-password").value;
-          loginMessage.hidden = true;
-          if (!email || !password) {
-            loginMessage.textContent = "Preencha e-mail e senha.";
-            loginMessage.hidden = false;
-            return;
-          }
-          const {error} = await supabaseClient.auth.signInWithPassword({
-            email,
-            password,
-          });
-          if (error) {
-            loginMessage.textContent = error.message || "Erro ao fazer login.";
-            loginMessage.hidden = false;
-          } else {
-            await checkSession();
-          }
+      document.getElementById("login-button").addEventListener("click", async () => {
+        const email = document.getElementById("login-email").value.trim();
+        const password = document.getElementById("login-password").value;
+
+        loginMessage.hidden = true;
+
+        if (!email || !password) {
+          showMessage(loginMessage, "Preencha e-mail e senha.", "error");
+          return;
+        }
+
+        const { error } = await supabaseClient.auth.signInWithPassword({
+          email,
+          password,
         });
 
+        if (error) {
+          showMessage(loginMessage, error.message || "Erro ao fazer login.", "error");
+        } else {
+          await checkSession();
+        }
+      });
+
       document.getElementById("back-button").addEventListener("click", () => {
-        // Volta para a listagem de produtos principal
         window.location.href = "admin.html";
       });
 
       async function loadProduct() {
         editMessage.hidden = true;
         const productId = getProductIdFromUrl();
+
         if (!productId) {
-          editMessage.textContent = "Produto não encontrado.";
-          editMessage.className = "message error";
-          editMessage.hidden = false;
+          showMessage(editMessage, "Produto não encontrado.", "error");
           return;
         }
-        const {data, error} = await supabaseClient
+
+        const { data, error } = await supabaseClient
           .from("products")
           .select("*")
           .eq("id", productId)
           .single();
+
         if (error) {
-          editMessage.textContent =
-            error.message || "Erro ao carregar produto.";
-          editMessage.className = "message error";
-          editMessage.hidden = false;
+          showMessage(editMessage, error.message || "Erro ao carregar produto.", "error");
           return;
         }
+
         if (!data) {
-          editMessage.textContent = "Produto não encontrado.";
-          editMessage.className = "message";
-          editMessage.hidden = false;
+          showMessage(editMessage, "Produto não encontrado.");
           return;
         }
-        // Preenche os campos
+
         document.getElementById("product-id").value = data.id;
         document.getElementById("product-name").value = data.name || "";
-        document.getElementById("product-description").value =
-          data.description || "";
+        document.getElementById("product-description").value = data.description || "";
         document.getElementById("product-price").value = data.price || "";
         document.getElementById("product-image").value = data.image || "";
         document.getElementById("product-images").value = data.images
@@ -259,82 +604,89 @@
           : "";
         document.getElementById("product-availability").value =
           data.availability || "Em estoque";
-        document.getElementById("product-lead").value =
-          data.lead_time_days || "";
+        document.getElementById("product-lead").value = data.lead_time_days || "";
         document.getElementById("product-long-description").value =
           data.long_description || "";
+        document.getElementById("product-is-favorite").checked = Boolean(
+          data.is_favorite,
+        );
       }
 
-      document
-        .getElementById("edit-form")
-        .addEventListener("submit", async (event) => {
-          event.preventDefault();
-          editMessage.hidden = true;
-          const productId = getProductIdFromUrl();
-          const name = document.getElementById("product-name").value.trim();
-          const description = document
-            .getElementById("product-description")
-            .value.trim();
-          const priceValue = document.getElementById("product-price").value;
-          const image =
-            document.getElementById("product-image").value.trim() || null;
-          const imagesStr = document
-            .getElementById("product-images")
-            .value.trim();
-          const availability = document.getElementById(
-            "product-availability",
-          ).value;
-          const leadTime = document.getElementById("product-lead").value;
-          const longDescription = document
-            .getElementById("product-long-description")
-            .value.trim();
-          if (!productId || !name || !description || !priceValue) {
-            editMessage.textContent = "Preencha todos os campos obrigatórios.";
-            editMessage.className = "message error";
-            editMessage.hidden = false;
+      document.getElementById("edit-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        editMessage.hidden = true;
+
+        const productId = getProductIdFromUrl();
+        const name = document.getElementById("product-name").value.trim();
+        const description = document.getElementById("product-description").value.trim();
+        const priceValue = document.getElementById("product-price").value;
+        const image = document.getElementById("product-image").value.trim() || null;
+        const imagesStr = document.getElementById("product-images").value.trim();
+        const availability = document.getElementById("product-availability").value;
+        const leadTime = document.getElementById("product-lead").value;
+        const longDescription = document
+          .getElementById("product-long-description")
+          .value.trim();
+        const isFavorite = document.getElementById("product-is-favorite").checked;
+
+        if (!productId || !name || !description || !priceValue) {
+          showMessage(editMessage, "Preencha todos os campos obrigatórios.", "error");
+          return;
+        }
+
+        const price = parseFloat(priceValue);
+        const lead_time_days = leadTime ? parseInt(leadTime, 10) : null;
+
+        let images = null;
+        if (imagesStr) {
+          images = imagesStr
+            .split(",")
+            .map((u) => u.trim())
+            .filter((v) => v);
+        }
+
+        const updated = {
+          name,
+          description,
+          price,
+          image,
+          images,
+          availability,
+          lead_time_days,
+          long_description: longDescription,
+          is_favorite: isFavorite,
+        };
+
+        try {
+          const { error } = await supabaseClient
+            .from("products")
+            .update(updated)
+            .eq("id", productId);
+
+          if (error) throw error;
+
+          showMessage(editMessage, "Produto atualizado com sucesso!", "success");
+        } catch (err) {
+          const message = String(err.message || "");
+
+          if (message.includes("is_favorite")) {
+            showMessage(
+              editMessage,
+              "A coluna is_favorite ainda não existe na tabela products. Execute o SQL enviado junto com estes arquivos no Supabase e tente novamente.",
+              "error",
+            );
             return;
           }
-          const price = parseFloat(priceValue);
-          const lead_time_days = leadTime ? parseInt(leadTime) : null;
-          let images = null;
-          if (imagesStr) {
-            images = imagesStr
-              .split(",")
-              .map((u) => u.trim())
-              .filter((v) => v);
-          }
-          const updated = {
-            name,
-            description,
-            price,
-            image,
-            images,
-            availability,
-            lead_time_days,
-            long_description: longDescription,
-          };
-          try {
-            const {error} = await supabaseClient
-              .from("products")
-              .update(updated)
-              .eq("id", productId);
-            if (error) throw error;
-            editMessage.textContent = "Produto atualizado com sucesso!";
-            editMessage.className = "message success";
-            editMessage.hidden = false;
-          } catch (err) {
-            editMessage.textContent =
-              err.message || "Erro ao atualizar produto.";
-            editMessage.className = "message error";
-            editMessage.hidden = false;
-          }
-        });
+
+          showMessage(editMessage, err.message || "Erro ao atualizar produto.", "error");
+        }
+      });
 
       checkSession();
 
-      // Botão de menu responsivo para a navegação
       const menuToggle = document.getElementById("menu-toggle");
       const navLinks = document.querySelector(".nav-links");
+
       if (menuToggle && navLinks) {
         menuToggle.addEventListener("click", () => {
           navLinks.classList.toggle("show");

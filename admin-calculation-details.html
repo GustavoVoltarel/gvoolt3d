@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalhes do Cálculo | GVolt 3D</title>
+    <meta
+      name="description"
+      content="Detalhamento de cálculo salvo da calculadora de custos da GVolt 3D."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcyMDYyLCJleHAiOjQ5MzE3NzIwNjJ9.1vnoc_Ib-MghMmvi6Pm5kXpz-qCW2Q0OYxxgzZz5Fx8"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+
+    <style>
+      .details-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+      }
+
+      .details-header h2 {
+        margin: 0;
+      }
+
+      .details-subtitle {
+        color: var(--muted);
+        margin: 8px 0 0;
+      }
+
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-bottom: 28px;
+      }
+
+      .summary-card {
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .summary-card span {
+        display: block;
+        color: var(--muted);
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+      }
+
+      .summary-card strong {
+        color: var(--text);
+        font-size: 1rem;
+      }
+
+      .summary-card.highlight strong {
+        color: var(--purple);
+        font-size: 1.25rem;
+        text-shadow: 0 0 14px rgba(184, 50, 255, 0.55);
+      }
+
+      .detail-section {
+        margin-top: 28px;
+      }
+
+      .detail-section h3 {
+        margin-bottom: 12px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 18px;
+      }
+
+      thead {
+        background: var(--card-solid);
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 12px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      tr:nth-child(even) {
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .actions-top {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      @media (max-width: 900px) {
+        .summary-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 620px) {
+        .summary-grid {
+          grid-template-columns: 1fr;
+        }
+
+        table thead {
+          display: none;
+        }
+
+        table,
+        table tbody,
+        table tr,
+        table td {
+          display: block;
+          width: 100%;
+        }
+
+        table tr {
+          margin-bottom: 16px;
+          border-bottom: 1px solid var(--border);
+        }
+
+        table td {
+          text-align: right;
+          position: relative;
+          padding-left: 50%;
+        }
+
+        table td::before {
+          content: attr(data-label);
+          position: absolute;
+          left: 0;
+          width: 50%;
+          padding-left: 16px;
+          font-weight: 500;
+          color: var(--muted);
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="site-glow"></div>
+
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="GVolt 3D">
+        <img
+          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          alt="Logo GVolt 3D"
+        />
+        <span>GVolt <strong>3D</strong></span>
+      </a>
+
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="admin.html">Produtos</a>
+        <a href="admin-filaments.html">Filamentos</a>
+        <a href="admin-printers.html">Impressoras</a>
+        <a href="admin-packaging.html">Embalagens</a>
+        <a href="admin-extras.html">Extras</a>
+        <a href="admin-settings.html">Configurações</a>
+        <a href="admin-calculator.html">Calculadora</a>
+      </nav>
+
+      <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </header>
+
+    <main class="admin-page">
+      <div id="login-container">
+        <h2>Área administrativa</h2>
+
+        <div class="form-group">
+          <label for="login-email">E-mail</label>
+          <input type="email" id="login-email" placeholder="seu@email.com" />
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Senha</label>
+          <input type="password" id="login-password" placeholder="Senha" />
+        </div>
+
+        <button class="btn btn-primary" id="login-button">Entrar</button>
+        <p id="login-message" class="message error" hidden></p>
+      </div>
+
+      <div id="details-container" hidden>
+        <div class="details-header">
+          <div>
+            <h2 id="page-title">Detalhes do cálculo</h2>
+            <p class="details-subtitle" id="page-subtitle"></p>
+          </div>
+
+          <div class="actions-top">
+            <button class="btn btn-secondary" id="back-button" type="button">
+              Voltar
+            </button>
+          </div>
+        </div>
+
+        <section class="summary-grid" id="summary-grid"></section>
+
+        <section class="detail-section">
+          <h3>Filamentos usados</h3>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Filamento</th>
+                <th>Quantidade</th>
+                <th>Custo estimado</th>
+              </tr>
+            </thead>
+            <tbody id="filaments-body"></tbody>
+          </table>
+        </section>
+
+        <section class="detail-section">
+          <h3>Embalagens usadas</h3>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Embalagem</th>
+                <th>Quantidade</th>
+                <th>Custo estimado</th>
+              </tr>
+            </thead>
+            <tbody id="packagings-body"></tbody>
+          </table>
+        </section>
+
+        <section class="detail-section">
+          <h3>Extras usados</h3>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Extra</th>
+                <th>Quantidade</th>
+                <th>Custo estimado</th>
+              </tr>
+            </thead>
+            <tbody id="extras-body"></tbody>
+          </table>
+        </section>
+
+        <section class="detail-section">
+          <h3>Resumo dos custos</h3>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Valor</th>
+              </tr>
+            </thead>
+            <tbody id="costs-body"></tbody>
+          </table>
+        </section>
+
+        <p id="details-message" class="message" hidden></p>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-brand">
+        <img
+          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          alt="Logo GVolt 3D"
+        />
+        <strong>GVolt <span>3D</span></strong>
+      </div>
+
+      <p>Soluções criativas em impressão 3D.</p>
+
+      <a href="https://wa.me/5519995325891" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i> Fale conosco
+      </a>
+    </footer>
+
+    <script>
+      const supabaseClient = window.supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_KEY
+      );
+
+      const ADMIN_EMAILS = window.ADMIN_EMAILS || [];
+
+      const loginContainer = document.getElementById("login-container");
+      const detailsContainer = document.getElementById("details-container");
+      const loginMessage = document.getElementById("login-message");
+      const detailsMessage = document.getElementById("details-message");
+
+      const params = new URLSearchParams(window.location.search);
+      const calculationId = params.get("id");
+
+      let printers = [];
+      let filaments = [];
+      let packaging = [];
+      let extras = [];
+
+      async function checkSession() {
+        const {
+          data: { session },
+        } = await supabaseClient.auth.getSession();
+
+        if (session && session.user) {
+          if (ADMIN_EMAILS.includes(session.user.email)) {
+            showDetails();
+            await loadCalculationDetails();
+          } else {
+            loginContainer.hidden = false;
+            detailsContainer.hidden = true;
+            loginMessage.hidden = false;
+            loginMessage.textContent =
+              "Este usuário não tem permissão para acessar a área administrativa.";
+          }
+        } else {
+          showLogin();
+        }
+      }
+
+      function showLogin() {
+        loginContainer.hidden = false;
+        detailsContainer.hidden = true;
+        loginMessage.hidden = true;
+      }
+
+      function showDetails() {
+        loginContainer.hidden = true;
+        detailsContainer.hidden = false;
+        loginMessage.hidden = true;
+      }
+
+      document
+        .getElementById("login-button")
+        .addEventListener("click", async () => {
+          const email = document.getElementById("login-email").value.trim();
+          const password = document.getElementById("login-password").value;
+
+          loginMessage.hidden = true;
+
+          if (!email || !password) {
+            loginMessage.textContent = "Preencha e-mail e senha.";
+            loginMessage.hidden = false;
+            return;
+          }
+
+          const { error } = await supabaseClient.auth.signInWithPassword({
+            email,
+            password,
+          });
+
+          if (error) {
+            loginMessage.textContent = error.message || "Erro ao fazer login.";
+            loginMessage.hidden = false;
+          } else {
+            await checkSession();
+          }
+        });
+
+      document.getElementById("back-button").addEventListener("click", () => {
+        window.location.href = "admin.html";
+      });
+
+      function formatMoney(value) {
+        if (value === null || value === undefined || value === "") return "R$ 0,00";
+
+        return Number(value).toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        });
+      }
+
+      function formatNumber(value, suffix = "") {
+        if (value === null || value === undefined || value === "") {
+          return `0${suffix}`;
+        }
+
+        return `${Number(value).toLocaleString("pt-BR", {
+          maximumFractionDigits: 2,
+        })}${suffix}`;
+      }
+
+      function formatDateTime(value) {
+        if (!value) return "";
+
+        return new Date(value).toLocaleString("pt-BR");
+      }
+
+      function normalizeJson(value) {
+        if (!value) return {};
+
+        if (typeof value === "string") {
+          try {
+            return JSON.parse(value);
+          } catch {
+            return {};
+          }
+        }
+
+        return value;
+      }
+
+      function getEntries(value) {
+        const parsed = normalizeJson(value);
+
+        if (Array.isArray(parsed)) {
+          return parsed
+            .map((item) => {
+              const id =
+                item.id ||
+                item.filament_id ||
+                item.packaging_id ||
+                item.extra_id;
+
+              const quantity =
+                item.weight ||
+                item.quantity ||
+                item.qty ||
+                item.amount ||
+                0;
+
+              return [id, quantity];
+            })
+            .filter(([id, quantity]) => id && Number(quantity) > 0);
+        }
+
+        return Object.entries(parsed).filter(
+          ([id, quantity]) => id && Number(quantity) > 0
+        );
+      }
+
+      function findById(list, id) {
+        return list.find((item) => String(item.id) === String(id));
+      }
+
+      function addSummaryCard(label, value, highlight = false) {
+        const grid = document.getElementById("summary-grid");
+
+        const card = document.createElement("article");
+        card.className = highlight ? "summary-card highlight" : "summary-card";
+
+        const span = document.createElement("span");
+        span.textContent = label;
+
+        const strong = document.createElement("strong");
+        strong.textContent = value;
+
+        card.appendChild(span);
+        card.appendChild(strong);
+        grid.appendChild(card);
+      }
+
+      function addTableRow(tbody, values) {
+        const tr = document.createElement("tr");
+
+        values.forEach((item) => {
+          const td = document.createElement("td");
+          td.setAttribute("data-label", item.label);
+          td.textContent = item.value;
+          tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+      }
+
+      function addEmptyRow(tbody, text, colSpan = 3) {
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+
+        td.colSpan = colSpan;
+        td.textContent = text;
+
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+      }
+
+      function renderFilaments(calc) {
+        const body = document.getElementById("filaments-body");
+        body.innerHTML = "";
+
+        const entries = getEntries(calc.filaments);
+
+        if (entries.length === 0) {
+          addEmptyRow(body, "Nenhum filamento registrado neste cálculo.");
+          return;
+        }
+
+        entries.forEach(([id, weight]) => {
+          const filament = findById(filaments, id);
+
+          const name = filament ? filament.name : `Filamento ${id}`;
+          const spoolPrice = filament ? Number(filament.spool_price) || 0 : 0;
+          const spoolSize = filament ? Number(filament.spool_size) || 1 : 1;
+          const pricePerGram = spoolPrice / (spoolSize * 1000);
+          const cost = pricePerGram * Number(weight);
+
+          addTableRow(body, [
+            { label: "Filamento", value: name },
+            { label: "Quantidade", value: formatNumber(weight, " g") },
+            { label: "Custo estimado", value: formatMoney(cost) },
+          ]);
+        });
+      }
+
+      function renderPackagings(calc) {
+        const body = document.getElementById("packagings-body");
+        body.innerHTML = "";
+
+        const entries = getEntries(calc.packagings);
+
+        if (entries.length === 0) {
+          addEmptyRow(body, "Nenhuma embalagem registrada neste cálculo.");
+          return;
+        }
+
+        entries.forEach(([id, quantity]) => {
+          const pack = findById(packaging, id);
+
+          const name = pack ? pack.name : `Embalagem ${id}`;
+          const unitCost = pack ? Number(pack.cost) || 0 : 0;
+          const cost = unitCost * Number(quantity);
+
+          addTableRow(body, [
+            { label: "Embalagem", value: name },
+            { label: "Quantidade", value: formatNumber(quantity, " un.") },
+            { label: "Custo estimado", value: formatMoney(cost) },
+          ]);
+        });
+      }
+
+      function renderExtras(calc) {
+        const body = document.getElementById("extras-body");
+        body.innerHTML = "";
+
+        const entries = getEntries(calc.extras);
+
+        if (entries.length === 0) {
+          addEmptyRow(body, "Nenhum extra registrado neste cálculo.");
+          return;
+        }
+
+        entries.forEach(([id, quantity]) => {
+          const extra = findById(extras, id);
+
+          const name = extra ? extra.name : `Extra ${id}`;
+          const unitCost = extra ? Number(extra.cost) || 0 : 0;
+          const cost = unitCost * Number(quantity);
+
+          addTableRow(body, [
+            { label: "Extra", value: name },
+            { label: "Quantidade", value: formatNumber(quantity, " un.") },
+            { label: "Custo estimado", value: formatMoney(cost) },
+          ]);
+        });
+      }
+
+      function renderCosts(calc) {
+        const body = document.getElementById("costs-body");
+        body.innerHTML = "";
+
+        const rows = [
+          ["Custo de filamento", calc.filament_cost],
+          ["Custo de energia", calc.energy_cost],
+          ["Depreciação da impressora", calc.depreciation_cost],
+          ["Mão de obra", calc.labor_cost],
+          ["Embalagens", calc.packaging_cost],
+          ["Extras", calc.extras_cost],
+          ["Subtotal", calc.subtotal],
+          ["Custo com falha", calc.cost_with_failure],
+          ["Custo bruto", calc.cost_bruto],
+          [`Preço final com markup de ${formatNumber(calc.markup_percent, "%")}`, calc.final_price],
+          ["Preço sugerido para marketplace", calc.marketplace_price],
+        ];
+
+        rows.forEach(([label, value]) => {
+          addTableRow(body, [
+            { label: "Item", value: label },
+            { label: "Valor", value: formatMoney(value) },
+          ]);
+        });
+      }
+
+      async function loadLookupTables() {
+        const [
+          printersResult,
+          filamentsResult,
+          packagingResult,
+          extrasResult,
+        ] = await Promise.all([
+          supabaseClient.from("printers").select("*"),
+          supabaseClient.from("filaments").select("*"),
+          supabaseClient.from("packaging").select("*"),
+          supabaseClient.from("extras").select("*"),
+        ]);
+
+        if (printersResult.error) throw printersResult.error;
+        if (filamentsResult.error) throw filamentsResult.error;
+        if (packagingResult.error) throw packagingResult.error;
+        if (extrasResult.error) throw extrasResult.error;
+
+        printers = printersResult.data || [];
+        filaments = filamentsResult.data || [];
+        packaging = packagingResult.data || [];
+        extras = extrasResult.data || [];
+      }
+
+      async function loadCalculationDetails() {
+        detailsMessage.hidden = true;
+
+        if (!calculationId) {
+          detailsMessage.textContent = "Cálculo não informado.";
+          detailsMessage.className = "message error";
+          detailsMessage.hidden = false;
+          return;
+        }
+
+        try {
+          await loadLookupTables();
+
+          const { data: calc, error } = await supabaseClient
+            .from("calculations")
+            .select("*")
+            .eq("id", calculationId)
+            .single();
+
+          if (error) throw error;
+
+          const printer = findById(printers, calc.printer_id);
+
+          document.getElementById("page-title").textContent =
+            calc.project_name || "Detalhes do cálculo";
+
+          document.getElementById("page-subtitle").textContent =
+            calc.created_at ? `Criado em ${formatDateTime(calc.created_at)}` : "";
+
+          const summaryGrid = document.getElementById("summary-grid");
+          summaryGrid.innerHTML = "";
+
+          addSummaryCard("Projeto", calc.project_name || "-");
+          addSummaryCard("Impressora", printer ? printer.name : "-");
+          addSummaryCard("Tempo de impressão", formatNumber(calc.print_time, " h"));
+          addSummaryCard("Tempo de mão de obra", formatNumber(calc.labor_time, " h"));
+          addSummaryCard("Markup", formatNumber(calc.markup_percent, "%"));
+          addSummaryCard("Custo bruto", formatMoney(calc.cost_bruto));
+          addSummaryCard("Marketplace", formatMoney(calc.marketplace_price));
+          addSummaryCard("Preço final", formatMoney(calc.final_price), true);
+
+          renderFilaments(calc);
+          renderPackagings(calc);
+          renderExtras(calc);
+          renderCosts(calc);
+        } catch (err) {
+          detailsMessage.textContent =
+            err.message || "Erro ao carregar detalhes do cálculo.";
+          detailsMessage.className = "message error";
+          detailsMessage.hidden = false;
+        }
+      }
+
+      checkSession();
+
+      const menuToggle = document.getElementById("menu-toggle");
+      const navLinks = document.querySelector(".nav-links");
+
+      if (menuToggle && navLinks) {
+        menuToggle.addEventListener("click", () => {
+          navLinks.classList.toggle("show");
+        });
+      }
+    </script>
+  </body>
+</html>
