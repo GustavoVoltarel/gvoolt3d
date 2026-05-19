@@ -57,6 +57,100 @@
       .favorite.favorite-badge i {
         font-size: 0.78rem;
       }
+
+      .seasonal-callout {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto 60px;
+        padding: clamp(24px, 5vw, 44px);
+        border: 1px solid rgba(255, 145, 190, 0.4);
+        border-radius: 30px;
+        background:
+          radial-gradient(circle at 18% 20%, rgba(255, 71, 135, 0.24), transparent 34%),
+          linear-gradient(135deg, rgba(30, 4, 24, 0.96), rgba(7, 2, 16, 0.96));
+        box-shadow: 0 0 34px rgba(255, 71, 135, 0.2);
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 28px;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .seasonal-callout::after {
+        content: "";
+        position: absolute;
+        right: -120px;
+        bottom: -150px;
+        width: 360px;
+        height: 360px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        box-shadow: 0 0 80px rgba(255, 71, 135, 0.18);
+      }
+
+      .seasonal-callout > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .seasonal-callout h2 {
+        margin: 0 0 10px;
+        font-size: clamp(1.7rem, 4vw, 2.8rem);
+        line-height: 1.08;
+      }
+
+      .seasonal-callout p {
+        color: var(--muted);
+        line-height: 1.65;
+        margin: 0 0 18px;
+      }
+
+      .seasonal-mini-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .seasonal-mini-card {
+        padding: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.045);
+        color: #f7d7ff;
+      }
+
+      .seasonal-mini-card i {
+        color: #ff7bb7;
+        margin-right: 8px;
+      }
+
+      .seasonal-badge-card {
+        position: absolute;
+        left: 14px;
+        top: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 9px 12px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #ff4f94, var(--purple-strong));
+        color: #fff;
+        font-size: 0.78rem;
+        font-weight: 800;
+        box-shadow: 0 0 22px rgba(255, 71, 135, 0.42);
+      }
+
+      @media (max-width: 860px) {
+        .seasonal-callout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 540px) {
+        .seasonal-mini-grid {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
   </head>
 
@@ -75,6 +169,7 @@
       <nav class="nav-links" aria-label="Navegação principal">
         <a href="#inicio">Início</a>
         <a href="#produtos">Produtos</a>
+        <a href="sazonais.html">Dia dos Namorados</a>
         <a href="#contato">Contato</a>
       </nav>
 
@@ -110,6 +205,9 @@
               class="btn btn-secondary"
               >Orçamento via WhatsApp</a
             >
+            <a href="sazonais.html?categoria=dia_dos_namorados" class="btn btn-secondary">
+              Dia dos Namorados
+            </a>
           </div>
         </div>
       </section>
@@ -129,6 +227,25 @@
         <article>
           <i class="fa-brands fa-whatsapp"></i><span>Compra rápida</span>
         </article>
+      </section>
+
+      <section class="seasonal-callout" aria-label="Produtos para o Dia dos Namorados">
+        <div>
+          <p class="eyebrow"><i class="fa-solid fa-heart"></i> Dia dos Namorados</p>
+          <h2>Presentes personalizados para o Dia dos Namorados</h2>
+          <p>
+            Uma seleção especial de peças 3D para presentear de um jeito criativo,
+            único e com a possibilidade de personalização.
+          </p>
+          <a href="sazonais.html?categoria=dia_dos_namorados" class="btn btn-primary">Ver coleção especial</a>
+        </div>
+
+        <div class="seasonal-mini-grid">
+          <div class="seasonal-mini-card"><i class="fa-solid fa-gift"></i> Presentes únicos</div>
+          <div class="seasonal-mini-card"><i class="fa-solid fa-heart"></i> Tema romântico</div>
+          <div class="seasonal-mini-card"><i class="fa-solid fa-pen-nib"></i> Personalizável</div>
+          <div class="seasonal-mini-card"><i class="fa-brands fa-whatsapp"></i> Pedido rápido</div>
+        </div>
       </section>
 
       <section class="products-section" id="produtos">
@@ -194,6 +311,23 @@
         });
       }
 
+      function getSeasonalLabel(product) {
+        if (!product || !product.is_seasonal) return "";
+        if (product.seasonal_label) return product.seasonal_label;
+
+        const labels = {
+          dia_dos_namorados: "Dia dos Namorados",
+          dia_dos_pais: "Dia dos Pais",
+          dia_das_maes: "Dia das Mães",
+          natal: "Natal",
+          pascoa: "Páscoa",
+          halloween: "Halloween",
+          outros: "Sazonal",
+        };
+
+        return labels[product.seasonal_category] || "Sazonal";
+      }
+
       function escapeHtml(value) {
         return String(value || "")
           .replace(/&/g, "&amp;")
@@ -203,6 +337,45 @@
           .replace(/'/g, "&#039;");
       }
 
+      const FALLBACK_IMAGE = "assets/fallback.svg";
+
+      function normalizeImageValue(value) {
+        if (!value) return [];
+        if (Array.isArray(value)) return value.flatMap((item) => normalizeImageValue(item));
+        if (typeof value === "object") {
+          return normalizeImageValue(value.url || value.src || value.path || value.publicUrl || "");
+        }
+
+        const text = String(value).trim();
+        if (!text) return [];
+
+        if (text.startsWith("[") || text.startsWith("{")) {
+          try {
+            return normalizeImageValue(JSON.parse(text));
+          } catch {
+            // Mantém o tratamento como texto se não for JSON válido.
+          }
+        }
+
+        return text
+          .split(",")
+          .map((item) => item.trim().replace(/^['"]|['"]$/g, ""))
+          .filter(Boolean);
+      }
+
+      function getProductMainImage(product) {
+        const images = [
+          ...normalizeImageValue(product.image),
+          ...normalizeImageValue(product.images),
+        ];
+
+        return [...new Set(images)].filter(Boolean)[0] || FALLBACK_IMAGE;
+      }
+
+      function imageFallbackAttribute() {
+        return `this.onerror=null;this.src='${FALLBACK_IMAGE}'`;
+      }
+
       function renderProducts(products) {
         container.innerHTML = "";
         emptyMessage.hidden = products.length !== 0;
@@ -210,17 +383,21 @@
         products.forEach((product) => {
           const card = document.createElement("article");
           const isFavorite = Boolean(product.is_favorite);
+          const seasonalLabel = getSeasonalLabel(product);
 
-          card.className = isFavorite
-            ? "product-card featured"
-            : "product-card";
+          card.className = isFavorite ? "product-card featured" : "product-card";
 
           card.innerHTML = `
             <a class="product-image" href="product.html?id=${encodeURIComponent(product.id)}" aria-label="Ver detalhes de ${escapeHtml(product.name)}">
-              <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" onerror="this.src='assets/fallback.jpg'">
+              <img src="${escapeHtml(getProductMainImage(product))}" alt="${escapeHtml(product.name)}" onerror="${imageFallbackAttribute()}">
+              ${
+                seasonalLabel
+                  ? `<span class="seasonal-badge-card"><i class="fa-solid fa-heart"></i> ${escapeHtml(seasonalLabel)}</span>`
+                  : ""
+              }
               ${
                 isFavorite
-                  ? `<span class="favorite favorite-badge"><i class="fa-solid fa-star"></i></span>`
+                  ? `<span class="favorite favorite-badge"><i class="fa-solid fa-star"></i> Favorito</span>`
                   : ""
               }
             </a>
@@ -249,10 +426,10 @@
 
         if (orderByFavorite) {
           query = query
-            .order("is_favorite", {ascending: false})
-            .order("name", {ascending: true});
+            .order("is_favorite", { ascending: false })
+            .order("name", { ascending: true });
         } else {
-          query = query.order("name", {ascending: true});
+          query = query.order("name", { ascending: true });
         }
 
         return await query;
@@ -260,7 +437,7 @@
 
       async function loadProducts() {
         try {
-          let {data, error} = await queryProducts(true);
+          let { data, error } = await queryProducts(true);
 
           if (error && String(error.message || "").includes("is_favorite")) {
             const fallback = await queryProducts(false);
@@ -281,27 +458,23 @@
 
       loadProducts();
 
-      document
-        .getElementById("searchInput")
-        .addEventListener("input", function () {
-          const term = this.value.toLowerCase().trim();
+      document.getElementById("searchInput").addEventListener("input", function () {
+        const term = this.value.toLowerCase().trim();
 
-          const filtered = allProducts.filter((product) => {
-            const name = String(product.name || "").toLowerCase();
-            const description = String(product.description || "").toLowerCase();
-            const longDescription = String(
-              product.long_description || "",
-            ).toLowerCase();
+        const filtered = allProducts.filter((product) => {
+          const name = String(product.name || "").toLowerCase();
+          const description = String(product.description || "").toLowerCase();
+          const longDescription = String(product.long_description || "").toLowerCase();
 
-            return (
-              name.includes(term) ||
-              description.includes(term) ||
-              longDescription.includes(term)
-            );
-          });
-
-          renderProducts(filtered);
+          return (
+            name.includes(term) ||
+            description.includes(term) ||
+            longDescription.includes(term)
+          );
         });
+
+        renderProducts(filtered);
+      });
 
       const menuToggle = document.getElementById("menu-toggle");
       const navLinks = document.querySelector(".nav-links");
