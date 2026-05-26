@@ -8,6 +8,7 @@
       name="description"
       content="Cadastre novos produtos no catálogo da GVolt 3D diretamente pelo navegador."
     />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -18,90 +19,209 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
-    <!-- Reutiliza o estilo principal -->
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/png" href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcxNDU2LCJleHAiOjQ5MzE3NzE0NTZ9.BXqHQJ7vzskF_NkliO4hJGsD96NCYQCjghncISquesg" />
 
-    <!-- Ícone da aba do navegador -->
-    <link
-      rel="icon"
-      type="image/png"
-      href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcxNDU2LCJleHAiOjQ5MzE3NzE0NTZ9.BXqHQJ7vzskF_NkliO4hJGsD96NCYQCjghncISquesg"
-    />
-    <!-- Biblioteca Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Arquivo de configuração (define SUPABASE_URL, SUPABASE_KEY e ADMIN_EMAILS) -->
     <script src="config.js"></script>
+
     <style>
-      /* Estilos específicos para o formulário de cadastro */
       .admin-page {
-        width: min(980px, calc(100% - 32px));
-        margin: 40px auto;
-        padding: 32px;
+        width: min(1080px, calc(100% - 32px));
+        margin: 28px auto 60px;
+        padding: clamp(20px, 4vw, 38px);
         border: 1px solid var(--border);
-        border-radius: var(--radius);
-        background: var(--card);
+        border-radius: 30px;
+        background:
+          radial-gradient(circle at top left, rgba(184, 50, 255, 0.17), transparent 36%),
+          linear-gradient(135deg, rgba(12, 5, 25, 0.96), rgba(5, 1, 13, 0.98));
         box-shadow: var(--shadow);
       }
-      .admin-page h2 {
-        margin-top: 0;
-        font-family: "Orbitron", sans-serif;
-        font-size: 1.6rem;
-        color: var(--pink);
-        text-align: center;
+
+      .page-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 28px;
       }
+
+      .page-header h2 {
+        margin: 0;
+        font-family: 'Orbitron', sans-serif;
+        font-size: clamp(1.55rem, 3vw, 2.35rem);
+      }
+
+      .page-header p {
+        max-width: 720px;
+        margin: 8px 0 0;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      #login-container,
+      #admin-container {
+        border: 1px solid rgba(189, 67, 255, 0.22);
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.035);
+        padding: clamp(18px, 3vw, 28px);
+        backdrop-filter: blur(14px);
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
       .form-group {
-        margin-bottom: 16px;
+        margin: 0;
         display: flex;
         flex-direction: column;
+        gap: 8px;
       }
+
+      .form-group.full { grid-column: 1 / -1; }
+
       .form-group label {
-        margin-bottom: 6px;
-        font-weight: 500;
+        color: #eadbff;
+        font-weight: 600;
+        font-size: 0.94rem;
       }
+
       .form-group input,
       .form-group textarea,
       .form-group select {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid var(--border);
-        border-radius: 8px;
+        width: 100%;
+        border: 1px solid rgba(189, 67, 255, 0.34);
+        border-radius: 16px;
+        background: rgba(5, 0, 13, 0.68);
         color: var(--text);
-        padding: 12px;
-        font-size: 0.95rem;
-      }
-      .form-group input:focus,
-      .form-group textarea:focus,
-      .form-group select:focus {
+        padding: 14px 16px;
+        font: inherit;
         outline: none;
-        border-color: var(--purple);
       }
+
+      .form-group textarea {
+        min-height: 150px;
+        resize: vertical;
+        line-height: 1.55;
+      }
+
+      .field-hint {
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.45;
+      }
+
+      .highlight-card {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 18px;
+        border: 1px solid rgba(240, 45, 255, 0.34);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .highlight-card.seasonal {
+        border-color: rgba(255, 145, 190, 0.42);
+        background:
+          linear-gradient(135deg, rgba(255, 71, 135, 0.14), rgba(184, 50, 255, 0.08)),
+          rgba(5, 0, 13, 0.52);
+      }
+
+      .highlight-info { display: flex; align-items: center; gap: 14px; }
+      .highlight-icon {
+        width: 46px;
+        height: 46px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--pink), var(--purple-strong));
+        color: #fff;
+        box-shadow: 0 0 22px rgba(184, 50, 255, 0.45);
+        flex: 0 0 46px;
+      }
+
+      .highlight-info strong { display: block; margin-bottom: 3px; }
+      .highlight-info p { margin: 0; color: var(--muted); line-height: 1.45; font-size: 0.9rem; }
+
+      .toggle { position: relative; width: 62px; height: 34px; flex: 0 0 62px; cursor: pointer; }
+      .toggle input { opacity: 0; width: 0; height: 0; }
+      .toggle span {
+        position: absolute;
+        inset: 0;
+        border-radius: 999px;
+        border: 1px solid rgba(189, 67, 255, 0.38);
+        background: rgba(255, 255, 255, 0.08);
+        transition: 0.2s ease;
+      }
+      .toggle span::before {
+        content: "";
+        position: absolute;
+        width: 26px;
+        height: 26px;
+        left: 4px;
+        top: 3px;
+        border-radius: 50%;
+        background: #fff;
+        transition: 0.2s ease;
+      }
+      .toggle input:checked + span {
+        border-color: transparent;
+        background: linear-gradient(135deg, var(--pink), var(--purple-strong));
+        box-shadow: 0 0 18px rgba(184, 50, 255, 0.44);
+      }
+      .toggle input:checked + span::before { transform: translateX(28px); }
+
+      .seasonal-fields {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        padding: 18px;
+        border: 1px solid rgba(189, 67, 255, 0.22);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.028);
+      }
+
+      .form-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 20px;
+      }
+
       .message {
-        margin-top: 12px;
-        font-size: 0.92rem;
+        margin: 16px 0 0;
+        padding: 12px 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(189, 67, 255, 0.25);
+        background: rgba(255, 255, 255, 0.045);
       }
-      .message.error {
-        color: var(--pink);
-      }
-      .message.success {
-        color: var(--success);
-      }
-      /* Botões extras */
-      #back-button {
-        margin-top: 16px;
+      .message.error { color: #ffd1d1; border-color: rgba(255, 107, 107, 0.45); background: rgba(255, 107, 107, 0.1); }
+      .message.success { color: #caffdd; border-color: rgba(37, 211, 102, 0.45); background: rgba(37, 211, 102, 0.1); }
+
+      @media (max-width: 760px) {
+        .page-header, .highlight-card { flex-direction: column; align-items: flex-start; }
+        .form-grid, .seasonal-fields { grid-template-columns: 1fr; }
+        .form-actions .btn { width: 100%; }
       }
     </style>
   </head>
+
   <body>
     <div class="site-glow"></div>
+
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="GVolt 3D">
-        <!-- Usa a nova logo do site -->
-        <img
-          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
-          alt="Logo GVolt 3D"
-        />
-
+        <img src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E" alt="Logo GVolt 3D" />
         <span>GVolt <strong>3D</strong></span>
       </a>
+
       <nav class="nav-links" aria-label="Navegação principal">
         <a href="admin.html">Produtos</a>
         <a href="admin-filaments.html">Filamentos</a>
@@ -111,132 +231,171 @@
         <a href="admin-settings.html">Configurações</a>
         <a href="admin-calculator.html">Calculadora</a>
       </nav>
-      <!-- Botão de menu para navegação em telas pequenas -->
+
       <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
         <i class="fa-solid fa-bars"></i>
       </button>
     </header>
+
     <main class="admin-page">
-      <h2>Cadastrar Produto</h2>
-      <!-- Formulário de login -->
+      <div class="page-header">
+        <div>
+          <p class="eyebrow"><i class="fa-solid fa-plus"></i> Administração</p>
+          <h2>Cadastrar Produto</h2>
+          <p>
+            Cadastre produtos comuns, favoritos e produtos sazonais. Marque como sazonal e escolha a campanha correspondente, como Dia dos
+            Namorados, Natal, Dia dos Pais, Dia das Mães e outras datas.
+          </p>
+        </div>
+      </div>
+
       <div id="login-container">
-        <div class="form-group">
-          <label for="login-email">E-mail</label>
-          <input type="email" id="login-email" placeholder="seu@email.com" />
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="login-email">E-mail</label>
+            <input type="email" id="login-email" placeholder="seu@email.com" />
+          </div>
+          <div class="form-group">
+            <label for="login-password">Senha</label>
+            <input type="password" id="login-password" placeholder="Senha" />
+          </div>
         </div>
-        <div class="form-group">
-          <label for="login-password">Senha</label>
-          <input type="password" id="login-password" placeholder="Senha" />
+        <div class="form-actions">
+          <button class="btn btn-primary" id="login-button">Entrar</button>
         </div>
-        <button class="btn btn-primary" id="login-button">Entrar</button>
         <p id="login-message" class="message error" hidden></p>
       </div>
-      <!-- Conteúdo de cadastro -->
+
       <div id="admin-container" hidden>
-        <p>Preencha os campos abaixo para adicionar um novo produto.</p>
         <form id="product-form">
-          <div class="form-group">
-            <label for="product-id">ID (slug)</label>
-            <input
-              type="text"
-              id="product-id"
-              placeholder="Ex: baby-yoda"
-              required
-            />
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="product-id">ID (slug)</label>
+              <input type="text" id="product-id" placeholder="Ex: caixa-coracao-personalizada" required />
+              <span class="field-hint">Use letras minúsculas, números e hífen.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="product-name">Nome</label>
+              <input type="text" id="product-name" placeholder="Nome do produto" required />
+            </div>
+
+            <div class="form-group full">
+              <label for="product-description">Descrição curta</label>
+              <input type="text" id="product-description" placeholder="Resumo exibido no card" required />
+            </div>
+
+            <div class="form-group">
+              <label for="product-price">Preço (R$)</label>
+              <input type="number" step="0.01" min="0" id="product-price" placeholder="0.00" required />
+            </div>
+
+            <div class="form-group">
+              <label for="product-availability">Disponibilidade</label>
+              <select id="product-availability">
+                <option value="Em estoque">Em estoque</option>
+                <option value="Sob encomenda">Sob encomenda</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="product-lead-time">Prazo (dias)</label>
+              <input type="number" min="0" id="product-lead-time" placeholder="0" />
+            </div>
+
+            <div class="form-group">
+              <label for="product-image">Imagem principal (URL)</label>
+              <input type="text" id="product-image" placeholder="URL da imagem" />
+            </div>
+
+            <div class="form-group full">
+              <label for="product-images">Imagens extras</label>
+              <input type="text" id="product-images" placeholder="url1.jpg, url2.jpg" />
+              <span class="field-hint">Separe as URLs por vírgula ou coloque uma URL por linha. A imagem principal não precisa ser repetida aqui.</span>
+            </div>
+
+            <div class="highlight-card">
+              <div class="highlight-info">
+                <span class="highlight-icon"><i class="fa-solid fa-star"></i></span>
+                <div>
+                  <strong>Produto favorito na vitrine</strong>
+                  <p>Quando marcado, aparece primeiro na página inicial.</p>
+                </div>
+              </div>
+              <label class="toggle" aria-label="Marcar produto como favorito">
+                <input type="checkbox" id="product-is-favorite" />
+                <span></span>
+              </label>
+            </div>
+
+            <div class="highlight-card seasonal">
+              <div class="highlight-info">
+                <span class="highlight-icon"><i class="fa-solid fa-heart"></i></span>
+                <div>
+                  <strong>Produto sazonal</strong>
+                  <p>Mostra o produto na tela especial de produtos sazonais.</p>
+                </div>
+              </div>
+              <label class="toggle" aria-label="Marcar produto como sazonal">
+                <input type="checkbox" id="product-is-seasonal" />
+                <span></span>
+              </label>
+            </div>
+
+            <div class="seasonal-fields" id="seasonal-fields">
+              <div class="form-group">
+                <label for="product-seasonal-category">Campanha sazonal</label>
+                <select id="product-seasonal-category">
+                  <option value="dia_dos_namorados">Dia dos Namorados</option>
+                  <option value="dia_dos_pais">Dia dos Pais</option>
+                  <option value="dia_das_maes">Dia das Mães</option>
+                  <option value="natal">Natal</option>
+                  <option value="pascoa">Páscoa</option>
+                  <option value="halloween">Halloween</option>
+                  <option value="outros">Outros sazonais</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="product-seasonal-label">Texto do selo</label>
+                <input type="text" id="product-seasonal-label" placeholder="Ex.: Dia dos Namorados" />
+              </div>
+            </div>
+
+            <div class="form-group full">
+              <label for="product-long-description">Descrição longa</label>
+              <textarea id="product-long-description" placeholder="Detalhes completos do produto..." rows="7"></textarea>
+            </div>
+
+            <div class="form-group full">
+              <label for="product-specs">Especificações técnicas (JSON ou vazio)</label>
+              <textarea id="product-specs" placeholder='{"Altura":"15cm","Material":"PLA"}' rows="3"></textarea>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="product-name">Nome</label>
-            <input
-              type="text"
-              id="product-name"
-              placeholder="Nome do produto"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="product-description">Descrição curta</label>
-            <input
-              type="text"
-              id="product-description"
-              placeholder="Resumo do produto"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="product-price">Preço (R$)</label>
-            <input
-              type="number"
-              step="0.01"
-              id="product-price"
-              placeholder="0.00"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="product-image">Imagem principal (URL)</label>
-            <input type="text" id="product-image" placeholder="URL da imagem" />
-          </div>
-          <div class="form-group">
-            <label for="product-images"
-              >Imagens (URLs separadas por vírgula)</label
-            >
-            <input
-              type="text"
-              id="product-images"
-              placeholder="url1.jpg, url2.jpg"
-            />
-          </div>
-          <div class="form-group">
-            <label for="product-availability">Disponibilidade</label>
-            <select id="product-availability">
-              <option value="Em estoque">Em estoque</option>
-              <option value="Sob encomenda">Sob encomenda</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="product-lead-time">Prazo (dias)</label>
-            <input type="number" id="product-lead-time" placeholder="0" />
-          </div>
-          <div class="form-group">
-            <label for="product-long-description">Descrição longa</label>
-            <textarea
-              id="product-long-description"
-              placeholder="Detalhes completos do produto..."
-              rows="6"
-            ></textarea>
-          </div>
-          <div class="form-group">
-            <label for="product-specs"
-              >Especificações técnicas (JSON ou vazio)</label
-            >
-            <textarea
-              id="product-specs"
-              placeholder='{"Altura":"15cm","Material":"PLA"}'
-              rows="3"
-            ></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary">Salvar Produto</button>
+
           <p id="product-message" class="message" hidden></p>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+              <i class="fa-solid fa-floppy-disk"></i>&nbsp; Salvar Produto
+            </button>
+            <button type="button" class="btn btn-secondary" id="back-button">Voltar</button>
+          </div>
         </form>
-        <button class="btn btn-secondary" id="back-button">Voltar</button>
       </div>
     </main>
+
     <footer class="footer">
       <div class="footer-brand">
-        <!-- Usa a nova logo do site -->
-        <img
-          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
-          alt="Logo GVolt 3D"
-        />
+        <img src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E" alt="Logo GVolt 3D" />
         <strong>GVolt <span>3D</span></strong>
       </div>
       <p>Soluções criativas em impressão 3D.</p>
       <a href="https://wa.me/5519995325891" target="_blank">
-        <i class="fa-brands fa-whatsapp"></i> Fale conosco</a
-      >
+        <i class="fa-brands fa-whatsapp"></i> Fale conosco
+      </a>
     </footer>
+
     <script>
-      // Cria o cliente Supabase usando as configurações globais definidas em config.js
       const supabaseClient = window.supabase.createClient(
         window.SUPABASE_URL,
         window.SUPABASE_KEY,
@@ -247,160 +406,289 @@
       const adminContainer = document.getElementById("admin-container");
       const loginMessage = document.getElementById("login-message");
       const productMessage = document.getElementById("product-message");
+      const seasonalCheckbox = document.getElementById("product-is-seasonal");
+      const seasonalFields = document.getElementById("seasonal-fields");
+      const seasonalCategorySelect = document.getElementById("product-seasonal-category");
+      const seasonalLabelInput = document.getElementById("product-seasonal-label");
 
-      // Verifica se há sessão ativa e se o usuário está autorizado
-      async function checkSession() {
-        const {
-          data: {session},
-        } = await supabaseClient.auth.getSession();
-        if (session && session.user) {
-          if (ADMIN_EMAILS.includes(session.user.email)) {
-            showAdmin();
-          } else {
-            loginContainer.hidden = false;
-            adminContainer.hidden = true;
-            loginMessage.hidden = false;
-            loginMessage.textContent =
-              "Este usuário não tem permissão para acessar a área administrativa.";
-          }
-        } else {
-          showLogin();
+      const SEASONAL_CATEGORIES = {
+        dia_dos_namorados: "Dia dos Namorados",
+        dia_dos_pais: "Dia dos Pais",
+        dia_das_maes: "Dia das Mães",
+        natal: "Natal",
+        pascoa: "Páscoa",
+        halloween: "Halloween",
+        outros: "Sazonal",
+      };
+
+      function getSeasonalCategoryLabel(category) {
+        return SEASONAL_CATEGORIES[category] || "Sazonal";
+      }
+
+      function updateSeasonalLabelFromCategory(force = false) {
+        const selectedLabel = getSeasonalCategoryLabel(seasonalCategorySelect.value);
+        const currentLabel = seasonalLabelInput.value.trim();
+        const defaultLabels = Object.values(SEASONAL_CATEGORIES);
+
+        if (force || !currentLabel || defaultLabels.includes(currentLabel)) {
+          seasonalLabelInput.value = selectedLabel;
         }
       }
 
-      function showLogin() {
-        loginContainer.hidden = false;
-        adminContainer.hidden = true;
-        loginMessage.hidden = true;
+      function showMessage(element, text, type = "") {
+        element.textContent = text;
+        element.className = type ? `message ${type}` : "message";
+        element.hidden = false;
       }
 
-      function showAdmin() {
-        loginContainer.hidden = true;
-        adminContainer.hidden = false;
-        loginMessage.hidden = true;
-      }
-
-      // Evento de login
-      document
-        .getElementById("login-button")
-        .addEventListener("click", async () => {
-          const email = document.getElementById("login-email").value.trim();
-          const password = document.getElementById("login-password").value;
-          loginMessage.hidden = true;
-          if (!email || !password) {
-            loginMessage.textContent = "Preencha e-mail e senha.";
-            loginMessage.hidden = false;
-            return;
-          }
-          const {error} = await supabaseClient.auth.signInWithPassword({
-            email,
-            password,
-          });
-          if (error) {
-            loginMessage.textContent = error.message || "Erro ao fazer login.";
-            loginMessage.hidden = false;
-          } else {
-            await checkSession();
-          }
+      function toggleSeasonalFields() {
+        const enabled = seasonalCheckbox.checked;
+        seasonalFields.style.opacity = enabled ? "1" : "0.55";
+        seasonalFields.querySelectorAll("input, select").forEach((field) => {
+          field.disabled = !enabled;
         });
+      }
 
-      // Botão de voltar para listagem
+      seasonalCheckbox.addEventListener("change", () => {
+        toggleSeasonalFields();
+        if (seasonalCheckbox.checked) {
+          updateSeasonalLabelFromCategory();
+        }
+      });
+
+      seasonalCategorySelect.addEventListener("change", () => {
+        updateSeasonalLabelFromCategory();
+      });
+      toggleSeasonalFields();
+
+      async function checkSession() {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (session && session.user) {
+          if (ADMIN_EMAILS.includes(session.user.email)) {
+            loginContainer.hidden = true;
+            adminContainer.hidden = false;
+          } else {
+            loginContainer.hidden = false;
+            adminContainer.hidden = true;
+            showMessage(
+              loginMessage,
+              "Este usuário não tem permissão para acessar a área administrativa.",
+              "error",
+            );
+          }
+        } else {
+          loginContainer.hidden = false;
+          adminContainer.hidden = true;
+          loginMessage.hidden = true;
+        }
+      }
+
+      document.getElementById("login-button").addEventListener("click", async () => {
+        const email = document.getElementById("login-email").value.trim();
+        const password = document.getElementById("login-password").value;
+        loginMessage.hidden = true;
+        if (!email || !password) {
+          showMessage(loginMessage, "Preencha e-mail e senha.", "error");
+          return;
+        }
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) {
+          showMessage(loginMessage, error.message || "Erro ao fazer login.", "error");
+        } else {
+          await checkSession();
+        }
+      });
+
       document.getElementById("back-button").addEventListener("click", () => {
         window.location.href = "admin.html";
       });
 
-      // Envio do formulário para inserir produto
-      document
-        .getElementById("product-form")
-        .addEventListener("submit", async (event) => {
-          event.preventDefault();
-          productMessage.hidden = true;
+      function cleanImageUrl(value) {
+        let text = String(value || "").trim();
+        if (!text) return "";
 
-          // Captura valores do formulário
-          const id = document.getElementById("product-id").value.trim();
-          const name = document.getElementById("product-name").value.trim();
-          const description = document
-            .getElementById("product-description")
-            .value.trim();
-          const priceValue = document.getElementById("product-price").value;
-          const image =
-            document.getElementById("product-image").value.trim() || null;
-          const imagesStr = document
-            .getElementById("product-images")
-            .value.trim();
-          const availability = document.getElementById(
-            "product-availability",
-          ).value;
-          const leadTime = document.getElementById("product-lead-time").value;
-          const longDescription = document
-            .getElementById("product-long-description")
-            .value.trim();
-          const specsStr = document
-            .getElementById("product-specs")
-            .value.trim();
+        text = text
+          .replace(/&amp;/g, "&")
+          .replace(/&#38;/g, "&")
+          .replace(/&quot;/g, '"')
+          .replace(/&#039;/g, "'");
 
-          if (!id || !name || !description || !priceValue) {
-            productMessage.textContent =
-              "Preencha todos os campos obrigatórios.";
-            productMessage.className = "message error";
-            productMessage.hidden = false;
-            return;
-          }
-          const price = parseFloat(priceValue);
-          const leadTimeDays = leadTime ? parseInt(leadTime) : null;
-          let images = null;
-          if (imagesStr) {
-            images = imagesStr
-              .split(",")
-              .map((url) => url.trim())
-              .filter((v) => v);
-          }
-          let technicalSpecs = null;
-          if (specsStr) {
-            try {
-              technicalSpecs = JSON.parse(specsStr);
-            } catch (e) {
-              productMessage.textContent =
-                "Especificações técnicas inválidas (não é JSON).";
-              productMessage.className = "message error";
-              productMessage.hidden = false;
-              return;
-            }
-          }
+        const urlFunction = text.match(/^url\((.*)\)$/i);
+        if (urlFunction) text = urlFunction[1];
 
-          const newProduct = {
-            id,
-            name,
-            description,
-            price,
-            image,
-            images,
-            availability,
-            lead_time_days: leadTimeDays,
-            long_description: longDescription,
-            technicalSpecs: technicalSpecs,
-          };
-          try {
-            const {error} = await supabaseClient
-              .from("products")
-              .insert([newProduct]);
-            if (error) throw error;
-            productMessage.textContent = "Produto adicionado com sucesso!";
-            productMessage.className = "message success";
-            productMessage.hidden = false;
-            document.getElementById("product-form").reset();
-          } catch (err) {
-            productMessage.textContent =
-              err.message || "Erro ao adicionar produto.";
-            productMessage.className = "message error";
-            productMessage.hidden = false;
-          }
+        for (let i = 0; i < 4; i += 1) {
+          text = text.trim();
+          text = text.replace(/^[\s'"`\[{(]+/g, "");
+          text = text.replace(/[\s'"`\]};,]+$/g, "");
+        }
+
+        const httpIndex = text.search(/https?:\/\//i);
+        if (httpIndex > 0) text = text.slice(httpIndex);
+
+        text = text.trim();
+
+        if (!text || ["null", "undefined", "false"].includes(text.toLowerCase())) {
+          return "";
+        }
+
+        return text;
+      }
+
+      function isUsableImageSource(value) {
+        const text = cleanImageUrl(value);
+        if (!text) return false;
+        if (/^[{\[<]/.test(text)) return false;
+
+        return (
+          /^https?:\/\//i.test(text) ||
+          /^data:image\//i.test(text) ||
+          /^blob:/i.test(text) ||
+          text.startsWith("assets/") ||
+          text.startsWith("./") ||
+          text.startsWith("../") ||
+          text.startsWith("/") ||
+          /\.(png|jpe?g|webp|gif|svg|avif)(\?.*)?$/i.test(text)
+        );
+      }
+
+      function uniqueImageUrls(values) {
+        const seen = new Set();
+        const result = [];
+
+        values.forEach((value) => {
+          const url = cleanImageUrl(value);
+          if (!isUsableImageSource(url)) return;
+          if (seen.has(url)) return;
+
+          seen.add(url);
+          result.push(url);
         });
 
-      // Checa a sessão ao carregar
+        return result;
+      }
+
+      function parseImageInput(value) {
+        if (!value) return [];
+
+        if (Array.isArray(value)) {
+          return uniqueImageUrls(value.flatMap((item) => parseImageInput(item)));
+        }
+
+        if (typeof value === "object") {
+          return parseImageInput(value.url || value.src || value.path || value.publicUrl || value.public_url || "");
+        }
+
+        const text = String(value).trim();
+        if (!text) return [];
+
+        try {
+          return parseImageInput(JSON.parse(text));
+        } catch {
+          // Continua para tratar URL simples, lista separada por vírgula/linha ou array do Postgres.
+        }
+
+        const urlMatches = text.match(/https?:\/\/[^\s"'<>{}\[\],]+/gi);
+        if (urlMatches && urlMatches.length) return uniqueImageUrls(urlMatches);
+
+        return uniqueImageUrls(
+          text
+            .split(/[\n,;]+/)
+            .map((item) => cleanImageUrl(item))
+            .filter(Boolean),
+        );
+      }
+
+      function formatImageInput(value) {
+        return parseImageInput(value).join(", ");
+      }
+
+      document.getElementById("product-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        productMessage.hidden = true;
+
+        const id = document.getElementById("product-id").value.trim();
+        const name = document.getElementById("product-name").value.trim();
+        const description = document.getElementById("product-description").value.trim();
+        const priceValue = document.getElementById("product-price").value;
+        const image = cleanImageUrl(document.getElementById("product-image").value) || null;
+        const imagesStr = document.getElementById("product-images").value.trim();
+        const availability = document.getElementById("product-availability").value;
+        const leadTime = document.getElementById("product-lead-time").value;
+        const longDescription = document.getElementById("product-long-description").value.trim();
+        const specsStr = document.getElementById("product-specs").value.trim();
+        const isFavorite = document.getElementById("product-is-favorite").checked;
+        const isSeasonal = seasonalCheckbox.checked;
+        const seasonalCategory = document.getElementById("product-seasonal-category").value;
+        const seasonalLabel = document.getElementById("product-seasonal-label").value.trim();
+
+        if (!id || !name || !description || !priceValue) {
+          showMessage(productMessage, "Preencha todos os campos obrigatórios.", "error");
+          return;
+        }
+
+        const price = parseFloat(priceValue);
+        const leadTimeDays = leadTime ? parseInt(leadTime, 10) : null;
+        const images = parseImageInput(imagesStr)
+          .filter((url) => !image || url !== image);
+
+        const imagesToSave = images.length ? images : null;
+
+        let technicalSpecs = null;
+        if (specsStr) {
+          try {
+            technicalSpecs = JSON.parse(specsStr);
+          } catch {
+            showMessage(productMessage, "Especificações técnicas inválidas. O campo precisa ser um JSON válido.", "error");
+            return;
+          }
+        }
+
+        const newProduct = {
+          id,
+          name,
+          description,
+          price,
+          image,
+          images: imagesToSave,
+          availability,
+          lead_time_days: leadTimeDays,
+          long_description: longDescription,
+          technicalSpecs: technicalSpecs,
+          is_favorite: isFavorite,
+          is_seasonal: isSeasonal,
+          seasonal_category: isSeasonal ? seasonalCategory : null,
+          seasonal_label: isSeasonal ? seasonalLabel || getSeasonalCategoryLabel(seasonalCategory) : null,
+        };
+
+        try {
+          const { error } = await supabaseClient.from("products").insert([newProduct]);
+          if (error) throw error;
+
+          showMessage(productMessage, "Produto adicionado com sucesso!", "success");
+          document.getElementById("product-form").reset();
+          toggleSeasonalFields();
+        } catch (err) {
+          const message = String(err.message || "");
+          if (
+            message.includes("is_favorite") ||
+            message.includes("is_seasonal") ||
+            message.includes("seasonal_category") ||
+            message.includes("seasonal_label")
+          ) {
+            showMessage(
+              productMessage,
+              "As colunas de favorito/sazonal ainda não existem na tabela products. Execute o SQL enviado junto com estes arquivos no Supabase e tente novamente.",
+              "error",
+            );
+            return;
+          }
+
+          showMessage(productMessage, err.message || "Erro ao adicionar produto.", "error");
+        }
+      });
+
       checkSession();
 
-      // Botão de menu responsivo para a navegação
       const menuToggle = document.getElementById("menu-toggle");
       const navLinks = document.querySelector(".nav-links");
       if (menuToggle && navLinks) {

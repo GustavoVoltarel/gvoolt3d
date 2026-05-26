@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Produto | GVolt 3D</title>
+    <meta name="description" content="Detalhes do produto GVolt 3D." />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -15,90 +17,82 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/png" href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcxNDU2LCJleHAiOjQ5MzE3NzE0NTZ9.BXqHQJ7vzskF_NkliO4hJGsD96NCYQCjghncISquesg" />
 
-    <!-- Ícone da aba do navegador -->
-    <link
-      rel="icon"
-      type="image/png"
-      href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcyMDYyLCJleHAiOjQ5MzE3NzIwNjJ9.1vnoc_Ib-MghMmvi6Pm5kXpz-qCW2Q0OYxxgzZz5Fx8"
-    />
-    <!-- Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Configurações globais (SUPABASE_URL, SUPABASE_KEY) -->
     <script src="config.js"></script>
   </head>
+
   <body>
     <div class="site-glow"></div>
+
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="GVolt 3D">
-        <!-- Usa a nova logo do site -->
-        <img
-          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
-          alt="Logo GVolt 3D"
-        />
+        <img src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E" alt="Logo GVolt 3D" />
         <span>GVolt <strong>3D</strong></span>
       </a>
+
       <nav class="nav-links" aria-label="Navegação principal">
-        <a href="index.html">Início</a>
+        <a href="index.html#inicio">Início</a>
         <a href="index.html#produtos">Produtos</a>
+        <a href="sazonais.html">Dia dos Namorados</a>
         <a href="index.html#contato">Contato</a>
       </nav>
-      <!-- Botão de menu para navegação em telas pequenas -->
+
       <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
         <i class="fa-solid fa-bars"></i>
       </button>
     </header>
+
     <main class="detail-page">
-      <a href="index.html#produtos" class="back-link"
-        ><i class="fa-solid fa-arrow-left"></i> Voltar para todos os produtos</a
-      >
+      <a href="index.html#produtos" class="back-link">
+        <i class="fa-solid fa-arrow-left"></i> Voltar para todos os produtos
+      </a>
+
       <section id="product-detail-container" class="product-detail-container">
         <div class="detail-gallery">
-          <!-- Imagem principal com setas -->
           <div class="main-image-wrapper">
-            <button class="nav-arrow prev" aria-label="Foto anterior">
-              &#10094;
-            </button>
+            <button class="nav-arrow prev" aria-label="Foto anterior">&#10094;</button>
             <img id="main-image" src="" alt="Produto" />
-            <button class="nav-arrow next" aria-label="Próxima foto">
-              &#10095;
-            </button>
+            <button class="nav-arrow next" aria-label="Próxima foto">&#10095;</button>
           </div>
-          <!-- Miniaturas -->
           <div class="thumbnail-container" id="thumbnail-container"></div>
         </div>
+
         <div class="product-info">
-          <p class="eyebrow">
-            <i class="fa-solid fa-bolt"></i> Produto GVolt 3D
-          </p>
+          <p class="eyebrow"><i class="fa-solid fa-bolt"></i> Produto GVolt 3D</p>
           <h1 id="product-name"></h1>
           <div class="rating" id="availability-info"></div>
           <p id="product-price" class="price"></p>
           <p id="product-description" class="description"></p>
-          <!-- Tabela de especificações técnicas -->
           <table id="technical-specs-table" class="technical-specs"></table>
+
           <a id="buy-button" class="buy-button" href="#" target="_blank">
-            <i class="fa-brands fa-whatsapp"></i>
-            Fazer pedido no WhatsApp
+            <i class="fa-brands fa-whatsapp"></i> Fazer pedido no WhatsApp
           </a>
         </div>
       </section>
     </main>
+
     <footer class="footer">
       <div class="footer-brand">
-        <!-- Usa a nova logo do site -->
-        <img
-          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
-          alt="Logo GVolt 3D"
-        />
+        <img src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E" alt="Logo GVolt 3D" />
         <strong>GVolt <span>3D</span></strong>
       </div>
       <p>Soluções criativas em impressão 3D.</p>
+      <a href="https://wa.me/5519995325891" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i> Fale conosco
+      </a>
     </footer>
+
     <script>
-      // Função auxiliar para extrair parâmetros da URL
+      const supabaseClient = window.supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_KEY,
+      );
+
       function getParameterByName(name, url = window.location.href) {
-        name = name.replace(/[\[\]]/g, "\\$&");
+        name = name.replace(/[\[\]]/g, "\$&");
         const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
         const results = regex.exec(url);
         if (!results) return null;
@@ -107,129 +101,321 @@
       }
 
       function formatPrice(value) {
-        return value.toLocaleString("pt-BR", {
+        return Number(value || 0).toLocaleString("pt-BR", {
           style: "currency",
           currency: "BRL",
         });
       }
-      // Obtém o ID do produto a partir da URL
-      const productId = getParameterByName("id");
-      // Função para obter lista de imagens
-      function getProductImages(product) {
-        if (product.images && product.images.length) {
-          return product.images;
+
+      const FALLBACK_IMAGE = "assets/fallback.svg";
+
+      function cleanImageUrl(value) {
+        let text = String(value || "").trim();
+        if (!text) return "";
+
+        text = text
+          .replace(/&amp;/g, "&")
+          .replace(/&#38;/g, "&")
+          .replace(/&quot;/g, '"')
+          .replace(/&#039;/g, "'");
+
+        const urlFunction = text.match(/^url\((.*)\)$/i);
+        if (urlFunction) text = urlFunction[1];
+
+        for (let i = 0; i < 4; i += 1) {
+          text = text.trim();
+          text = text.replace(/^[\s'"`\[{]+/g, "");
+          text = text.replace(/[\s'"`\]};,]+$/g, "");
         }
-        return product.image ? [product.image] : [];
+
+        if (text.startsWith("(") && text.endsWith(")")) {
+          text = text.slice(1, -1).trim();
+        }
+
+        const httpIndex = text.search(/https?:\/\//i);
+        if (httpIndex > 0) text = text.slice(httpIndex);
+
+        text = text.trim();
+
+        if (!text || ["null", "undefined", "false"].includes(text.toLowerCase())) {
+          return "";
+        }
+
+        return text;
       }
-      function renderProductGallery(images) {
-        const mainImageEl = document.getElementById("main-image");
-        const thumbnailContainer = document.getElementById(
-          "thumbnail-container",
+
+      function isUsableImageSource(value) {
+        const text = cleanImageUrl(value);
+        if (!text) return false;
+        if (/^[{\[<]/.test(text)) return false;
+
+        return (
+          /^https?:\/\//i.test(text) ||
+          /^data:image\//i.test(text) ||
+          /^blob:/i.test(text) ||
+          text.startsWith("assets/") ||
+          text.startsWith("./") ||
+          text.startsWith("../") ||
+          text.startsWith("/") ||
+          /\.(png|jpe?g|webp|gif|svg|avif)(\?.*)?$/i.test(text)
         );
+      }
+
+      function uniqueImages(images) {
+        const seen = new Set();
+        const result = [];
+
+        images.forEach((item) => {
+          const url = cleanImageUrl(item);
+          if (!isUsableImageSource(url)) return;
+          if (seen.has(url)) return;
+
+          seen.add(url);
+          result.push(url);
+        });
+
+        return result;
+      }
+
+      function normalizeImageValue(value) {
+        if (!value) return [];
+
+        if (Array.isArray(value)) {
+          return uniqueImages(value.flatMap((item) => normalizeImageValue(item)));
+        }
+
+        if (typeof value === "object") {
+          return normalizeImageValue(
+            value.url || value.src || value.path || value.publicUrl || value.public_url || "",
+          );
+        }
+
+        const text = String(value).trim();
+        if (!text) return [];
+
+        try {
+          return normalizeImageValue(JSON.parse(text));
+        } catch {
+          // Continua para tratar URL comum, lista separada por vírgula ou array do Postgres.
+        }
+
+        const urlMatches = Array.from(
+          text.matchAll(/https?:\/\/.*?(?=(?:\s*[,;\n]\s*["']?\s*https?:\/\/)|$)/gis),
+          (match) => match[0],
+        );
+
+        if (urlMatches.length) return uniqueImages(urlMatches);
+
+        return uniqueImages(
+          text
+            .split(/[\n,;]+/)
+            .map((item) => cleanImageUrl(item))
+            .filter(Boolean),
+        );
+      }
+
+      function getProductImages(product) {
+        return uniqueImages([
+          ...normalizeImageValue(product.image),
+          ...normalizeImageValue(product.images),
+        ]);
+      }
+
+      function preloadImage(src) {
+        return new Promise((resolve) => {
+          const url = cleanImageUrl(src);
+
+          if (!isUsableImageSource(url)) {
+            resolve("");
+            return;
+          }
+
+          if (url === FALLBACK_IMAGE) {
+            resolve(url);
+            return;
+          }
+
+          const tester = new Image();
+          let finished = false;
+
+          const finish = (ok) => {
+            if (finished) return;
+            finished = true;
+            clearTimeout(timeout);
+            resolve(ok ? url : "");
+          };
+
+          const timeout = setTimeout(() => finish(false), 6000);
+
+          tester.onload = () => finish(tester.naturalWidth > 0 && tester.naturalHeight > 0);
+          tester.onerror = () => finish(false);
+          tester.src = url;
+        });
+      }
+
+      async function getWorkingImages(images) {
+        const candidates = uniqueImages(images);
+        const checkedImages = await Promise.all(candidates.map((url) => preloadImage(url)));
+        return uniqueImages(checkedImages.filter(Boolean));
+      }
+
+      function setImageWithFallback(imageElement, src) {
+        imageElement.onerror = () => {
+          imageElement.onerror = null;
+          imageElement.src = FALLBACK_IMAGE;
+        };
+
+        imageElement.removeAttribute("srcset");
+        imageElement.src = isUsableImageSource(src) ? cleanImageUrl(src) : FALLBACK_IMAGE;
+      }
+
+      async function renderProductGallery(images) {
+        const mainImageEl = document.getElementById("main-image");
+        const thumbnailContainer = document.getElementById("thumbnail-container");
+        const prev = document.querySelector(".nav-arrow.prev");
+        const next = document.querySelector(".nav-arrow.next");
         let currentIndex = 0;
+
+        setImageWithFallback(mainImageEl, FALLBACK_IMAGE);
+        thumbnailContainer.innerHTML = "";
+        thumbnailContainer.style.display = "none";
+        prev.style.display = "none";
+        next.style.display = "none";
+
+        const workingImages = await getWorkingImages(images);
+        const galleryImages = workingImages.length ? workingImages : [FALLBACK_IMAGE];
+
         function showImage(index) {
           currentIndex = index;
-          mainImageEl.src = images[index];
-          const thumbnails = thumbnailContainer.querySelectorAll("img");
-          thumbnails.forEach((thumb, idx) => {
-            if (idx === index) {
-              thumb.classList.add("active-thumb");
-            } else {
-              thumb.classList.remove("active-thumb");
-            }
+          setImageWithFallback(mainImageEl, galleryImages[index]);
+
+          thumbnailContainer.querySelectorAll("img").forEach((thumb, idx) => {
+            thumb.classList.toggle("active-thumb", idx === index);
           });
         }
+
         thumbnailContainer.innerHTML = "";
-        images.forEach((imgSrc, idx) => {
+
+        galleryImages.forEach((imgSrc, idx) => {
           const thumb = document.createElement("img");
-          thumb.src = imgSrc;
+          setImageWithFallback(thumb, imgSrc);
           thumb.alt = "Miniatura " + (idx + 1);
           thumb.addEventListener("click", () => showImage(idx));
           thumbnailContainer.appendChild(thumb);
         });
-        if (images.length) showImage(0);
-        document.querySelector(".nav-arrow.prev").onclick = () => {
-          const newIndex = (currentIndex - 1 + images.length) % images.length;
-          showImage(newIndex);
-        };
-        document.querySelector(".nav-arrow.next").onclick = () => {
-          const newIndex = (currentIndex + 1) % images.length;
-          showImage(newIndex);
-        };
+
+        showImage(0);
+
+        const hasMoreThanOneRealImage = workingImages.length > 1;
+        prev.style.display = hasMoreThanOneRealImage ? "grid" : "none";
+        next.style.display = hasMoreThanOneRealImage ? "grid" : "none";
+        thumbnailContainer.style.display = hasMoreThanOneRealImage ? "flex" : "none";
+
+        prev.onclick = () =>
+          showImage((currentIndex - 1 + galleryImages.length) % galleryImages.length);
+
+        next.onclick = () => showImage((currentIndex + 1) % galleryImages.length);
       }
-      // Cria cliente Supabase com configurações globais
-      const supabaseClient = window.supabase.createClient(
-        window.SUPABASE_URL,
-        window.SUPABASE_KEY,
-      );
+
+      function normalizeSpecs(product) {
+        return product.technicalSpecs || product.technical_specs || null;
+      }
+
+      function renderTechnicalSpecs(product) {
+        const techTable = document.getElementById("technical-specs-table");
+        techTable.innerHTML = "";
+
+        let specs = normalizeSpecs(product);
+        if (!specs) return;
+
+        if (typeof specs === "string") {
+          try { specs = JSON.parse(specs); } catch { specs = null; }
+        }
+
+        if (!specs || typeof specs !== "object") return;
+
+        const tbody = document.createElement("tbody");
+        Object.entries(specs).forEach(([key, value]) => {
+          const row = document.createElement("tr");
+          const th = document.createElement("th");
+          const td = document.createElement("td");
+          th.textContent = key;
+          td.textContent = value;
+          row.appendChild(th);
+          row.appendChild(td);
+          tbody.appendChild(row);
+        });
+        techTable.appendChild(tbody);
+      }
+
+      async function renderProduct(product) {
+        document.title = `${product.name} | GVolt 3D`;
+        document.getElementById("product-name").textContent = product.name || "Produto";
+        document.getElementById("product-description").innerHTML = String(
+          product.long_description || product.longDescription || product.description || "",
+        ).replace(/\n/g, "<br>");
+        document.getElementById("product-price").textContent = formatPrice(product.price);
+
+        const availability = product.availability || "";
+        const leadTime = product.lead_time_days || product.leadTimeDays || "";
+        document.getElementById("availability-info").innerHTML = `
+          <span style="color:${availability === "Em estoque" ? "#25d366" : "#f02dff"}">
+            ● ${availability || "Sob consulta"}
+          </span>
+          ${leadTime ? ` • Prazo: ${leadTime} dias` : ""}
+        `;
+
+        renderTechnicalSpecs(product);
+        await renderProductGallery(getProductImages(product));
+
+        const message = encodeURIComponent(
+          `Olá! Quero comprar este produto 👇
+
+${product.name}
+${formatPrice(product.price)}
+
+Você pode me passar mais detalhes?`,
+        );
+        document.getElementById("buy-button").href =
+          "https://wa.me/5519995325891?text=" + message;
+      }
+
       async function loadProduct() {
+        const productId = getParameterByName("id");
         const container = document.getElementById("product-detail-container");
+
+        if (!productId) {
+          container.innerHTML = '<p class="empty-message">Produto não informado.</p>';
+          return;
+        }
+
         try {
-          const {data: product, error} = await supabaseClient
+          const { data, error } = await supabaseClient
             .from("products")
             .select("*")
             .eq("id", productId)
             .single();
+
           if (error) throw error;
-          if (!product) {
-            container.innerHTML =
-              '<p class="empty-message">Produto não encontrado.</p>';
-            return;
-          }
-          // Atualiza título
-          document.title = `${product.name} | GVolt 3D`;
-          // Preenche campos
-          document.getElementById("product-name").textContent = product.name;
-          document.getElementById("product-description").innerHTML = (
-            product.long_description || ""
-          ).replace(/\n/g, "<br>");
-          document.getElementById("product-price").textContent = formatPrice(
-            product.price,
-          );
-          // Disponibilidade e prazo
-          const availabilityInfo = document.getElementById("availability-info");
-          const statusColor =
-            product.availability === "Em estoque" ? "#25d366" : "#f02dff";
-          availabilityInfo.innerHTML = `
-  <span style="color:${statusColor}">● ${product.availability || "Sob encomenda"}</span>
-  ${product.lead_time_days ? ` • Prazo: ${product.lead_time_days} dias` : ""}
-`;
-          // Tabela de especificações técnicas
-          const techTable = document.getElementById("technical-specs-table");
-          techTable.innerHTML = "";
-          if (product.technicalSpecs) {
-            const tbody = document.createElement("tbody");
-            for (const [key, value] of Object.entries(product.technicalSpecs)) {
-              const row = document.createElement("tr");
-              const th = document.createElement("th");
-              th.textContent = key;
-              const td = document.createElement("td");
-              td.textContent = value;
-              row.appendChild(th);
-              row.appendChild(td);
-              tbody.appendChild(row);
-            }
-            techTable.appendChild(tbody);
-          }
-          // Galeria de imagens
-          const images = getProductImages(product);
-          renderProductGallery(images);
-          // Botão de compra via WhatsApp
-          const whatsappNumber = "5519995325891";
-          const message = encodeURIComponent(
-            `Olá! Quero comprar este produto 👇\n\n${product.name}\n${formatPrice(product.price)}\n\nVocê pode me passar mais detalhes?`,
-          );
-          document.getElementById("buy-button").href =
-            `https://wa.me/${whatsappNumber}?text=${message}`;
+          if (!data) throw new Error("Produto não encontrado.");
+          await renderProduct(data);
         } catch (err) {
-          console.error("Erro ao carregar produto:", err);
-          container.innerHTML =
-            '<p class="empty-message">Erro ao carregar produto.</p>';
+          console.warn("Falha ao carregar produto via Supabase. Tentando products.json...", err);
+
+          try {
+            const response = await fetch("products.json");
+            const products = await response.json();
+            const product = products.find((item) => String(item.id) === String(productId));
+            if (!product) throw new Error("Produto não encontrado.");
+            await renderProduct(product);
+          } catch (error) {
+            container.innerHTML = '<p class="empty-message">Produto não encontrado.</p>';
+          }
         }
       }
+
       loadProduct();
 
-      // Botão de menu responsivo
       const menuToggle = document.getElementById("menu-toggle");
       const navLinks = document.querySelector(".nav-links");
       if (menuToggle && navLinks) {

@@ -194,6 +194,24 @@
           rgba(5, 0, 13, 0.52);
       }
 
+      .seasonal-card {
+        border-color: rgba(255, 145, 190, 0.42);
+        background:
+          linear-gradient(135deg, rgba(255, 71, 135, 0.14), rgba(184, 50, 255, 0.08)),
+          rgba(5, 0, 13, 0.52);
+      }
+
+      .seasonal-fields {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        padding: 18px;
+        border: 1px solid rgba(189, 67, 255, 0.22);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.028);
+      }
+
       .favorite-info {
         display: flex;
         align-items: center;
@@ -312,6 +330,10 @@
           flex-direction: column;
         }
 
+        .seasonal-fields {
+          grid-template-columns: 1fr;
+        }
+
         .form-actions .btn {
           width: 100%;
         }
@@ -353,7 +375,8 @@
           <h2>Editar Produto</h2>
           <p>
             Atualize as informações da peça e marque como favorito quando quiser
-            destacar o produto no início do catálogo público.
+destacar o produto no início do catálogo público. Também é possível
+            marcar a peça como sazonal para aparecer na página especial.
           </p>
         </div>
         <div class="header-icon" aria-hidden="true">
@@ -427,7 +450,7 @@
             <div class="form-group full">
               <label for="product-images">Imagens extras</label>
               <input type="text" id="product-images" />
-              <span class="field-hint">Separe as URLs por vírgula.</span>
+              <span class="field-hint">Separe as URLs por vírgula ou coloque uma URL por linha. A imagem principal não precisa ser repetida aqui.</span>
             </div>
 
             <div class="favorite-card">
@@ -446,6 +469,49 @@
                 <input type="checkbox" id="product-is-favorite" />
                 <span></span>
               </label>
+            </div>
+
+            <div class="favorite-card seasonal-card">
+              <div class="favorite-info">
+                <span class="favorite-icon"><i class="fa-solid fa-heart"></i></span>
+                <div>
+                  <strong>Produto sazonal</strong>
+                  <p>
+                    Marque esta opção para mostrar o produto na tela de produtos sazonais.
+                    Escolha a campanha correta para organizar a vitrine sazonal.
+                  </p>
+                </div>
+              </div>
+
+              <label class="toggle" aria-label="Marcar produto como sazonal">
+                <input type="checkbox" id="product-is-seasonal" />
+                <span></span>
+              </label>
+            </div>
+
+            <div class="seasonal-fields" id="seasonal-fields">
+              <div class="form-group">
+                <label for="product-seasonal-category">Campanha sazonal</label>
+                <select id="product-seasonal-category">
+                  <option value="dia_dos_namorados">Dia dos Namorados</option>
+                  <option value="dia_dos_pais">Dia dos Pais</option>
+                  <option value="dia_das_maes">Dia das Mães</option>
+                  <option value="natal">Natal</option>
+                  <option value="pascoa">Páscoa</option>
+                  <option value="halloween">Halloween</option>
+                  <option value="outros">Outros sazonais</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="product-seasonal-label">Texto do selo</label>
+                <input
+                  type="text"
+                  id="product-seasonal-label"
+                  placeholder="Ex.: Dia dos Namorados"
+                />
+                <span class="field-hint">Texto exibido no card do produto sazonal.</span>
+              </div>
             </div>
 
             <div class="form-group full">
@@ -495,11 +561,58 @@
       const editContainer = document.getElementById("edit-container");
       const loginMessage = document.getElementById("login-message");
       const editMessage = document.getElementById("edit-message");
+      const seasonalCheckbox = document.getElementById("product-is-seasonal");
+      const seasonalFields = document.getElementById("seasonal-fields");
+      const seasonalCategorySelect = document.getElementById("product-seasonal-category");
+      const seasonalLabelInput = document.getElementById("product-seasonal-label");
+
+      const SEASONAL_CATEGORIES = {
+        dia_dos_namorados: "Dia dos Namorados",
+        dia_dos_pais: "Dia dos Pais",
+        dia_das_maes: "Dia das Mães",
+        natal: "Natal",
+        pascoa: "Páscoa",
+        halloween: "Halloween",
+        outros: "Sazonal",
+      };
+
+      function getSeasonalCategoryLabel(category) {
+        return SEASONAL_CATEGORIES[category] || "Sazonal";
+      }
+
+      function updateSeasonalLabelFromCategory(force = false) {
+        const selectedLabel = getSeasonalCategoryLabel(seasonalCategorySelect.value);
+        const currentLabel = seasonalLabelInput.value.trim();
+        const defaultLabels = Object.values(SEASONAL_CATEGORIES);
+
+        if (force || !currentLabel || defaultLabels.includes(currentLabel)) {
+          seasonalLabelInput.value = selectedLabel;
+        }
+      }
 
       function getProductIdFromUrl() {
         const params = new URLSearchParams(window.location.search);
         return params.get("id");
       }
+
+      function toggleSeasonalFields() {
+        const enabled = seasonalCheckbox.checked;
+        seasonalFields.style.opacity = enabled ? "1" : "0.55";
+        seasonalFields.querySelectorAll("input, select").forEach((field) => {
+          field.disabled = !enabled;
+        });
+      }
+
+      seasonalCheckbox.addEventListener("change", () => {
+        toggleSeasonalFields();
+        if (seasonalCheckbox.checked) {
+          updateSeasonalLabelFromCategory();
+        }
+      });
+
+      seasonalCategorySelect.addEventListener("change", () => {
+        updateSeasonalLabelFromCategory();
+      });
 
       function showMessage(element, text, type = "") {
         element.textContent = text;
@@ -569,6 +682,106 @@
         window.location.href = "admin.html";
       });
 
+
+      function cleanImageUrl(value) {
+        let text = String(value || "").trim();
+        if (!text) return "";
+
+        text = text
+          .replace(/&amp;/g, "&")
+          .replace(/&#38;/g, "&")
+          .replace(/&quot;/g, '"')
+          .replace(/&#039;/g, "'");
+
+        const urlFunction = text.match(/^url\((.*)\)$/i);
+        if (urlFunction) text = urlFunction[1];
+
+        for (let i = 0; i < 4; i += 1) {
+          text = text.trim();
+          text = text.replace(/^[\s'"`\[{(]+/g, "");
+          text = text.replace(/[\s'"`\]};,]+$/g, "");
+        }
+
+        const httpIndex = text.search(/https?:\/\//i);
+        if (httpIndex > 0) text = text.slice(httpIndex);
+
+        text = text.trim();
+
+        if (!text || ["null", "undefined", "false"].includes(text.toLowerCase())) {
+          return "";
+        }
+
+        return text;
+      }
+
+      function isUsableImageSource(value) {
+        const text = cleanImageUrl(value);
+        if (!text) return false;
+        if (/^[{\[<]/.test(text)) return false;
+
+        return (
+          /^https?:\/\//i.test(text) ||
+          /^data:image\//i.test(text) ||
+          /^blob:/i.test(text) ||
+          text.startsWith("assets/") ||
+          text.startsWith("./") ||
+          text.startsWith("../") ||
+          text.startsWith("/") ||
+          /\.(png|jpe?g|webp|gif|svg|avif)(\?.*)?$/i.test(text)
+        );
+      }
+
+      function uniqueImageUrls(values) {
+        const seen = new Set();
+        const result = [];
+
+        values.forEach((value) => {
+          const url = cleanImageUrl(value);
+          if (!isUsableImageSource(url)) return;
+          if (seen.has(url)) return;
+
+          seen.add(url);
+          result.push(url);
+        });
+
+        return result;
+      }
+
+      function parseImageInput(value) {
+        if (!value) return [];
+
+        if (Array.isArray(value)) {
+          return uniqueImageUrls(value.flatMap((item) => parseImageInput(item)));
+        }
+
+        if (typeof value === "object") {
+          return parseImageInput(value.url || value.src || value.path || value.publicUrl || value.public_url || "");
+        }
+
+        const text = String(value).trim();
+        if (!text) return [];
+
+        try {
+          return parseImageInput(JSON.parse(text));
+        } catch {
+          // Continua para tratar URL simples, lista separada por vírgula/linha ou array do Postgres.
+        }
+
+        const urlMatches = text.match(/https?:\/\/[^\s"'<>{}\[\],]+/gi);
+        if (urlMatches && urlMatches.length) return uniqueImageUrls(urlMatches);
+
+        return uniqueImageUrls(
+          text
+            .split(/[\n,;]+/)
+            .map((item) => cleanImageUrl(item))
+            .filter(Boolean),
+        );
+      }
+
+      function formatImageInput(value) {
+        return parseImageInput(value).join(", ");
+      }
+
       async function loadProduct() {
         editMessage.hidden = true;
         const productId = getProductIdFromUrl();
@@ -598,10 +811,8 @@
         document.getElementById("product-name").value = data.name || "";
         document.getElementById("product-description").value = data.description || "";
         document.getElementById("product-price").value = data.price || "";
-        document.getElementById("product-image").value = data.image || "";
-        document.getElementById("product-images").value = data.images
-          ? data.images.join(", ")
-          : "";
+        document.getElementById("product-image").value = formatImageInput(data.image);
+        document.getElementById("product-images").value = formatImageInput(data.images);
         document.getElementById("product-availability").value =
           data.availability || "Em estoque";
         document.getElementById("product-lead").value = data.lead_time_days || "";
@@ -610,6 +821,11 @@
         document.getElementById("product-is-favorite").checked = Boolean(
           data.is_favorite,
         );
+        seasonalCheckbox.checked = Boolean(data.is_seasonal);
+        seasonalCategorySelect.value = data.seasonal_category || "dia_dos_namorados";
+        seasonalLabelInput.value =
+          data.seasonal_label || getSeasonalCategoryLabel(seasonalCategorySelect.value);
+        toggleSeasonalFields();
       }
 
       document.getElementById("edit-form").addEventListener("submit", async (event) => {
@@ -620,7 +836,7 @@
         const name = document.getElementById("product-name").value.trim();
         const description = document.getElementById("product-description").value.trim();
         const priceValue = document.getElementById("product-price").value;
-        const image = document.getElementById("product-image").value.trim() || null;
+        const image = cleanImageUrl(document.getElementById("product-image").value) || null;
         const imagesStr = document.getElementById("product-images").value.trim();
         const availability = document.getElementById("product-availability").value;
         const leadTime = document.getElementById("product-lead").value;
@@ -628,6 +844,11 @@
           .getElementById("product-long-description")
           .value.trim();
         const isFavorite = document.getElementById("product-is-favorite").checked;
+        const isSeasonal = seasonalCheckbox.checked;
+        const seasonalCategory = document.getElementById("product-seasonal-category").value;
+        const seasonalLabel = document
+          .getElementById("product-seasonal-label")
+          .value.trim();
 
         if (!productId || !name || !description || !priceValue) {
           showMessage(editMessage, "Preencha todos os campos obrigatórios.", "error");
@@ -637,24 +858,24 @@
         const price = parseFloat(priceValue);
         const lead_time_days = leadTime ? parseInt(leadTime, 10) : null;
 
-        let images = null;
-        if (imagesStr) {
-          images = imagesStr
-            .split(",")
-            .map((u) => u.trim())
-            .filter((v) => v);
-        }
+        const images = parseImageInput(imagesStr)
+          .filter((url) => !image || url !== image);
+
+        const imagesToSave = images.length ? images : null;
 
         const updated = {
           name,
           description,
           price,
           image,
-          images,
+          images: imagesToSave,
           availability,
           lead_time_days,
           long_description: longDescription,
           is_favorite: isFavorite,
+          is_seasonal: isSeasonal,
+          seasonal_category: isSeasonal ? seasonalCategory : null,
+          seasonal_label: isSeasonal ? seasonalLabel || getSeasonalCategoryLabel(seasonalCategory) : null,
         };
 
         try {
@@ -669,6 +890,20 @@
         } catch (err) {
           const message = String(err.message || "");
 
+          if (
+            message.includes("is_favorite") ||
+            message.includes("is_seasonal") ||
+            message.includes("seasonal_category") ||
+            message.includes("seasonal_label")
+          ) {
+            showMessage(
+              editMessage,
+              "As colunas de favorito/sazonal ainda não existem na tabela products. Execute o SQL enviado junto com estes arquivos no Supabase e tente novamente.",
+              "error",
+            );
+            return;
+          }
+
           if (message.includes("is_favorite")) {
             showMessage(
               editMessage,
@@ -682,6 +917,7 @@
         }
       });
 
+      toggleSeasonalFields();
       checkSession();
 
       const menuToggle = document.getElementById("menu-toggle");

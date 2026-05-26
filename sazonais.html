@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Produtos Sazonais | GVolt 3D</title>
+    <meta
+      name="description"
+      content="Produtos sazonais da GVolt 3D para datas comemorativas, como Dia dos Namorados, Natal, Dia dos Pais, Dia das Mães, Páscoa e outras campanhas."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcxNDU2LCJleHAiOjQ5MzE3NzE0NTZ9.BXqHQJ7vzskF_NkliO4hJGsD96NCYQCjghncISquesg"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+
+    <style>
+      .seasonal-hero {
+        width: min(1180px, calc(100% - 32px));
+        margin: 28px auto 34px;
+        padding: clamp(26px, 6vw, 68px);
+        min-height: 440px;
+        border: 1px solid rgba(255, 145, 190, 0.42);
+        border-radius: 34px;
+        background:
+          radial-gradient(
+            circle at 18% 18%,
+            rgba(255, 71, 135, 0.25),
+            transparent 35%
+          ),
+          radial-gradient(
+            circle at 86% 22%,
+            rgba(184, 50, 255, 0.28),
+            transparent 34%
+          ),
+          linear-gradient(135deg, rgba(24, 4, 28, 0.96), rgba(5, 1, 13, 0.98));
+        box-shadow:
+          0 0 38px rgba(255, 71, 135, 0.22),
+          var(--shadow);
+        display: grid;
+        grid-template-columns: 1fr 0.8fr;
+        gap: 34px;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .seasonal-hero::after {
+        content: "";
+        position: absolute;
+        right: -160px;
+        bottom: -190px;
+        width: 520px;
+        height: 520px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        box-shadow: 0 0 90px rgba(255, 71, 135, 0.18);
+      }
+
+      .seasonal-hero > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .seasonal-hero h1 {
+        margin: 0;
+        font-family: "Orbitron", sans-serif;
+        font-size: clamp(2.25rem, 6.4vw, 5.2rem);
+        line-height: 0.95;
+        text-transform: uppercase;
+      }
+
+      .seasonal-hero h1 span {
+        color: #ff7bb7;
+        text-shadow: 0 0 22px rgba(255, 71, 135, 0.72);
+      }
+
+      .seasonal-hero p {
+        max-width: 650px;
+        color: #eadff3;
+        font-size: clamp(1rem, 2vw, 1.22rem);
+        line-height: 1.7;
+        margin: 20px 0 28px;
+      }
+
+      .seasonal-panel {
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 28px;
+        padding: 24px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(14px);
+      }
+
+      .seasonal-panel ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        display: grid;
+        gap: 14px;
+      }
+
+      .seasonal-panel li {
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .seasonal-panel i {
+        color: #ff7bb7;
+        margin-right: 8px;
+      }
+
+      .seasonal-filters {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto 22px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 16px;
+        align-items: end;
+      }
+
+      .seasonal-count {
+        color: var(--muted);
+        margin: 0 0 6px;
+      }
+
+      .category-filter-bar {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto 28px;
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding: 4px 2px 12px;
+        scrollbar-width: thin;
+      }
+
+      .category-filter-button {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.045);
+        color: var(--text);
+        cursor: pointer;
+        font: inherit;
+        font-size: 0.9rem;
+        transition:
+          transform 0.2s ease,
+          border-color 0.2s ease,
+          background 0.2s ease;
+      }
+
+      .category-filter-button:hover,
+      .category-filter-button.active {
+        transform: translateY(-1px);
+        border-color: rgba(255, 123, 183, 0.65);
+        background: linear-gradient(
+          135deg,
+          rgba(255, 79, 148, 0.24),
+          rgba(184, 50, 255, 0.2)
+        );
+        box-shadow: 0 0 20px rgba(255, 71, 135, 0.14);
+      }
+
+      .seasonal-products {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto 70px;
+      }
+
+      .seasonal-product-card {
+        position: relative;
+        border-color: rgba(255, 145, 190, 0.38);
+      }
+
+      .seasonal-tag {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 9px 12px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #ff4f94, var(--purple-strong));
+        color: #fff;
+        font-size: 0.78rem;
+        font-weight: 800;
+        z-index: 1;
+        box-shadow: 0 0 22px rgba(255, 71, 135, 0.42);
+      }
+
+      .empty-state {
+        width: min(760px, calc(100% - 32px));
+        margin: 30px auto 70px;
+        padding: 28px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: rgba(255, 255, 255, 0.045);
+        color: var(--muted);
+        text-align: center;
+        line-height: 1.65;
+      }
+
+      @media (max-width: 880px) {
+        .seasonal-hero {
+          grid-template-columns: 1fr;
+        }
+
+        .seasonal-filters {
+          grid-template-columns: 1fr;
+          align-items: start;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="site-glow"></div>
+
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="GVolt 3D">
+        <img
+          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          alt="Logo GVolt 3D"
+        />
+        <span>GVolt <strong>3D</strong></span>
+      </a>
+
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="index.html#inicio">Início</a>
+        <a href="index.html#produtos">Produtos</a>
+        <a href="sazonais.html">Dia dos Namorados</a>
+        <a href="index.html#contato">Contato</a>
+      </nav>
+
+      <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </header>
+
+    <main>
+      <section class="seasonal-hero">
+        <div>
+          <p class="eyebrow" id="hero-eyebrow">
+            <i class="fa-solid fa-gift"></i> Produtos sazonais
+          </p>
+          <h1 id="hero-title">Produtos <span>Sazonais</span></h1>
+          <p id="hero-description">
+            Escolha uma campanha e veja produtos personalizados em impressão 3D
+            para datas comemorativas. Você também pode pedir uma personalização
+            pelo WhatsApp.
+          </p>
+          <div class="hero-actions">
+            <a href="#produtos-sazonais" class="btn btn-primary"
+              >Ver produtos</a
+            >
+            <a
+              id="whatsapp-link"
+              href="https://wa.me/5519995325891"
+              target="_blank"
+              class="btn btn-secondary"
+            >
+              Pedir personalização
+            </a>
+          </div>
+        </div>
+
+        <aside class="seasonal-panel">
+          <ul>
+            <li>
+              <i class="fa-solid fa-layer-group"></i> Filtros por campanha
+              sazonal.
+            </li>
+            <li>
+              <i class="fa-solid fa-pen-nib"></i> Possibilidade de
+              personalização.
+            </li>
+            <li>
+              <i class="fa-solid fa-star"></i> Favoritos aparecem primeiro.
+            </li>
+            <li>
+              <i class="fa-brands fa-whatsapp"></i> Compra e orçamento pelo
+              WhatsApp.
+            </li>
+          </ul>
+        </aside>
+      </section>
+
+      <section class="seasonal-filters" id="produtos-sazonais">
+        <div>
+          <p class="eyebrow">
+            <i class="fa-solid fa-layer-group"></i> Escolha a campanha
+          </p>
+          <h2 id="section-title">Todos os produtos sazonais</h2>
+        </div>
+
+        <p id="seasonal-count" class="seasonal-count"></p>
+      </section>
+
+      <div
+        class="category-filter-bar"
+        id="category-filter-bar"
+        aria-label="Filtros de campanha sazonal"
+      ></div>
+
+      <section class="seasonal-products">
+        <div id="products" class="products-container"></div>
+        <div id="empty-state" class="empty-state" hidden>
+          Nenhum produto encontrado para esta campanha. Marque um produto como
+          sazonal na tela de edição/cadastro e escolha a campanha correta.
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer" id="contato">
+      <div class="footer-brand">
+        <img
+          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          alt="Logo GVolt 3D"
+        />
+        <strong>GVolt <span>3D</span></strong>
+      </div>
+      <p>Soluções criativas em impressão 3D.</p>
+      <a href="https://wa.me/5519995325891" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i> Fale conosco
+      </a>
+    </footer>
+
+    <script>
+      const supabaseClient = window.supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_KEY,
+      );
+
+      const container = document.getElementById("products");
+      const emptyState = document.getElementById("empty-state");
+      const seasonalCount = document.getElementById("seasonal-count");
+      const categoryFilterBar = document.getElementById("category-filter-bar");
+      const sectionTitle = document.getElementById("section-title");
+      const heroEyebrow = document.getElementById("hero-eyebrow");
+      const heroTitle = document.getElementById("hero-title");
+      const heroDescription = document.getElementById("hero-description");
+      const whatsappLink = document.getElementById("whatsapp-link");
+      const FALLBACK_IMAGE = "assets/fallback.svg";
+
+      const SEASONAL_CATEGORIES = [
+        {
+          slug: "dia_dos_namorados",
+          label: "Dia dos Namorados",
+          icon: "fa-heart",
+          title: "Dia dos <span>Namorados</span>",
+          sectionTitle: "Selecionados para o Dia dos Namorados",
+          description:
+            "Presentes personalizados em impressão 3D para surpreender com algo criativo, diferente e feito com carinho.",
+          whatsappText:
+            "Olá! Quero um presente personalizado para o Dia dos Namorados com a GVolt 3D",
+        },
+        {
+          slug: "dia_dos_pais",
+          label: "Dia dos Pais",
+          icon: "fa-user-tie",
+          title: "Dia dos <span>Pais</span>",
+          sectionTitle: "Presentes para o Dia dos Pais",
+          description:
+            "Peças criativas, úteis e personalizadas para presentear no Dia dos Pais.",
+          whatsappText:
+            "Olá! Quero um presente personalizado para o Dia dos Pais com a GVolt 3D",
+        },
+        {
+          slug: "dia_das_maes",
+          label: "Dia das Mães",
+          icon: "fa-heart-circle-check",
+          title: "Dia das <span>Mães</span>",
+          sectionTitle: "Presentes para o Dia das Mães",
+          description:
+            "Produtos personalizados para transformar uma lembrança em um presente especial.",
+          whatsappText:
+            "Olá! Quero um presente personalizado para o Dia das Mães com a GVolt 3D",
+        },
+        {
+          slug: "natal",
+          label: "Natal",
+          icon: "fa-tree",
+          title: "Coleção de <span>Natal</span>",
+          sectionTitle: "Produtos especiais de Natal",
+          description:
+            "Enfeites, lembranças e presentes personalizados para deixar o Natal mais criativo.",
+          whatsappText:
+            "Olá! Quero um produto personalizado de Natal com a GVolt 3D",
+        },
+        {
+          slug: "pascoa",
+          label: "Páscoa",
+          icon: "fa-egg",
+          title: "Coleção de <span>Páscoa</span>",
+          sectionTitle: "Produtos especiais de Páscoa",
+          description:
+            "Itens temáticos, lembranças e presentes criativos para a Páscoa.",
+          whatsappText:
+            "Olá! Quero um produto personalizado de Páscoa com a GVolt 3D",
+        },
+        {
+          slug: "halloween",
+          label: "Halloween",
+          icon: "fa-ghost",
+          title: "Coleção <span>Halloween</span>",
+          sectionTitle: "Produtos especiais de Halloween",
+          description:
+            "Peças temáticas e decorativas para deixar o Halloween mais divertido.",
+          whatsappText:
+            "Olá! Quero um produto personalizado de Halloween com a GVolt 3D",
+        },
+        {
+          slug: "outros",
+          label: "Outros sazonais",
+          icon: "fa-star",
+          title: "Outros <span>Sazonais</span>",
+          sectionTitle: "Outros produtos sazonais",
+          description:
+            "Produtos criados para campanhas, eventos e datas especiais fora das principais coleções.",
+          whatsappText:
+            "Olá! Quero um produto sazonal personalizado com a GVolt 3D",
+        },
+      ];
+
+      const DEFAULT_SEASONAL_CATEGORY = "dia_dos_namorados";
+
+      let allSeasonalProducts = [];
+      let activeCategory = getInitialCategory();
+
+      function getInitialCategory() {
+        const params = new URLSearchParams(window.location.search);
+        const category = params.get("categoria");
+
+        if (category === "todos") {
+          return "todos";
+        }
+
+        return SEASONAL_CATEGORIES.some((item) => item.slug === category)
+          ? category
+          : DEFAULT_SEASONAL_CATEGORY;
+      }
+
+      function getCategoryConfig(slug) {
+        return SEASONAL_CATEGORIES.find((item) => item.slug === slug) || null;
+      }
+
+      function formatPrice(value) {
+        return Number(value || 0).toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        });
+      }
+
+      function escapeHtml(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function cleanImageUrl(value) {
+        let text = String(value || "").trim();
+        if (!text) return "";
+
+        text = text
+          .replace(/&amp;/g, "&")
+          .replace(/&#38;/g, "&")
+          .replace(/&quot;/g, '"')
+          .replace(/&#039;/g, "'");
+
+        const urlFunction = text.match(/^url\((.*)\)$/i);
+        if (urlFunction) text = urlFunction[1];
+
+        for (let i = 0; i < 4; i += 1) {
+          text = text.trim();
+          text = text.replace(/^[\s'"`\[{]+/g, "");
+          text = text.replace(/[\s'"`\]};,]+$/g, "");
+        }
+
+        if (text.startsWith("(") && text.endsWith(")")) {
+          text = text.slice(1, -1).trim();
+        }
+
+        const httpIndex = text.search(/https?:\/\//i);
+        if (httpIndex > 0) text = text.slice(httpIndex);
+
+        text = text.trim();
+
+        if (
+          !text ||
+          ["null", "undefined", "false"].includes(text.toLowerCase())
+        ) {
+          return "";
+        }
+
+        return text;
+      }
+
+      function isUsableImageSource(value) {
+        const text = cleanImageUrl(value);
+        if (!text) return false;
+        if (/^[{\[<]/.test(text)) return false;
+
+        return (
+          /^https?:\/\//i.test(text) ||
+          /^data:image\//i.test(text) ||
+          /^blob:/i.test(text) ||
+          text.startsWith("assets/") ||
+          text.startsWith("./") ||
+          text.startsWith("../") ||
+          text.startsWith("/") ||
+          /\.(png|jpe?g|webp|gif|svg|avif)(\?.*)?$/i.test(text)
+        );
+      }
+
+      function uniqueImages(images) {
+        const seen = new Set();
+        const result = [];
+
+        images.forEach((item) => {
+          const url = cleanImageUrl(item);
+          if (!isUsableImageSource(url)) return;
+          if (seen.has(url)) return;
+
+          seen.add(url);
+          result.push(url);
+        });
+
+        return result;
+      }
+
+      function normalizeImageList(value) {
+        if (!value) return [];
+
+        if (Array.isArray(value)) {
+          return uniqueImages(
+            value.flatMap((item) => normalizeImageList(item)),
+          );
+        }
+
+        if (typeof value === "object") {
+          return normalizeImageList(
+            value.url ||
+              value.src ||
+              value.path ||
+              value.publicUrl ||
+              value.public_url ||
+              "",
+          );
+        }
+
+        const text = String(value).trim();
+        if (!text) return [];
+
+        try {
+          return normalizeImageList(JSON.parse(text));
+        } catch {
+          // Continua para tratar URL comum, lista separada por vírgula ou array do Postgres.
+        }
+
+        const urlMatches = Array.from(
+          text.matchAll(
+            /https?:\/\/.*?(?=(?:\s*[,;\n]\s*["']?\s*https?:\/\/)|$)/gis,
+          ),
+          (match) => match[0],
+        );
+
+        if (urlMatches.length) return uniqueImages(urlMatches);
+
+        return uniqueImages(
+          text
+            .split(/[\n,;]+/)
+            .map((item) => cleanImageUrl(item))
+            .filter(Boolean),
+        );
+      }
+
+      function getProductImages(product) {
+        return uniqueImages([
+          ...normalizeImageList(product.image),
+          ...normalizeImageList(product.images),
+        ]);
+      }
+
+      function preloadImage(src) {
+        return new Promise((resolve) => {
+          const url = cleanImageUrl(src);
+
+          if (!isUsableImageSource(url)) {
+            resolve("");
+            return;
+          }
+
+          if (url === FALLBACK_IMAGE) {
+            resolve(url);
+            return;
+          }
+
+          const tester = new Image();
+          let finished = false;
+
+          const finish = (ok) => {
+            if (finished) return;
+            finished = true;
+            clearTimeout(timeout);
+            resolve(ok ? url : "");
+          };
+
+          const timeout = setTimeout(() => finish(false), 6000);
+
+          tester.onload = () =>
+            finish(tester.naturalWidth > 0 && tester.naturalHeight > 0);
+          tester.onerror = () => finish(false);
+          tester.src = url;
+        });
+      }
+
+      async function getWorkingImages(images) {
+        const candidates = uniqueImages(images);
+        const checkedImages = await Promise.all(
+          candidates.map((url) => preloadImage(url)),
+        );
+        return uniqueImages(checkedImages.filter(Boolean));
+      }
+
+      async function getProductMainImage(product) {
+        const workingImages = await getWorkingImages(getProductImages(product));
+        return workingImages[0] || FALLBACK_IMAGE;
+      }
+
+      function imageFallbackAttribute() {
+        return `this.onerror=null;this.src='${FALLBACK_IMAGE}'`;
+      }
+
+      function getSeasonalLabel(product) {
+        if (product.seasonal_label) return product.seasonal_label;
+        const category = getCategoryConfig(product.seasonal_category);
+        return category ? category.label : "Sazonal";
+      }
+
+      function updateUrl(category) {
+        const url = new URL(window.location.href);
+
+        if (category === DEFAULT_SEASONAL_CATEGORY) {
+          url.searchParams.delete("categoria");
+        } else {
+          url.searchParams.set("categoria", category);
+        }
+
+        window.history.pushState({category}, "", url);
+      }
+
+      function renderCategoryButtons() {
+        const filters = [
+          {slug: "todos", label: "Todos", icon: "fa-layer-group"},
+          ...SEASONAL_CATEGORIES,
+        ];
+
+        categoryFilterBar.innerHTML = filters
+          .map(
+            (filter) => `
+            <button
+              type="button"
+              class="category-filter-button ${filter.slug === activeCategory ? "active" : ""}"
+              data-category="${filter.slug}"
+            >
+              <i class="fa-solid ${filter.icon}"></i>
+              ${escapeHtml(filter.label)}
+            </button>
+          `,
+          )
+          .join("");
+
+        categoryFilterBar
+          .querySelectorAll("[data-category]")
+          .forEach((button) => {
+            button.addEventListener("click", () => {
+              activeCategory = button.dataset.category;
+              updateUrl(activeCategory);
+              renderCurrentCategory();
+            });
+          });
+      }
+
+      function renderHero() {
+        const category = getCategoryConfig(activeCategory);
+
+        if (!category) {
+          heroEyebrow.innerHTML =
+            '<i class="fa-solid fa-gift"></i> Produtos sazonais';
+          heroTitle.innerHTML = "Produtos <span>Sazonais</span>";
+          heroDescription.textContent =
+            "Escolha uma campanha e veja produtos personalizados em impressão 3D para datas comemorativas. Você também pode pedir uma personalização pelo WhatsApp.";
+          sectionTitle.textContent = "Todos os produtos sazonais";
+          whatsappLink.href =
+            "https://wa.me/5519995325891?text=" +
+            encodeURIComponent(
+              "Olá! Quero um produto sazonal personalizado com a GVolt 3D",
+            );
+          return;
+        }
+
+        heroEyebrow.innerHTML = `<i class="fa-solid ${category.icon}"></i> Coleção especial`;
+        heroTitle.innerHTML = category.title;
+        heroDescription.textContent = category.description;
+        sectionTitle.textContent = category.sectionTitle;
+        whatsappLink.href =
+          "https://wa.me/5519995325891?text=" +
+          encodeURIComponent(category.whatsappText);
+      }
+
+      function getVisibleProducts() {
+        const products =
+          activeCategory === "todos"
+            ? allSeasonalProducts
+            : allSeasonalProducts.filter(
+                (product) => product.seasonal_category === activeCategory,
+              );
+
+        return [...products].sort((a, b) => {
+          const favoriteDiff =
+            Number(Boolean(b.is_favorite)) - Number(Boolean(a.is_favorite));
+          if (favoriteDiff !== 0) return favoriteDiff;
+          return String(a.name || "").localeCompare(
+            String(b.name || ""),
+            "pt-BR",
+          );
+        });
+      }
+
+      let renderProductsToken = 0;
+
+      async function renderProducts(products) {
+        const token = ++renderProductsToken;
+
+        container.innerHTML = "";
+        emptyState.hidden = products.length !== 0;
+
+        const category = getCategoryConfig(activeCategory);
+        const categoryText = category ? ` em ${category.label}` : "";
+
+        seasonalCount.textContent = products.length
+          ? `${products.length} produto${products.length > 1 ? "s" : ""}${categoryText}`
+          : `Nenhum produto cadastrado${categoryText}`;
+
+        if (!products.length) {
+          emptyState.innerHTML = category
+            ? `Nenhum produto encontrado para <strong>${escapeHtml(category.label)}</strong>. Marque um produto como sazonal na tela de edição/cadastro e escolha essa campanha.`
+            : "Nenhum produto sazonal cadastrado ainda. Marque um produto como sazonal na tela de edição/cadastro.";
+          return;
+        }
+
+        const cards = await Promise.all(
+          products.map(async (product) => {
+            const card = document.createElement("article");
+            const imageUrl = await getProductMainImage(product);
+
+            card.className = "product-card seasonal-product-card";
+            card.innerHTML = `
+              <a class="product-image" href="product.html?id=${encodeURIComponent(product.id)}" aria-label="Ver detalhes de ${escapeHtml(product.name)}">
+                <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(product.name)}" onerror="${imageFallbackAttribute()}">
+                <span class="seasonal-tag"><i class="fa-solid fa-heart"></i> ${escapeHtml(getSeasonalLabel(product))}</span>
+              </a>
+              <div class="product-card-body">
+                <h3>${escapeHtml(product.name)}</h3>
+                <p>${escapeHtml(product.description)}</p>
+                <strong>${formatPrice(product.price)}</strong>
+                <a class="details-link" href="product.html?id=${encodeURIComponent(product.id)}">
+                  Ver detalhes e comprar →
+                </a>
+              </div>
+            `;
+
+            card.addEventListener("click", (event) => {
+              if (event.target.closest("a")) return;
+              window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
+            });
+
+            return card;
+          }),
+        );
+
+        if (token !== renderProductsToken) return;
+
+        container.innerHTML = "";
+        cards.forEach((card) => container.appendChild(card));
+      }
+
+      async function renderCurrentCategory() {
+        renderCategoryButtons();
+        renderHero();
+        await renderProducts(getVisibleProducts());
+      }
+
+      async function loadSeasonalProducts() {
+        try {
+          // Carrega todos os produtos sem filtrar pelo Supabase para evitar erro de
+          // schema cache quando uma coluna foi criada recentemente. O filtro sazonal
+          // e a ordenação por favorito são feitos no JavaScript.
+          let {data, error} = await supabaseClient
+            .from("products")
+            .select("*")
+            .order("name", {ascending: true});
+
+          if (error) throw error;
+
+          allSeasonalProducts = (data || []).filter((product) => {
+            return (
+              product.is_seasonal === true ||
+              product.is_seasonal === "true" ||
+              product.is_seasonal === 1 ||
+              Boolean(product.seasonal_category)
+            );
+          });
+
+          await renderCurrentCategory();
+        } catch (error) {
+          console.error("Erro ao carregar produtos sazonais:", error);
+          emptyState.innerHTML =
+            "Não foi possível carregar os produtos sazonais. Veja o console do navegador para identificar o erro retornado pelo Supabase.";
+          emptyState.hidden = false;
+          seasonalCount.textContent = "Erro ao carregar produtos sazonais";
+          renderCategoryButtons();
+          renderHero();
+        }
+      }
+
+      window.addEventListener("popstate", () => {
+        activeCategory = getInitialCategory();
+        renderCurrentCategory();
+      });
+
+      renderCurrentCategory();
+      loadSeasonalProducts();
+
+      const menuToggle = document.getElementById("menu-toggle");
+      const navLinks = document.querySelector(".nav-links");
+      if (menuToggle && navLinks) {
+        menuToggle.addEventListener("click", () => {
+          navLinks.classList.toggle("show");
+        });
+      }
+    </script>
+  </body>
+</html>
