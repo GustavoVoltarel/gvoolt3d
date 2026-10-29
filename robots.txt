@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /admin-analytics.html
+Disallow: /admin-dashboard.html
+Disallow: /admin-orders.html
+Disallow: /admin-create.html
+Disallow: /admin-edit.html
+Disallow: /admin-delete.html
+Disallow: /admin-settings.html
+Disallow: /admin-calculator.html

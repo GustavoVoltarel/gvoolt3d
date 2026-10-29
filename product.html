@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link
@@ -17,25 +17,30 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
     <link rel="stylesheet" href="style.css" />
-    <link rel="icon" type="image/png" href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcxNDU2LCJleHAiOjQ5MzE3NzE0NTZ9.BXqHQJ7vzskF_NkliO4hJGsD96NCYQCjghncISquesg" />
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
-  </head>
+    <link rel="stylesheet" href="cyberpunk.css" />
+    <meta name="theme-color" content="#080e15" />
+      <link rel="stylesheet" href="gvolt-growth.css" />
+    <script defer src="gvolt-analytics.js"></script>
+<meta name="robots" content="index,follow" /><meta property="og:site_name" content="GVolt 3D" /><meta name="twitter:card" content="summary" />
+</head>
 
   <body>
     <div class="site-glow"></div>
 
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="GVolt 3D">
-        <img src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E" alt="Logo GVolt 3D" />
+        <img src="assets/logo-gvolt-gv.webp" alt="Logo GVolt 3D" />
         <span>GVolt <strong>3D</strong></span>
       </a>
 
       <nav class="nav-links" aria-label="Navegação principal">
         <a href="index.html#inicio">Início</a>
         <a href="index.html#produtos">Produtos</a>
-        <a href="sazonais.html">Dia dos Namorados</a>
+        <a href="personalizados.html">Personalizados</a>
         <a href="index.html#contato">Contato</a>
       </nav>
 
@@ -63,23 +68,24 @@
           <p class="eyebrow"><i class="fa-solid fa-bolt"></i> Produto GVolt 3D</p>
           <h1 id="product-name"></h1>
           <div class="rating" id="availability-info"></div>
+          <p class="detail-reassurance">Peça feita com atenção aos detalhes. Dúvidas sobre tamanho, material ou prazo? Consulte-nos antes de pedir.</p>
           <p id="product-price" class="price"></p>
           <p id="product-description" class="description"></p>
           <table id="technical-specs-table" class="technical-specs"></table>
 
-          <a id="buy-button" class="buy-button" href="#" target="_blank">
-            <i class="fa-brands fa-whatsapp"></i> Fazer pedido no WhatsApp
-          </a>
+          <div class="detail-buy-actions"><label for="orderQuantity">Quantidade<input type="number" id="orderQuantity" value="1" min="1" max="99" inputmode="numeric" /></label>
+            <a id="buy-button" class="buy-button" href="#" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Solicitar pelo WhatsApp</a>
+            <small>Preço e prazo são confirmados na conversa antes da produção.</small></div>
         </div>
       </section>
     </main>
 
     <footer class="footer">
       <div class="footer-brand">
-        <img src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E" alt="Logo GVolt 3D" />
+        <img src="assets/logo-gvolt-gv.webp" alt="Logo GVolt 3D" />
         <strong>GVolt <span>3D</span></strong>
       </div>
-      <p>Soluções criativas em impressão 3D.</p>
+      <p>Suas ideias ganham forma. Miniaturas, presentes e criações personalizadas.</p>
       <a href="https://wa.me/5519995325891" target="_blank">
         <i class="fa-brands fa-whatsapp"></i> Fale conosco
       </a>
@@ -348,18 +354,38 @@
         techTable.appendChild(tbody);
       }
 
+      function updateProductMetadata(product){
+        const description=String(product.description||product.long_description||'Produto personalizado GVolt 3D').replace(/\s+/g,' ').slice(0,180);
+        const setMeta=(attr,name,value)=>{let e=document.querySelector(`meta[${attr}="${name}"]`);if(!e){e=document.createElement('meta');e.setAttribute(attr,name);document.head.appendChild(e)}e.content=value};
+        setMeta('name','description',description);
+        setMeta('property','og:type','product');
+        setMeta('property','og:site_name','GVolt 3D');
+        setMeta('property','og:title',`${product.name} | GVolt 3D`);
+        setMeta('property','og:description',description);
+        setMeta('name','twitter:card','summary');
+        let canonical=document.querySelector('link[rel="canonical"]');if(!canonical){canonical=document.createElement('link');canonical.rel='canonical';document.head.appendChild(canonical)}canonical.href=window.location.origin+window.location.pathname+'?id='+encodeURIComponent(product.id);
+        const pictures=getProductImages(product).filter(x=>/^https?:\/\//.test(x));
+        if(pictures.length)setMeta('property','og:image',pictures[0]);
+        // JSON-LD após consulta ao Supabase; robôs de redes sociais normalmente não executam JavaScript.
+        const schema={'@context':'https://schema.org','@type':'Product',name:product.name,description,sku:String(product.id),brand:{'@type':'Brand',name:'GVolt 3D'},url:canonical.href};
+        if(pictures.length)schema.image=pictures;
+        const price=Number(product.price);
+        if(price>0&&Number.isFinite(price))schema.offers={'@type':'Offer',price:price.toFixed(2),priceCurrency:'BRL',availability:/estoque/i.test(product.availability||'')?'https://schema.org/InStock':'https://schema.org/PreOrder',url:canonical.href};
+        let el=document.getElementById('product-jsonld');if(!el){el=document.createElement('script');el.id='product-jsonld';el.type='application/ld+json';document.head.appendChild(el)}el.textContent=JSON.stringify(schema).replace(/</g,'\\u003c');
+      }
+
       async function renderProduct(product) {
         document.title = `${product.name} | GVolt 3D`;
         document.getElementById("product-name").textContent = product.name || "Produto";
-        document.getElementById("product-description").innerHTML = String(
+        document.getElementById("product-description").textContent = String(
           product.long_description || product.longDescription || product.description || "",
-        ).replace(/\n/g, "<br>");
+        );
         document.getElementById("product-price").textContent = formatPrice(product.price);
 
         const availability = product.availability || "";
         const leadTime = product.lead_time_days || product.leadTimeDays || "";
         document.getElementById("availability-info").innerHTML = `
-          <span style="color:${availability === "Em estoque" ? "#25d366" : "#f02dff"}">
+          <span style="color:${availability === "Em estoque" ? "#25d366" : "#00ddee"}">
             ● ${availability || "Sob consulta"}
           </span>
           ${leadTime ? ` • Prazo: ${leadTime} dias` : ""}
@@ -368,16 +394,19 @@
         renderTechnicalSpecs(product);
         await renderProductGallery(getProductImages(product));
 
-        const message = encodeURIComponent(
-          `Olá! Quero comprar este produto 👇
-
-${product.name}
-${formatPrice(product.price)}
-
-Você pode me passar mais detalhes?`,
-        );
-        document.getElementById("buy-button").href =
-          "https://wa.me/5519995325891?text=" + message;
+        const qty=document.getElementById('orderQuantity');
+        const btn=document.getElementById('buy-button');
+        btn.dataset.productId=product.id;
+        function updateWhatsApp(){
+          const count=Math.min(99,Math.max(1,Number.parseInt(qty.value,10)||1));
+          const url=new URL(window.location.href);url.hash='';
+          const message=["Olá! Gostaria de pedir um produto da GVolt 3D:","",`Produto: ${product.name}`,`Quantidade: ${count}`,`Preço anunciado (unidade): ${formatPrice(product.price)}`,`Link: ${url.href}`,"", "Podemos confirmar disponibilidade, valor final e prazo?"].join('\n');
+          btn.href='https://wa.me/5519995325891?text='+encodeURIComponent(message);
+        }
+        qty.addEventListener('input',updateWhatsApp);
+        updateWhatsApp();
+        window.GVoltAnalytics?.track('product_view',product.id);
+        updateProductMetadata(product);
       }
 
       async function loadProduct() {
@@ -390,27 +419,22 @@ Você pode me passar mais detalhes?`,
         }
 
         try {
-          const { data, error } = await supabaseClient
+          const {data, error} = await supabaseClient
             .from("products")
             .select("*")
             .eq("id", productId)
-            .single();
-
+            .eq("is_active", true)
+            .maybeSingle();
           if (error) throw error;
-          if (!data) throw new Error("Produto não encontrado.");
-          await renderProduct(data);
-        } catch (err) {
-          console.warn("Falha ao carregar produto via Supabase. Tentando products.json...", err);
-
-          try {
-            const response = await fetch("products.json");
-            const products = await response.json();
-            const product = products.find((item) => String(item.id) === String(productId));
-            if (!product) throw new Error("Produto não encontrado.");
-            await renderProduct(product);
-          } catch (error) {
-            container.innerHTML = '<p class="empty-message">Produto não encontrado.</p>';
+          if (!data) {
+            container.innerHTML = '<p class="empty-message">Este anúncio está pausado ou não está disponível no momento. <a href="index.html#produtos">Ver outros produtos</a>.</p>';
+            return;
           }
+          await renderProduct(data);
+        } catch (error) {
+          console.error("Falha ao consultar a disponibilidade do anúncio:", error);
+          // Não use products.json como fallback: seria possível exibir anúncios pausados.
+          container.innerHTML = '<p class="empty-message">Não foi possível consultar este anúncio agora. <a href="index.html#produtos">Voltar ao catálogo</a>.</p>';
         }
       }
 
@@ -424,5 +448,6 @@ Você pode me passar mais detalhes?`,
         });
       }
     </script>
-  </body>
+  <a class="mobile-whatsapp" href="https://wa.me/5519995325891?text=Ol%C3%A1%21%20Tenho%20uma%20d%C3%BAvida%20sobre%20um%20produto%20da%20GVolt%203D." target="_blank" rel="noopener" aria-label="Dúvidas? Fale com a GVolt 3D"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Orçamento pelo WhatsApp</a>
+</body>
 </html>

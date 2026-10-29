@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link
@@ -23,7 +23,7 @@
     <link
       rel="icon"
       type="image/png"
-      href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcxNDU2LCJleHAiOjQ5MzE3NzE0NTZ9.BXqHQJ7vzskF_NkliO4hJGsD96NCYQCjghncISquesg"
+      href="assets/favicon.png"
     />
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -35,22 +35,22 @@
         margin: 28px auto 34px;
         padding: clamp(26px, 6vw, 68px);
         min-height: 440px;
-        border: 1px solid rgba(255, 145, 190, 0.42);
+        border: 1px solid rgba(0, 221, 238, 0.42);
         border-radius: 34px;
         background:
           radial-gradient(
             circle at 18% 18%,
-            rgba(255, 71, 135, 0.25),
+            rgba(252, 238, 10, 0.25),
             transparent 35%
           ),
           radial-gradient(
             circle at 86% 22%,
-            rgba(184, 50, 255, 0.28),
+            rgba(252, 238, 10, 0.28),
             transparent 34%
           ),
-          linear-gradient(135deg, rgba(24, 4, 28, 0.96), rgba(5, 1, 13, 0.98));
+          linear-gradient(135deg, rgba(15, 23, 32, 0.96), rgba(5, 1, 13, 0.98));
         box-shadow:
-          0 0 38px rgba(255, 71, 135, 0.22),
+          0 0 38px rgba(252, 238, 10, 0.22),
           var(--shadow);
         display: grid;
         grid-template-columns: 1fr 0.8fr;
@@ -69,7 +69,7 @@
         height: 520px;
         border-radius: 50%;
         border: 1px solid rgba(255, 255, 255, 0.14);
-        box-shadow: 0 0 90px rgba(255, 71, 135, 0.18);
+        box-shadow: 0 0 90px rgba(252, 238, 10, 0.18);
       }
 
       .seasonal-hero > * {
@@ -79,20 +79,20 @@
 
       .seasonal-hero h1 {
         margin: 0;
-        font-family: "Orbitron", sans-serif;
+        font-family: "Oxanium", sans-serif;
         font-size: clamp(2.25rem, 6.4vw, 5.2rem);
         line-height: 0.95;
         text-transform: uppercase;
       }
 
       .seasonal-hero h1 span {
-        color: #ff7bb7;
-        text-shadow: 0 0 22px rgba(255, 71, 135, 0.72);
+        color: #00ddee;
+        text-shadow: 0 0 22px rgba(252, 238, 10, 0.72);
       }
 
       .seasonal-hero p {
         max-width: 650px;
-        color: #eadff3;
+        color: #c2d1d4;
         font-size: clamp(1rem, 2vw, 1.22rem);
         line-height: 1.7;
         margin: 20px 0 28px;
@@ -120,7 +120,7 @@
       }
 
       .seasonal-panel i {
-        color: #ff7bb7;
+        color: #00ddee;
         margin-right: 8px;
       }
 
@@ -170,13 +170,13 @@
       .category-filter-button:hover,
       .category-filter-button.active {
         transform: translateY(-1px);
-        border-color: rgba(255, 123, 183, 0.65);
+        border-color: rgba(0, 221, 238, 0.65);
         background: linear-gradient(
           135deg,
-          rgba(255, 79, 148, 0.24),
-          rgba(184, 50, 255, 0.2)
+          rgba(252, 238, 10, 0.24),
+          rgba(252, 238, 10, 0.2)
         );
-        box-shadow: 0 0 20px rgba(255, 71, 135, 0.14);
+        box-shadow: 0 0 20px rgba(252, 238, 10, 0.14);
       }
 
       .seasonal-products {
@@ -186,7 +186,7 @@
 
       .seasonal-product-card {
         position: relative;
-        border-color: rgba(255, 145, 190, 0.38);
+        border-color: rgba(0, 221, 238, 0.38);
       }
 
       .seasonal-tag {
@@ -198,12 +198,12 @@
         gap: 6px;
         padding: 9px 12px;
         border-radius: 999px;
-        background: linear-gradient(135deg, #ff4f94, var(--purple-strong));
+        background: linear-gradient(135deg, #fcee0a, var(--purple-strong));
         color: #fff;
         font-size: 0.78rem;
         font-weight: 800;
         z-index: 1;
-        box-shadow: 0 0 22px rgba(255, 71, 135, 0.42);
+        box-shadow: 0 0 22px rgba(252, 238, 10, 0.42);
       }
 
       .empty-state {
@@ -229,7 +229,12 @@
         }
       }
     </style>
-  </head>
+    <link rel="stylesheet" href="cyberpunk.css" />
+    <meta name="theme-color" content="#080e15" />
+      <link rel="stylesheet" href="gvolt-growth.css" />
+    <script defer src="gvolt-analytics.js"></script>
+<meta property="og:type" content="website" /><meta property="og:site_name" content="GVolt 3D" /><meta name="robots" content="index,follow" />
+</head>
 
   <body>
     <div class="site-glow"></div>
@@ -237,7 +242,7 @@
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="GVolt 3D">
         <img
-          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          src="assets/logo-gvolt-gv.webp"
           alt="Logo GVolt 3D"
         />
         <span>GVolt <strong>3D</strong></span>
@@ -246,7 +251,7 @@
       <nav class="nav-links" aria-label="Navegação principal">
         <a href="index.html#inicio">Início</a>
         <a href="index.html#produtos">Produtos</a>
-        <a href="sazonais.html">Dia dos Namorados</a>
+        <a href="personalizados.html">Personalizados</a>
         <a href="index.html#contato">Contato</a>
       </nav>
 
@@ -332,12 +337,12 @@
     <footer class="footer" id="contato">
       <div class="footer-brand">
         <img
-          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          src="assets/logo-gvolt-gv.webp"
           alt="Logo GVolt 3D"
         />
         <strong>GVolt <span>3D</span></strong>
       </div>
-      <p>Soluções criativas em impressão 3D.</p>
+      <p>Suas ideias ganham forma. Miniaturas, presentes e criações personalizadas.</p>
       <a href="https://wa.me/5519995325891" target="_blank">
         <i class="fa-brands fa-whatsapp"></i> Fale conosco
       </a>
@@ -820,12 +825,13 @@
           let {data, error} = await supabaseClient
             .from("products")
             .select("*")
+            .eq("is_active", true)
             .order("name", {ascending: true});
 
           if (error) throw error;
 
           allSeasonalProducts = (data || []).filter((product) => {
-            return (
+            return product.is_active === true && (
               product.is_seasonal === true ||
               product.is_seasonal === "true" ||
               product.is_seasonal === 1 ||
@@ -861,5 +867,6 @@
         });
       }
     </script>
-  </body>
+  <a class="mobile-whatsapp" href="https://wa.me/5519995325891?text=Ol%C3%A1%21%20Quero%20fazer%20um%20or%C3%A7amento%20com%20a%20GVolt%203D." target="_blank" rel="noopener" aria-label="Peça um orçamento pelo WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Orçamento pelo WhatsApp</a>
+</body>
 </html>

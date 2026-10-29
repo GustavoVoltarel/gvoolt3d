@@ -1,0 +1,299 @@
+/* ===============================================================
+   GVOLT 3D | Cyberpunk — Administração (ajustes responsivos)
+   Carregue este arquivo DEPOIS de style.css e cyberpunk.css.
+   Escopo isolado: não afeta a loja pública.
+   =============================================================== */
+body.admin-interface {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: clip;
+}
+
+body.admin-interface .topbar {
+  flex: 0 0 auto;
+}
+
+/* Layout básico ausente no admin.html, admin-list.html,
+   admin-delete.html e admin-calculation-details.html. */
+body.admin-interface .admin-page {
+  box-sizing: border-box;
+  flex: 1 0 auto;
+  width: min(1080px, calc(100% - 32px)) !important;
+  min-width: 0;
+  margin: 30px auto 38px !important;
+  padding: clamp(22px, 3.3vw, 42px) !important;
+  border: 1px solid rgba(0, 221, 238, .27) !important;
+  border-radius: 9px !important;
+  background: linear-gradient(135deg, #111e28 0%, #0a131b 100%) !important;
+  box-shadow: 0 24px 65px rgba(0, 0, 0, .24) !important;
+}
+body.admin-interface .admin-page > h2 {
+  margin: 0 0 26px;
+  text-align: center;
+  color: var(--yellow);
+  font: 800 clamp(1.35rem, 2.6vw, 1.9rem)/1.2 'Oxanium', system-ui, sans-serif;
+}
+body.admin-interface .admin-page > .page-header {
+  margin-bottom: 24px;
+}
+body.admin-interface .admin-page > .page-header h2 {
+  margin: 0;
+}
+
+/* Cartão de acesso: igual em todas as 12 telas. */
+body.admin-interface #login-container {
+  position: relative;
+  width: min(460px, 100%) !important;
+  max-width: 100%;
+  margin: 14px auto 14px !important;
+  padding: clamp(22px, 4vw, 34px) !important;
+  border: 1px solid rgba(0, 221, 238, .38) !important;
+  border-radius: 9px !important;
+  background:
+    linear-gradient(130deg, rgba(0, 221, 238, .055), transparent 60%),
+    #0b1720 !important;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, .26), inset 0 1px rgba(255,255,255,.04) !important;
+  text-align: left;
+}
+body.admin-interface #login-container::before {
+  content: 'ACESSO AO PAINEL';
+  display: block;
+  margin-bottom: 23px;
+  padding: 0 0 14px;
+  border-bottom: 1px solid rgba(0, 221, 238, .22);
+  color: var(--cyan);
+  font: 700 .72rem/1.4 'Oxanium', system-ui, sans-serif;
+  letter-spacing: .16em;
+}
+body.admin-interface #login-container .form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  margin: 0 0 18px !important;
+  min-width: 0;
+}
+body.admin-interface #login-container label {
+  display: block;
+  width: 100%;
+  margin: 0;
+  color: #d6e7eb;
+  font: 700 .96rem/1.25 'Rajdhani', system-ui, sans-serif;
+}
+body.admin-interface #login-container input {
+  display: block;
+  width: 100% !important;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 48px;
+  padding: 11px 14px !important;
+  border: 1px solid rgba(0, 221, 238, .34) !important;
+  border-radius: 5px !important;
+  background: #09121a !important;
+  color: #f5f9fa !important;
+  font: 600 1.05rem/1.3 'Rajdhani', system-ui, sans-serif;
+  transition: border-color .18s, box-shadow .18s;
+}
+body.admin-interface #login-container input:focus {
+  border-color: var(--cyan) !important;
+  outline: 2px solid rgba(0, 221, 238, .15);
+  outline-offset: 0;
+  box-shadow: 0 0 0 3px rgba(0,221,238,.11);
+}
+body.admin-interface #login-container input::placeholder {
+  color: #879fa9;
+}
+body.admin-interface #login-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 8px;
+  font-size: .95rem;
+  cursor: pointer;
+}
+body.admin-interface #login-message:not([hidden]) {
+  display: block;
+  overflow-wrap: anywhere;
+  margin: 18px 0 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 133, 133, .3);
+  border-radius: 4px;
+  background: rgba(255, 80, 80, .06);
+  color: #ffb2b2;
+}
+/* Garante o comportamento de autenticação, inclusive onde outras
+   regras definem display:flex/block nos painéis. */
+body.admin-interface [hidden] {
+  display: none !important;
+}
+
+/* Conteúdo autenticado: dimensões previsíveis e tabelas utilizáveis. */
+body.admin-interface .admin-page > [id$='-container']:not(#login-container) {
+  min-width: 0;
+  max-width: 100%;
+}
+body.admin-interface #list-container,
+body.admin-interface #manage-container,
+body.admin-interface #details-container,
+body.admin-interface #calc-container,
+body.admin-interface #settings-container {
+  overflow-x: auto;
+}
+body.admin-interface .admin-page table {
+  width: 100%;
+  border-collapse: collapse;
+}
+body.admin-interface .admin-page .form-group input,
+body.admin-interface .admin-page .form-group select,
+body.admin-interface .admin-page .form-group textarea {
+  max-width: 100%;
+}
+body.admin-interface .admin-page :is(h2,h3) {
+  overflow-wrap: anywhere;
+}
+body.admin-interface .admin-page .message {
+  overflow-wrap: anywhere;
+}
+body.admin-interface .footer {
+  flex: 0 0 auto;
+  margin-top: auto;
+}
+
+/* Símbolo do menu independe da carga do Font Awesome. */
+body.admin-interface .menu-toggle span[aria-hidden="true"] {
+  font-family: system-ui, sans-serif;
+  font-size: 1.65rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* O menu com sete módulos não cabe num cabeçalho intermediário.
+   Exibe hamburger antes da navegação começar a ficar espremida. */
+@media (max-width: 1180px) {
+  body.admin-interface .topbar {
+    justify-content: space-between;
+  }
+  body.admin-interface .menu-toggle {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    position: relative;
+    z-index: 10001;
+    color: var(--yellow);
+  }
+  body.admin-interface .nav-links {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    left: auto;
+    z-index: 10000;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 3px;
+    width: min(310px, calc(100vw - 32px));
+    min-width: 0;
+    max-height: calc(100svh - 120px);
+    overflow-y: auto;
+    margin: 0;
+    padding: 12px;
+    background: #0b1720 !important;
+    border: 1px solid rgba(0,221,238,.45);
+    border-radius: 7px;
+    box-shadow: 0 18px 50px rgba(0,0,0,.55) !important;
+  }
+  body.admin-interface .nav-links.show {
+    display: flex;
+  }
+  body.admin-interface .nav-links a {
+    padding: 12px 14px;
+    text-align: left;
+    white-space: normal;
+    font-size: .95rem;
+    border-radius: 4px;
+  }
+  body.admin-interface .nav-links a.active::after {
+    display: none;
+  }
+  body.admin-interface .nav-links a.active {
+    background: rgba(252,238,10,.09);
+  }
+}
+@media (max-width: 620px) {
+  body.admin-interface .admin-page {
+    width: calc(100% - 24px) !important;
+    margin: 18px auto 26px !important;
+    padding: 22px 15px !important;
+  }
+  body.admin-interface #login-container {
+    padding: 22px 18px !important;
+    margin-top: 18px !important;
+  }
+  body.admin-interface .admin-page > h2 {
+    margin-bottom: 22px;
+    font-size: 1.35rem;
+  }
+  body.admin-interface .topbar {
+    width: calc(100% - 24px);
+  }
+  body.admin-interface .footer {
+    width: calc(100% - 24px);
+    padding: 20px 16px;
+  }
+  body.admin-interface #delete-container .buttons {
+    flex-wrap: wrap;
+  }
+}
+
+/* GVOLT 3D — estado de publicação de anúncios (independente do estoque) */
+body.admin-interface .product-admin-toolbar {
+  display:flex;align-items:center;flex-wrap:wrap;gap:10px 16px;
+  padding:14px 16px;margin:14px 0 18px;
+  border:1px solid rgba(0,221,238,.21);border-radius:7px;
+  background:#0a1820;
+}
+body.admin-interface .product-admin-toolbar label {
+  font:700 .83rem 'Oxanium',sans-serif;color:#d8eef1;
+}
+body.admin-interface .product-admin-toolbar select {
+  min-height:40px;min-width:150px;padding:7px 12px;
+  color:#edf9fb;background:#102430;border:1px solid rgba(0,221,238,.45);
+}
+body.admin-interface .product-admin-count {color:#8eacb5;font-weight:600;margin-left:auto;}
+body.admin-interface .product-row-paused td:not(.actions) {color:#9cb4be;}
+body.admin-interface .product-publish-badge {
+  display:inline-flex;align-items:center;padding:5px 10px;
+  border:1px solid transparent;border-radius:4px;
+  font:700 .72rem/1.3 'Oxanium',sans-serif;white-space:nowrap;
+}
+body.admin-interface .product-publish-badge.is-published {
+  color:#adffd3;background:rgba(40,170,111,.11);border-color:rgba(48,201,119,.36);
+}
+body.admin-interface .product-publish-badge.is-paused {
+  color:#ffd58d;background:rgba(252,177,10,.10);border-color:rgba(252,177,10,.36);
+}
+body.admin-interface .product-toggle-button {
+  border:1px solid rgba(0,221,238,.38) !important;
+  background:rgba(0,221,238,.07) !important;
+  padding:8px 11px !important;border-radius:4px;color:#6cecf6 !important;
+  font:700 .79rem 'Oxanium',sans-serif !important;white-space:nowrap;
+  transition:background .16s,border-color .16s;
+}
+body.admin-interface .product-toggle-button.pause {
+  color:#ffd37d !important;border-color:rgba(252,177,10,.4) !important;
+  background:rgba(252,177,10,.06) !important;
+}
+body.admin-interface .product-toggle-button:hover:not(:disabled) {background:rgba(0,221,238,.17) !important;}
+body.admin-interface .product-toggle-button.pause:hover:not(:disabled) {background:rgba(252,177,10,.14) !important;}
+body.admin-interface .product-toggle-button:disabled {opacity:.55;cursor:wait !important;}
+body.admin-interface #products-table td.actions {gap:10px;}
+@media(max-width:700px) {
+  body.admin-interface .product-admin-count {width:100%;margin-left:0;}
+  body.admin-interface #products-table td.actions {display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;}
+}

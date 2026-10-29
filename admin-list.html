@@ -6,12 +6,12 @@
     <title>Gerenciar Produtos | GVolt 3D</title>
     <meta
       name="description"
-      content="Lista de produtos cadastrados e opções para editar ou apagar."
+      content="Lista de anúncios para editar, pausar ou reativar."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link
@@ -54,23 +54,30 @@
         text-decoration: underline;
       }
     </style>
+    <link rel="stylesheet" href="cyberpunk.css" />
+    <link rel="stylesheet" href="admin-cyberpunk.css" />
+    <meta name="theme-color" content="#080e15" />
   </head>
-  <body>
+  <body class="admin-interface">
     <div class="site-glow"></div>
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="GVolt 3D">
         <!-- Usa a nova logo do site -->
         <img
-          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          src="assets/logo-gvolt-gv.webp"
           alt="Logo GVolt 3D"
         />
         <span>GVolt <strong>3D</strong></span>
       </a>
       <nav class="nav-links" aria-label="Navegação principal">
+        <a href="admin-dashboard.html">Gestão</a>
         <a href="index.html">Início</a>
         <a href="index.html#produtos">Produtos</a>
         <a href="index.html#contato">Contato</a>
       </nav>
+      <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+        <span aria-hidden="true">☰</span>
+      </button>
     </header>
     <main class="admin-page">
       <h2>Gerenciar Produtos</h2>
@@ -90,7 +97,12 @@
 
       <!-- Área de listagem -->
       <div id="list-container" hidden>
-        <p>Lista de produtos cadastrados:</p>
+        <p>Anúncios publicados e pausados:</p>
+        <div class="product-admin-toolbar">
+          <label for="product-status-filter">Exibir anúncios</label>
+          <select id="product-status-filter"><option value="all">Todos</option><option value="active">Publicados</option><option value="paused">Pausados</option></select>
+          <span id="product-status-count" class="product-admin-count" aria-live="polite"></span>
+        </div>
         <table id="products-table">
           <thead>
             <tr>
@@ -98,6 +110,7 @@
               <th>Nome</th>
               <th>Preço</th>
               <th>Disponibilidade</th>
+              <th>Anúncio</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -113,7 +126,7 @@
       <div class="footer-brand">
         <!-- Usa a nova logo do site -->
         <img
-          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          src="assets/logo-gvolt-gv.webp"
           alt="Logo GVolt 3D"
         />
         <strong>GVolt <span>3D</span></strong>
@@ -201,43 +214,111 @@
           showLogin();
         });
 
+      let adminProducts = [];
+      document.getElementById("product-status-filter").addEventListener("change", renderAdminProducts);
+
+      function renderAdminProducts() {
+        const filter = document.getElementById("product-status-filter").value;
+        const published = adminProducts.filter(p => p.is_active).length;
+        document.getElementById("product-status-count").textContent =
+          `${published} publicado(s) · ${adminProducts.length-published} pausado(s)`;
+        productsBody.innerHTML = "";
+        const visible = adminProducts.filter(p => filter === "all" || (filter === "active" ? p.is_active : !p.is_active));
+        if (!visible.length) {
+          const tr = document.createElement("tr");
+          const td = document.createElement("td");
+          td.colSpan = 6;
+          td.textContent = adminProducts.length ? "Nenhum anúncio neste filtro." : "Nenhum produto cadastrado.";
+          tr.appendChild(td);
+          productsBody.appendChild(tr);
+        }
+        for (const prod of visible) {
+          const tr = document.createElement("tr");
+          if (!prod.is_active) tr.classList.add("product-row-paused");
+          const add = (label, value) => {
+            const td = document.createElement("td");
+            td.setAttribute("data-label", label);
+            td.textContent = value == null ? "" : String(value);
+            tr.appendChild(td);
+            return td;
+          };
+          add("ID", prod.id);
+          add("Nome", prod.name);
+          add("Preço", Number(prod.price || 0).toLocaleString("pt-BR", {style:"currency",currency:"BRL"}));
+          add("Disponibilidade", prod.availability || "");
+          const status = add("Anúncio", "");
+          const badge = document.createElement("span");
+          badge.className = `product-publish-badge ${prod.is_active ? "is-published" : "is-paused"}`;
+          badge.textContent = prod.is_active ? "Publicado" : "Pausado";
+          status.appendChild(badge);
+          const actions = add("Ações", "");
+          actions.className = "actions";
+          const edit = document.createElement("a");
+          edit.href = `admin-edit.html?id=${encodeURIComponent(prod.id)}`;
+          edit.textContent = "Editar";
+          const toggle = document.createElement("button");
+          toggle.type = "button";
+          toggle.className = `product-toggle-button ${prod.is_active ? "pause" : "activate"}`;
+          toggle.textContent = prod.is_active ? "Pausar anúncio" : "Reativar anúncio";
+          toggle.addEventListener("click", () => toggleProductState(prod, toggle));
+          actions.append(edit, toggle);
+          productsBody.appendChild(tr);
+        }
+      }
+
+      async function toggleProductState(prod, button) {
+        const current = prod.is_active;
+        const next = !current;
+        button.disabled = true;
+        button.textContent = "Salvando...";
+        listMessage.hidden = true;
+        try {
+          const {data,error} = await supabaseClient.from("products")
+            .update({is_active:next}).eq("id",prod.id).eq("is_active",current)
+            .select("id,is_active").single();
+          if(error) throw error;
+          if(!data || data.is_active !== next) throw new Error("Atualize a página e tente novamente.");
+          prod.is_active = next;
+          renderAdminProducts();
+          listMessage.textContent = next ? `“${prod.name}” reativado.` : `“${prod.name}” pausado.`;
+          listMessage.className = "message success";
+          listMessage.hidden = false;
+        } catch(e) {
+          button.disabled = false;
+          button.textContent = current ? "Pausar anúncio" : "Reativar anúncio";
+          listMessage.textContent = e.message || "Erro ao atualizar anúncio.";
+          listMessage.className = "message error";
+          listMessage.hidden = false;
+        }
+      }
+
       async function loadProducts() {
         listMessage.hidden = true;
-        productsBody.innerHTML = "";
-        const {data, error} = await supabaseClient
-          .from("products")
-          .select("id, name, price, availability");
-        if (error) {
-          listMessage.textContent =
-            error.message || "Erro ao carregar produtos.";
+        const {data,error} = await supabaseClient.from("products")
+          .select("id,name,price,availability,is_active")
+          .order("name", {ascending:true});
+        if(error) {
+          listMessage.textContent = error.message || "Erro ao carregar produtos.";
           listMessage.className = "message error";
           listMessage.hidden = false;
           return;
         }
-        if (!data || data.length === 0) {
-          listMessage.textContent = "Nenhum produto cadastrado.";
-          listMessage.className = "message";
-          listMessage.hidden = false;
-          return;
-        }
-        data.forEach((prod) => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${prod.id}</td>
-            <td>${prod.name}</td>
-            <td>R$ ${prod.price.toFixed(2)}</td>
-            <td>${prod.availability || ""}</td>
-            <td class="actions">
-              <a href="admin-edit.html?id=${encodeURIComponent(prod.id)}">Editar</a>
-              <a href="admin-delete.html?id=${encodeURIComponent(prod.id)}">Apagar</a>
-            </td>
-          `;
-          productsBody.appendChild(tr);
-        });
+        adminProducts = (data || []).map(p=>({...p,is_active:p.is_active!==false}));
+        renderAdminProducts();
       }
 
       // Inicializa verificação
       checkSession();
+    </script>
+    <script>
+      const adminMenuToggle = document.getElementById('menu-toggle');
+      const adminNavLinks = document.querySelector('.nav-links');
+      if (adminMenuToggle && adminNavLinks) {
+        adminMenuToggle.addEventListener('click', () => {
+          const opened = adminNavLinks.classList.toggle('show');
+          adminMenuToggle.setAttribute('aria-expanded', String(opened));
+        });
+      }
     </script>
   </body>
 </html>

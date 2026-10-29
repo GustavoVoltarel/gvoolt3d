@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
@@ -27,7 +27,7 @@
     <link
       rel="icon"
       type="image/png"
-      href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcyMDYyLCJleHAiOjQ5MzE3NzIwNjJ9.1vnoc_Ib-MghMmvi6Pm5kXpz-qCW2Q0OYxxgzZz5Fx8"
+      href="assets/favicon.png"
     />
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -81,7 +81,7 @@
       .summary-card.highlight strong {
         color: var(--purple);
         font-size: 1.25rem;
-        text-shadow: 0 0 14px rgba(184, 50, 255, 0.55);
+        text-shadow: 0 0 14px rgba(252, 238, 10, 0.55);
       }
 
       .detail-section {
@@ -165,21 +165,25 @@
         }
       }
     </style>
+    <link rel="stylesheet" href="cyberpunk.css" />
+    <link rel="stylesheet" href="admin-cyberpunk.css" />
+    <meta name="theme-color" content="#080e15" />
   </head>
 
-  <body>
+  <body class="admin-interface">
     <div class="site-glow"></div>
 
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="GVolt 3D">
         <img
-          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          src="assets/logo-gvolt-gv.webp"
           alt="Logo GVolt 3D"
         />
         <span>GVolt <strong>3D</strong></span>
       </a>
 
       <nav class="nav-links" aria-label="Navegação principal">
+        <a href="admin-dashboard.html">Gestão</a>
         <a href="admin.html">Produtos</a>
         <a href="admin-filaments.html">Filamentos</a>
         <a href="admin-printers.html">Impressoras</a>
@@ -190,7 +194,7 @@
       </nav>
 
       <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
-        <i class="fa-solid fa-bars"></i>
+        <span aria-hidden="true">☰</span>
       </button>
     </header>
 
@@ -294,7 +298,7 @@
     <footer class="footer">
       <div class="footer-brand">
         <img
-          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          src="assets/logo-gvolt-gv.webp"
           alt="Logo GVolt 3D"
         />
         <strong>GVolt <span>3D</span></strong>

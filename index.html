@@ -3,16 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GVolt 3D | Impressão 3D personalizada</title>
+    <title>GVolt 3D | Miniaturas, presentes e impressão 3D personalizada</title>
     <meta
       name="description"
-      content="Produtos personalizados de impressão 3D com acabamento premium. Conheça a GVolt 3D."
+      content="Miniaturas, presentes e peças personalizadas em impressão 3D. Suas ideias ganham forma na GVolt 3D."
     />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link
@@ -24,17 +24,18 @@
     <link
       rel="icon"
       type="image/png"
-      href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcxNDU2LCJleHAiOjQ5MzE3NzE0NTZ9.BXqHQJ7vzskF_NkliO4hJGsD96NCYQCjghncISquesg"
+      href="assets/favicon.png"
     />
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
+    <link rel="stylesheet" href="store-experience.css" />
 
     <style>
       .product-card.featured {
-        border-color: rgba(240, 45, 255, 0.62);
+        border-color: rgba(0, 221, 238, 0.62);
         box-shadow:
-          0 0 28px rgba(184, 50, 255, 0.26),
+          0 0 28px rgba(252, 238, 10, 0.26),
           0 8px 30px rgba(0, 0, 0, 0.28);
       }
 
@@ -51,7 +52,7 @@
         font-size: 0.78rem;
         font-weight: 800;
         letter-spacing: 0.2px;
-        box-shadow: 0 0 22px rgba(184, 50, 255, 0.42);
+        box-shadow: 0 0 22px rgba(252, 238, 10, 0.42);
       }
 
       .favorite.favorite-badge i {
@@ -62,16 +63,16 @@
         width: min(1180px, calc(100% - 32px));
         margin: 0 auto 60px;
         padding: clamp(24px, 5vw, 44px);
-        border: 1px solid rgba(255, 145, 190, 0.4);
+        border: 1px solid rgba(0, 221, 238, 0.4);
         border-radius: 30px;
         background:
           radial-gradient(
             circle at 18% 20%,
-            rgba(255, 71, 135, 0.24),
+            rgba(252, 238, 10, 0.24),
             transparent 34%
           ),
-          linear-gradient(135deg, rgba(30, 4, 24, 0.96), rgba(7, 2, 16, 0.96));
-        box-shadow: 0 0 34px rgba(255, 71, 135, 0.2);
+          linear-gradient(135deg, rgba(30, 4, 24, 0.96), rgba(8, 13, 19, 0.96));
+        box-shadow: 0 0 34px rgba(252, 238, 10, 0.2);
         display: grid;
         grid-template-columns: 1.1fr 0.9fr;
         gap: 28px;
@@ -89,7 +90,7 @@
         height: 360px;
         border-radius: 50%;
         border: 1px solid rgba(255, 255, 255, 0.14);
-        box-shadow: 0 0 80px rgba(255, 71, 135, 0.18);
+        box-shadow: 0 0 80px rgba(252, 238, 10, 0.18);
       }
 
       .seasonal-callout > * {
@@ -120,11 +121,11 @@
         border: 1px solid rgba(255, 255, 255, 0.14);
         border-radius: 18px;
         background: rgba(255, 255, 255, 0.045);
-        color: #f7d7ff;
+        color: #d4ecee;
       }
 
       .seasonal-mini-card i {
-        color: #ff7bb7;
+        color: #00ddee;
         margin-right: 8px;
       }
 
@@ -137,11 +138,11 @@
         gap: 6px;
         padding: 9px 12px;
         border-radius: 999px;
-        background: linear-gradient(135deg, #ff4f94, var(--purple-strong));
+        background: linear-gradient(135deg, #fcee0a, var(--purple-strong));
         color: #fff;
         font-size: 0.78rem;
         font-weight: 800;
-        box-shadow: 0 0 22px rgba(255, 71, 135, 0.42);
+        box-shadow: 0 0 22px rgba(252, 238, 10, 0.42);
       }
 
       @media (max-width: 860px) {
@@ -156,7 +157,32 @@
         }
       }
     </style>
-  </head>
+    <link rel="stylesheet" href="cyberpunk.css" />
+    <!-- Fonte exclusiva do título GVOLT 3D no destaque principal -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,700;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Cyberpunk suave: altera apenas a fonte do nome no hero. */
+      .hero h1 {
+        font-family: "Chakra Petch", "Oxanium", sans-serif;
+        font-weight: 700;
+        font-style: italic;
+        letter-spacing: -0.045em;
+      }
+    </style>
+    <meta name="theme-color" content="#080e15" />
+      <link rel="stylesheet" href="gvolt-growth.css" />
+    <script defer src="gvolt-analytics.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="GVolt 3D" />
+    <meta property="og:title" content="GVolt 3D | Suas ideias ganham forma" />
+    <meta property="og:description" content="Miniaturas, presentes e peças personalizadas em impressão 3D." />
+    <meta name="twitter:card" content="summary" />
+    <meta name="robots" content="index,follow" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Store","name":"GVolt 3D","description":"Miniaturas, presentes e peças personalizadas em impressão 3D.","contactPoint":{"@type":"ContactPoint","contactType":"customer service","telephone":"+55-19-99532-5891"}}</script>
+</head>
 
   <body>
     <div class="site-glow"></div>
@@ -164,7 +190,7 @@
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="GVolt 3D">
         <img
-          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          src="assets/logo-gvolt-gv.webp"
           alt="Logo GVolt 3D"
         />
         <span>GVolt <strong>3D</strong></span>
@@ -173,7 +199,7 @@
       <nav class="nav-links" aria-label="Navegação principal">
         <a href="#inicio">Início</a>
         <a href="#produtos">Produtos</a>
-        <a href="sazonais.html">Dia dos Namorados</a>
+        <a href="personalizados.html">Personalizados</a>
         <a href="#contato">Contato</a>
       </nav>
 
@@ -186,7 +212,7 @@
       <section class="hero">
         <div class="hero-image-card">
           <img
-            src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+            src="assets/logo-gvolt-gv.webp"
             alt="Logo GVolt 3D"
           />
         </div>
@@ -197,12 +223,12 @@
           </p>
           <h1>GVolt <span>3D</span></h1>
           <p class="hero-text">
-            Peças criativas, funcionais e decorativas feitas sob medida para
-            transformar suas ideias em realidade.
+            Miniaturas, presentes e peças personalizadas em impressão 3D.
+            Suas ideias ganham forma aqui.
           </p>
 
           <div class="hero-actions">
-            <a href="#produtos" class="btn btn-primary">Ver produtos</a>
+            <a href="#produtos" class="btn btn-primary">Conheça nossas criações</a>
             <a
               href="https://wa.me/5519995325891?text=Ol%C3%A1%21%20Quero%20fazer%20um%20or%C3%A7amento%20com%20a%20GVolt%203D"
               target="_blank"
@@ -210,49 +236,40 @@
               >Orçamento via WhatsApp</a
             >
             <a
-              href="sazonais.html?categoria=dia_dos_namorados"
+              href="personalizados.html"
               class="btn btn-secondary"
             >
-              Dia dos Namorados
+              Crie sua peça
             </a>
           </div>
         </div>
       </section>
 
-      <section class="benefits" id="sobre">
-        <article>
-          <i class="fa-solid fa-cube"></i><span>Peças exclusivas</span>
-        </article>
-        <article>
-          <i class="fa-solid fa-wand-magic-sparkles"></i
-          ><span>Design personalizado</span>
-        </article>
-        <article>
-          <i class="fa-solid fa-shield-heart"></i
-          ><span>Acabamento cuidadoso</span>
-        </article>
-        <article>
-          <i class="fa-brands fa-whatsapp"></i><span>Compra rápida</span>
-        </article>
+      <section class="gv-benefits" id="sobre" aria-labelledby="gvBenefitsTitle">
+        <div class="gv-benefits-header">
+          <p class="eyebrow">// POR QUE A GVOLT 3D?</p>
+          <h2 id="gvBenefitsTitle">Criações com <span>identidade própria.</span></h2>
+          <p>Um presente especial, uma miniatura ou uma peça para o dia a dia: você conta a ideia e nós ajudamos a transformá-la em algo real.</p>
+        </div>
+        <div class="gv-benefit-grid">
+          <article class="gv-benefit"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i><h3>Feito para sua ideia</h3><p>Explore modelos do catálogo ou solicite uma criação personalizada.</p></article>
+          <article class="gv-benefit"><i class="fa-solid fa-cube" aria-hidden="true"></i><h3>Atenção aos detalhes</h3><p>Conversamos sobre dimensões, acabamento e finalidade antes de produzir.</p></article>
+          <article class="gv-benefit"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><h3>Atendimento direto</h3><p>Tire dúvidas e combine valores e prazos diretamente pelo WhatsApp.</p></article>
+        </div>
+      </section>
+      <section class="brand-story" aria-label="A origem da GVolt 3D">
+        <div><p class="eyebrow">// CRIATIVIDADE QUE GANHA FORMA</p><h2>Suas ideias ganham <span>forma.</span></h2><p>Na GVolt 3D, transformamos ideias em miniaturas, presentes e peças personalizadas com tecnologia e criatividade.</p><a class="btn btn-secondary" href="personalizados.html">Conte sua ideia <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div>
+        <aside class="brand-origin"><strong>G de Gustavo. VOLT de Voltarel.</strong><p>Nosso nome tem uma história: nasceu do sobrenome de quem está por trás das criações. Cada peça carrega um pouco dessa identidade.</p></aside>
       </section>
 
-      <section
-        class="seasonal-callout"
-        aria-label="Produtos sazonais para o Dia dos Namorados"
-      >
+      <section id="active-campaign" class="seasonal-callout" aria-label="Campanha especial" hidden>
         <div>
           <p class="eyebrow">
-            <i class="fa-solid fa-heart"></i> Produtos sazonais
+            <i class="fa-solid fa-bolt"></i> <span id="campaign-eyebrow">Coleção especial</span>
           </p>
-          <h2>Presentes personalizados para o Dia dos Namorados</h2>
-          <p>
-            Uma seleção especial de peças 3D para presentear de um jeito
-            criativo, único e com a possibilidade de personalização.
-          </p>
-          <a
-            href="sazonais.html?categoria=dia_dos_namorados"
-            class="btn btn-primary"
-            >Ver coleção especial</a
+          <h2 id="campaign-title">Coleção especial</h2>
+          <p id="campaign-description"></p>
+          <a id="campaign-link" href="sazonais.html" class="btn btn-primary">Ver coleção especial</a
           >
         </div>
 
@@ -261,7 +278,7 @@
             <i class="fa-solid fa-gift"></i> Presentes únicos
           </div>
           <div class="seasonal-mini-card">
-            <i class="fa-solid fa-heart"></i> Tema romântico
+            <i class="fa-solid fa-bolt"></i> Edição especial
           </div>
           <div class="seasonal-mini-card">
             <i class="fa-solid fa-pen-nib"></i> Personalizável
@@ -294,24 +311,44 @@
           />
         </div>
 
+        <div class="catalog-controls" aria-label="Filtros de produtos">
+          <div class="catalog-field"><label for="categoryFilter">Categoria</label><select id="categoryFilter"><option value="">Todas as categorias</option></select></div>
+          <div class="catalog-field"><label for="availabilityFilter">Disponibilidade</label><select id="availabilityFilter"><option value="">Todas</option><option value="Em estoque">Em estoque</option><option value="Sob encomenda">Sob encomenda</option></select></div>
+          <div class="catalog-field"><label for="sortFilter">Ordenar por</label><select id="sortFilter"><option value="featured">Destaques</option><option value="price_asc">Menor preço</option><option value="price_desc">Maior preço</option><option value="name">Nome (A–Z)</option></select></div>
+          <button id="resetFilters" class="btn btn-secondary" type="button">Limpar filtros</button>
+        </div>
+        <p id="productCount" class="catalog-count" aria-live="polite"></p>
         <div id="products" class="products-container"></div>
 
         <p id="emptyMessage" class="empty-message" hidden>
           Nenhum produto encontrado.
         </p>
       </section>
+      <section id="portfolio" class="portfolio-section" hidden>
+        <div class="section-heading"><p class="eyebrow">// NOSSO TRABALHO</p><h2>Feitos na <span>GVolt</span></h2><p>Projetos e criações produzidos por nós.</p></div>
+        <div id="portfolioGrid" class="portfolio-grid"></div>
+      </section>
+      <section class="custom-cta">
+        <div><p class="eyebrow">// SUA IDEIA, NOSSA IMPRESSÃO</p><h2>Tem uma ideia? <span>Vamos criar.</span></h2><p>Conte o que você imagina e peça um orçamento personalizado, sem compromisso.</p></div>
+        <a class="btn btn-primary" href="personalizados.html">Pedir peça personalizada <i class="fa-solid fa-arrow-right"></i></a>
+      </section>
+      <section class="trust-section" aria-label="Como funciona">
+        <div><strong>01 / Escolha</strong><p>Explore o catálogo ou envie sua ideia.</p></div>
+        <div><strong>02 / Combine</strong><p>Conversamos sobre detalhes, valor e prazo.</p></div>
+        <div><strong>03 / Receba</strong><p>Sua peça é produzida após a confirmação.</p></div>
+      </section>
     </main>
 
     <footer class="footer" id="contato">
       <div class="footer-brand">
         <img
-          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          src="assets/logo-gvolt-gv.webp"
           alt="Logo GVolt 3D"
         />
         <strong>GVolt <span>3D</span></strong>
       </div>
 
-      <p>Soluções criativas em impressão 3D.</p>
+      <p>Suas ideias ganham forma. Miniaturas, presentes e criações personalizadas.</p>
       <a href="https://wa.me/5519995325891" target="_blank"
         ><i class="fa-brands fa-whatsapp"></i> Fale conosco</a
       >
@@ -552,7 +589,7 @@
             const card = document.createElement("article");
             const isFavorite = Boolean(product.is_favorite);
             const seasonalLabel = getSeasonalLabel(product);
-            const imageUrl = await getProductMainImage(product);
+            const imageUrl = getProductImages(product)[0] || FALLBACK_IMAGE;
 
             card.className = isFavorite
               ? "product-card featured"
@@ -560,19 +597,20 @@
 
             card.innerHTML = `
               <a class="product-image" href="product.html?id=${encodeURIComponent(product.id)}" aria-label="Ver detalhes de ${escapeHtml(product.name)}">
-                <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(product.name)}" onerror="${imageFallbackAttribute()}">
+                <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(product.name)}" loading="lazy" decoding="async" onerror="${imageFallbackAttribute()}">
                 ${
                   seasonalLabel
                     ? `<span class="seasonal-badge-card"><i class="fa-solid fa-heart"></i> ${escapeHtml(seasonalLabel)}</span>`
                     : ""
                 }
-                ${isFavorite ? "" : ""}
+                ${isFavorite ? '<span class="featured-label">★ DESTAQUE</span>' : ''}
               </a>
 
               <div class="product-card-body">
+                <div class="card-labels"><span>${escapeHtml(product.category || 'Outros')}</span><span class="stock-badge ${/estoque/i.test(product.availability || '') ? 'stock-ready' : 'stock-order'}">${escapeHtml(product.availability || 'Consulte')}</span></div>
                 <h3>${escapeHtml(product.name)}</h3>
                 <p>${escapeHtml(product.description)}</p>
-                <strong>${formatPrice(product.price)}</strong>
+                <div class="card-meta"><strong>${formatPrice(product.price)}</strong>${Number(product.lead_time_days) > 0 ? `<span>Prazo: ${Number(product.lead_time_days)} dias</span>` : ''}</div>
                 <a class="details-link" href="product.html?id=${encodeURIComponent(product.id)}">
                   Ver detalhes e comprar →
                 </a>
@@ -613,12 +651,16 @@
           const {data, error} = await supabaseClient
             .from("products")
             .select("*")
+            .eq("is_active", true)
             .order("name", {ascending: true});
 
           if (error) throw error;
 
-          allProducts = sortProducts(data || []);
-          await renderProducts(allProducts);
+          allProducts = sortProducts((data || []).filter(p => p.is_active === true));
+          const categories = [...new Set(allProducts.map(p => p.category || 'Outros'))].sort((a,b)=>a.localeCompare(b,'pt-BR'));
+          const sel = document.getElementById('categoryFilter');
+          categories.forEach(c => { const o = document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o); });
+          applyCatalogFilters();
         } catch (error) {
           console.error("Erro ao carregar produtos:", error);
           emptyMessage.textContent = "Não foi possível carregar os produtos.";
@@ -628,27 +670,63 @@
 
       loadProducts();
 
-      document
-        .getElementById("searchInput")
-        .addEventListener("input", function () {
-          const term = this.value.toLowerCase().trim();
-
-          const filtered = allProducts.filter((product) => {
-            const name = String(product.name || "").toLowerCase();
-            const description = String(product.description || "").toLowerCase();
-            const longDescription = String(
-              product.long_description || "",
-            ).toLowerCase();
-
-            return (
-              name.includes(term) ||
-              description.includes(term) ||
-              longDescription.includes(term)
-            );
-          });
-
-          renderProducts(filtered);
+      function applyCatalogFilters() {
+        const term = document.getElementById('searchInput').value.toLocaleLowerCase('pt-BR').trim();
+        const category = document.getElementById('categoryFilter').value;
+        const availability = document.getElementById('availabilityFilter').value;
+        const sort = document.getElementById('sortFilter').value;
+        let filtered = allProducts.filter(p => {
+          const text = [p.name,p.description,p.long_description].join(' ').toLocaleLowerCase('pt-BR');
+          return (!term || text.includes(term)) && (!category || (p.category || 'Outros')===category) && (!availability || p.availability===availability);
         });
+        if(sort==='price_asc') filtered.sort((a,b)=>Number(a.price)-Number(b.price));
+        if(sort==='price_desc') filtered.sort((a,b)=>Number(b.price)-Number(a.price));
+        if(sort==='name') filtered.sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
+        document.getElementById('productCount').textContent = filtered.length + (filtered.length===1 ? ' produto encontrado' : ' produtos encontrados');
+        renderProducts(filtered);
+      }
+      ['searchInput','categoryFilter','availabilityFilter','sortFilter'].forEach(id => {
+        document.getElementById(id).addEventListener(id==='searchInput'?'input':'change',applyCatalogFilters);
+      });
+      document.getElementById('resetFilters').addEventListener('click',()=>{
+        ['searchInput','categoryFilter','availabilityFilter'].forEach(id=>document.getElementById(id).value='');
+        document.getElementById('sortFilter').value='featured';
+        applyCatalogFilters();
+      });
+      async function loadCampaign(){
+        try {
+          const today = new Intl.DateTimeFormat('sv-SE',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+          const {data,error} = await supabaseClient.from('store_campaigns').select('*').eq('enabled',true).lte('starts_on',today).gte('ends_on',today).order('starts_on',{ascending:false}).limit(1);
+          if(error || !data?.length) return;
+          const c=data[0];
+          document.getElementById('campaign-eyebrow').textContent=c.eyebrow;
+          document.getElementById('campaign-title').textContent=c.title;
+          document.getElementById('campaign-description').textContent=c.description;
+          document.getElementById('campaign-link').textContent=c.button_label;
+          const url=String(c.button_url||'');
+          if(/^(?:https:\/\/|(?:sazonais|index|personalizados|product)\.html(?:[?#]|$)|#)/i.test(url)) document.getElementById('campaign-link').href=url;
+          document.getElementById('active-campaign').hidden=false;
+        }catch(e){ console.warn('Campanhas indisponíveis',e); }
+      }
+      async function loadPortfolio(){
+        try{
+          const {data,error}=await supabaseClient.from('store_gallery').select('title,description,image_url,quote,quote_author').eq('published',true).order('sort_order',{ascending:true}).limit(12);
+          if(error||!data?.length) return;
+          const grid=document.getElementById('portfolioGrid');
+          data.forEach(item=>{
+            if(!/^https:\/\//i.test(item.image_url||'')) return;
+            const card=document.createElement('article'); card.className='portfolio-card';
+            const img=document.createElement('img'); img.src=item.image_url; img.alt=item.title; img.loading='lazy'; img.decoding='async'; img.onerror=()=>{img.src='assets/fallback.svg';img.onerror=null};
+            const info=document.createElement('div'); const h=document.createElement('h3');h.textContent=item.title;
+            const p=document.createElement('p');p.textContent=item.description||'';
+            info.append(h,p);
+            if(item.quote){const quote=document.createElement('blockquote');quote.textContent='“'+item.quote+'”';info.append(quote); if(item.quote_author){const by=document.createElement('small');by.textContent='— '+item.quote_author;info.append(by)}}
+            card.append(img,info);grid.append(card);
+          });
+          document.getElementById('portfolio').hidden=grid.childElementCount===0;
+        }catch(e){console.warn('Portfólio indisponível',e)}
+      }
+      loadCampaign(); loadPortfolio();
 
       const menuToggle = document.getElementById("menu-toggle");
       const navLinks = document.querySelector(".nav-links");
@@ -659,5 +737,6 @@
         });
       }
     </script>
-  </body>
+  <a class="mobile-whatsapp" href="https://wa.me/5519995325891?text=Ol%C3%A1%21%20Quero%20fazer%20um%20or%C3%A7amento%20com%20a%20GVolt%203D." target="_blank" rel="noopener" aria-label="Peça um orçamento pelo WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Orçamento pelo WhatsApp</a>
+</body>
 </html>

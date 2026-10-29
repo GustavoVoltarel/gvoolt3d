@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
@@ -27,7 +27,7 @@
     <link
       rel="icon"
       type="image/png"
-      href="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/favicon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2Zhdmljb24ucG5nIiwiaWF0IjoxNzc4MTcyMDYyLCJleHAiOjQ5MzE3NzIwNjJ9.1vnoc_Ib-MghMmvi6Pm5kXpz-qCW2Q0OYxxgzZz5Fx8"
+      href="assets/favicon.png"
     />
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -41,8 +41,8 @@
         border: 1px solid var(--border);
         border-radius: 30px;
         background:
-          radial-gradient(circle at top left, rgba(184, 50, 255, 0.17), transparent 36%),
-          linear-gradient(135deg, rgba(12, 5, 25, 0.96), rgba(5, 1, 13, 0.98));
+          radial-gradient(circle at top left, rgba(252, 238, 10, 0.17), transparent 36%),
+          linear-gradient(135deg, rgba(15, 23, 32, 0.96), rgba(5, 1, 13, 0.98));
         box-shadow: var(--shadow);
         position: relative;
         overflow: hidden;
@@ -53,8 +53,8 @@
         position: absolute;
         inset: 0;
         background-image:
-          linear-gradient(rgba(184, 50, 255, 0.04) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(184, 50, 255, 0.04) 1px, transparent 1px);
+          linear-gradient(rgba(252, 238, 10, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(252, 238, 10, 0.04) 1px, transparent 1px);
         background-size: 38px 38px;
         pointer-events: none;
         opacity: 0.55;
@@ -75,7 +75,7 @@
 
       .page-header h2 {
         margin: 0;
-        font-family: 'Orbitron', sans-serif;
+        font-family: 'Oxanium', sans-serif;
         font-size: clamp(1.55rem, 3vw, 2.35rem);
         letter-spacing: 0.5px;
       }
@@ -97,13 +97,13 @@
         border: 1px solid var(--border);
         background: rgba(255, 255, 255, 0.05);
         color: var(--purple);
-        box-shadow: 0 0 24px rgba(184, 50, 255, 0.3);
+        box-shadow: 0 0 24px rgba(252, 238, 10, 0.3);
         font-size: 1.35rem;
       }
 
       #login-container,
       #edit-container {
-        border: 1px solid rgba(189, 67, 255, 0.22);
+        border: 1px solid rgba(0, 221, 238, 0.22);
         border-radius: 24px;
         background: rgba(255, 255, 255, 0.035);
         padding: clamp(18px, 3vw, 28px);
@@ -133,7 +133,7 @@
       }
 
       .form-group label {
-        color: #eadbff;
+        color: #dfe9ef;
         font-weight: 600;
         font-size: 0.94rem;
       }
@@ -142,15 +142,15 @@
       .form-group textarea,
       .form-group select {
         width: 100%;
-        border: 1px solid rgba(189, 67, 255, 0.34);
+        border: 1px solid rgba(0, 221, 238, 0.34);
         border-radius: 16px;
-        background: rgba(5, 0, 13, 0.68);
+        background: rgba(8, 13, 19, 0.68);
         color: var(--text);
         padding: 14px 16px;
         font: inherit;
         outline: none;
         transition: 0.18s ease;
-        box-shadow: inset 0 0 18px rgba(184, 50, 255, 0.06);
+        box-shadow: inset 0 0 18px rgba(252, 238, 10, 0.06);
       }
 
       .form-group textarea {
@@ -164,8 +164,8 @@
       .form-group select:focus {
         border-color: var(--purple);
         box-shadow:
-          0 0 0 3px rgba(184, 50, 255, 0.15),
-          inset 0 0 18px rgba(184, 50, 255, 0.08);
+          0 0 0 3px rgba(252, 238, 10, 0.15),
+          inset 0 0 18px rgba(252, 238, 10, 0.08);
       }
 
       .form-group input[disabled] {
@@ -187,18 +187,18 @@
         justify-content: space-between;
         gap: 18px;
         padding: 18px;
-        border: 1px solid rgba(240, 45, 255, 0.34);
+        border: 1px solid rgba(0, 221, 238, 0.34);
         border-radius: 20px;
         background:
-          linear-gradient(135deg, rgba(184, 50, 255, 0.14), rgba(255, 255, 255, 0.035)),
-          rgba(5, 0, 13, 0.52);
+          linear-gradient(135deg, rgba(252, 238, 10, 0.14), rgba(255, 255, 255, 0.035)),
+          rgba(8, 13, 19, 0.52);
       }
 
       .seasonal-card {
-        border-color: rgba(255, 145, 190, 0.42);
+        border-color: rgba(0, 221, 238, 0.42);
         background:
-          linear-gradient(135deg, rgba(255, 71, 135, 0.14), rgba(184, 50, 255, 0.08)),
-          rgba(5, 0, 13, 0.52);
+          linear-gradient(135deg, rgba(252, 238, 10, 0.14), rgba(252, 238, 10, 0.08)),
+          rgba(8, 13, 19, 0.52);
       }
 
       .seasonal-fields {
@@ -207,7 +207,7 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 18px;
         padding: 18px;
-        border: 1px solid rgba(189, 67, 255, 0.22);
+        border: 1px solid rgba(0, 221, 238, 0.22);
         border-radius: 20px;
         background: rgba(255, 255, 255, 0.028);
       }
@@ -227,7 +227,7 @@
         border-radius: 50%;
         background: linear-gradient(135deg, var(--pink), var(--purple-strong));
         color: #fff;
-        box-shadow: 0 0 22px rgba(184, 50, 255, 0.45);
+        box-shadow: 0 0 22px rgba(252, 238, 10, 0.45);
       }
 
       .favorite-info strong {
@@ -261,7 +261,7 @@
         position: absolute;
         inset: 0;
         border-radius: 999px;
-        border: 1px solid rgba(189, 67, 255, 0.38);
+        border: 1px solid rgba(0, 221, 238, 0.38);
         background: rgba(255, 255, 255, 0.08);
         transition: 0.2s ease;
       }
@@ -281,7 +281,7 @@
       .toggle input:checked + span {
         border-color: transparent;
         background: linear-gradient(135deg, var(--pink), var(--purple-strong));
-        box-shadow: 0 0 18px rgba(184, 50, 255, 0.44);
+        box-shadow: 0 0 18px rgba(252, 238, 10, 0.44);
       }
 
       .toggle input:checked + span::before {
@@ -300,7 +300,7 @@
         margin: 4px 0 0;
         padding: 12px 14px;
         border-radius: 14px;
-        border: 1px solid rgba(189, 67, 255, 0.25);
+        border: 1px solid rgba(0, 221, 238, 0.25);
         background: rgba(255, 255, 255, 0.045);
       }
 
@@ -339,21 +339,25 @@
         }
       }
     </style>
+    <link rel="stylesheet" href="cyberpunk.css" />
+    <link rel="stylesheet" href="admin-cyberpunk.css" />
+    <meta name="theme-color" content="#080e15" />
   </head>
 
-  <body>
+  <body class="admin-interface">
     <div class="site-glow"></div>
 
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="GVolt 3D">
         <img
-          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          src="assets/logo-gvolt-gv.webp"
           alt="Logo GVolt 3D"
         />
         <span>GVolt <strong>3D</strong></span>
       </a>
 
       <nav class="nav-links" aria-label="Navegação principal">
+        <a href="admin-dashboard.html">Gestão</a>
         <a href="admin.html">Produtos</a>
         <a href="admin-filaments.html">Filamentos</a>
         <a href="admin-printers.html">Impressoras</a>
@@ -364,7 +368,7 @@
       </nav>
 
       <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
-        <i class="fa-solid fa-bars"></i>
+        <span aria-hidden="true">☰</span>
       </button>
     </header>
 
@@ -427,6 +431,11 @@ destacar o produto no início do catálogo público. Também é possível
             <div class="form-group">
               <label for="product-price">Preço (R$)</label>
               <input type="number" step="0.01" min="0" id="product-price" required />
+            </div>
+
+            <div class="form-group">
+              <label for="product-category">Categoria do catálogo</label>
+              <select id="product-category"><option value="Miniaturas">Miniaturas</option><option value="Decoração">Decoração</option><option value="Presentes">Presentes</option><option value="Utilidades">Utilidades</option><option value="Personalizados">Personalizados</option><option value="Outros">Outros</option></select>
             </div>
 
             <div class="form-group">
@@ -538,7 +547,7 @@ destacar o produto no início do catálogo público. Também é possível
     <footer class="footer">
       <div class="footer-brand">
         <img
-          src="https://ztrzwaosybnmzwjufqld.supabase.co/storage/v1/object/sign/Logo/gvolt-logo(2).jpeg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV85MGZhMzNjNC01ZjczLTQyYjAtYmE0NC0zYWQ0YTI4ZTllNTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJMb2dvL2d2b2x0LWxvZ28oMikuanBlZyIsImlhdCI6MTc3ODE3MTUwMywiZXhwIjo0OTMxNzcxNTAzfQ.9eLch91nOTMxbWJrWqDTJldzdqiuiAJr6Z5tpAWeT2E"
+          src="assets/logo-gvolt-gv.webp"
           alt="Logo GVolt 3D"
         />
         <strong>GVolt <span>3D</span></strong>
@@ -813,6 +822,7 @@ destacar o produto no início do catálogo público. Também é possível
         document.getElementById("product-price").value = data.price || "";
         document.getElementById("product-image").value = formatImageInput(data.image);
         document.getElementById("product-images").value = formatImageInput(data.images);
+        document.getElementById("product-category").value = data.category || "Outros";
         document.getElementById("product-availability").value =
           data.availability || "Em estoque";
         document.getElementById("product-lead").value = data.lead_time_days || "";
@@ -839,6 +849,7 @@ destacar o produto no início do catálogo público. Também é possível
         const image = cleanImageUrl(document.getElementById("product-image").value) || null;
         const imagesStr = document.getElementById("product-images").value.trim();
         const availability = document.getElementById("product-availability").value;
+        const category = document.getElementById("product-category").value;
         const leadTime = document.getElementById("product-lead").value;
         const longDescription = document
           .getElementById("product-long-description")
@@ -865,6 +876,7 @@ destacar o produto no início do catálogo público. Também é possível
 
         const updated = {
           name,
+          category,
           description,
           price,
           image,
